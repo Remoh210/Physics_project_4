@@ -14,8 +14,8 @@ public:
 	virtual bool isFinished(void);
 
 private:
-	cMeshObject* theObj;
-	cMeshObject* targetObj;
+	cGameObject* theObj;
+	cGameObject* targetObj;
 
 	glm::vec3 initPosition;
 	glm::vec3 prevPosition;

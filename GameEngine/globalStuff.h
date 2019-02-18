@@ -13,7 +13,7 @@
 
 #include "sPlyVertex.h"
 #include "sPlyTriangle.h"
-#include "cMeshObject.h"
+#include "cGameObject.h"
 #include "sModelDrawInfo.h"
 #include "cVAOMeshManager.h"
 #include "cLuaBrain.h"
@@ -32,6 +32,8 @@
 #include "cMoveToEase.h"
 #include "cMoveToEaseIO.h"
 #include "cSimpleDebugRenderer.h"
+
+#include "cSimpleAssimpSkinnedMeshLoader_OneMesh.h"
 // ... and more
 extern GLuint program;
 
@@ -60,7 +62,7 @@ extern cBasicTextureManager* g_pTheTextureManager;
 //extern cCommandGroup* luaCommandGroup;
 extern cCommandGroup sceneCommandGroup;
 extern std::vector<cAABB::sAABB_Triangle> vec_cur_AABB_tris;
-//extern std::vector<cMeshObject*> vec_pObjectsToDraw;
+//extern std::vector<cGameObject*> vec_pObjectsToDraw;
 
 extern glm::vec3 g_CameraEye;	// = glm::vec3( 0.0, 0.0, +10.0f );
 //extern glm::vec3 g_CameraAt;	// = glm::vec3( 0.0, 0.0, 0.0f );
@@ -70,11 +72,11 @@ extern unsigned int SCR_WIDTH;
 extern unsigned int SCR_HEIGHT;
 extern glm::vec3 g_Gravity;
 
-
+extern cFBO* g_pFBOMain;
 
 extern cVAOMeshManager* g_pTheVAOMeshManager;
-extern std::vector< cMeshObject* > vec_pObjectsToDraw;
-extern std::vector< cMeshObject* > vec_pSpheres;
+extern std::vector< cGameObject* > vec_pObjectsToDraw;
+extern std::vector< cGameObject* > vec_pSpheres;
 extern cSceneManager* g_pSceneManager;
 extern cLightManager* LightManager;
 extern cTextRend* g_textRenderer;
@@ -85,7 +87,7 @@ extern cSimpleDebugRenderer* g_simpleDubugRenderer;
 // You can get at object like this, or you can 
 // search for them using the findObjectBy...() 
 // functions.
-extern cMeshObject* g_pRogerRabbit;
+extern cGameObject* g_pRogerRabbit;
 // 
 
 // Signature for the ply loader function
@@ -93,25 +95,25 @@ bool LoadPlyFileData( std::string fileName );
 
 void LoadModelTypes( cVAOMeshManager* pTheVAOMeshManager, GLuint shaderProgramID );
 void CreateModels(std::string filename, cVAOMeshManager* pTheVAOMeshManager, GLuint shaderProgramID);
-void LoadModelsIntoScene( std::vector<cMeshObject*> &vec_pObjectsToDraw );
+void LoadModelsIntoScene( std::vector<cGameObject*> &vec_pObjectsToDraw );
 
 
 void loadCameraInfo(std::string filename);
 void saveCameraInfo(std::string filename);
 
-cMeshObject* findObjectByFriendlyName(std::string theNameToFind);
-cMeshObject* findObjectByUniqueID( unsigned int IDToFind );
+cGameObject* findObjectByFriendlyName(std::string theNameToFind);
+cGameObject* findObjectByUniqueID( unsigned int IDToFind );
 extern cLuaBrain* p_LuaScripts;
 
 void saveLightInfo(std::string filename, std::vector<sLight*> lights);
 
-void saveModelInfo(std::string filename, std::vector<cMeshObject*> models);
+void saveModelInfo(std::string filename, std::vector<cGameObject*> models);
 
-void loadModels(std::string filename, std::vector<cMeshObject*> models);
+void loadModels(std::string filename, std::vector<cGameObject*> models);
 
 void loadLights(std::string filename, std::vector<sLight*> lights);
 
-void DrawObject( cMeshObject* pCurrentMesh,
+void DrawObject( cGameObject* pCurrentMesh,
 				 glm::mat4x4 &matModel, 
 				 GLuint shaderProgramID );
 

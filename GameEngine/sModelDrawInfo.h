@@ -4,7 +4,7 @@
 #include <string>
 #include "sPlyVertex.h"
 #include "sPlyTriangle.h"
-
+#include "cMesh.h"
 // This is very tightly tied to this method
 //struct sVert_xyz_rgb
 //{
@@ -78,6 +78,7 @@ struct sModelDrawInfo
 	// HACK: Can make this dynamic
 	bool bVertexBufferIsDynamic;	// = false by default
 	bool bIsIndexedModel;			// = true by default
+	cMesh* pMeshData;
 };
 
 #endif 

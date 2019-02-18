@@ -3,7 +3,7 @@
 #include "cAABB.h"// for g_pRogerRabbit
 
 #include "cVAOMeshManager.h"
-#include "cMeshObject.h"
+#include "cGameObject.h"
 
 #include "DebugRenderer/cDebugRenderer.h"
 
@@ -12,7 +12,6 @@
 // Loading models was moved into this function
 void LoadModelTypes( cVAOMeshManager* pTheVAOMeshManager, GLuint shaderProgramID )
 {
-	
 
 	sModelDrawInfo sphereInfo;
 	sphereInfo.meshFileName = "Sphere_320.ply";			// "Sphere_320_faces_xyz.ply";
@@ -60,12 +59,12 @@ void LoadModelTypes( cVAOMeshManager* pTheVAOMeshManager, GLuint shaderProgramID
 
 	
 // Loads the models we are drawing into the vector
-void LoadModelsIntoScene( std::vector<cMeshObject*> &vec_pObjectsToDraw )
+void LoadModelsIntoScene( std::vector<cGameObject*> &vec_pObjectsToDraw )
 {
 
 	//SkyBoxObject
 	{	
-		cMeshObject* pSkyBoxObject = new cMeshObject();
+		cGameObject* pSkyBoxObject = new cGameObject();
 		pSkyBoxObject->setDiffuseColour(glm::vec3(1.0f, 105.0f / 255.0f, 180.0f / 255.0f));
 		pSkyBoxObject->bUseVertexColour = false;
 		pSkyBoxObject->friendlyName = "SkyBoxObject";
@@ -78,7 +77,7 @@ void LoadModelsIntoScene( std::vector<cMeshObject*> &vec_pObjectsToDraw )
 	}
 
 	{	
-		cMeshObject* pDebugSphere = new cMeshObject();
+		cGameObject* pDebugSphere = new cGameObject();
 		pDebugSphere->setDiffuseColour(glm::vec3(1.0f, 105.0f / 255.0f, 180.0f / 255.0f));
 		pDebugSphere->friendlyName = "DebugSphere";
 		float scale = 1.0f;

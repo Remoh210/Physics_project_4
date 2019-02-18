@@ -16,8 +16,8 @@ public:
 	void createTrigGroup(std::string trigScript);
 
 private:
-	cMeshObject* theObj;
-	cMeshObject* targetObj;
+	cGameObject* theObj;
+	cGameObject* targetObj;
 	glm::vec3 triggerPoint;
 	float distanceToTarget;
 	float radius;

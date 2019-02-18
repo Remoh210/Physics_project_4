@@ -1,6 +1,6 @@
-#include "cMeshObject.h"
+#include "cGameObject.h"
 
-cMeshObject::cMeshObject()
+cGameObject::cGameObject()
 {
 	this->position = glm::vec3(0.0f);
 	this->nonUniformScale = glm::vec3(1.0f);
@@ -15,11 +15,13 @@ cMeshObject::cMeshObject()
 	this->bIsDebug = false;
 	this->bIsVisible = true;
 	this->bIsWireFrame = false;
+	// HACK: See class definition for why this is a hack
+	this->b_HACK_UsesOffscreenFBO = false;
 
 	// Set unique ID
-	this->m_uniqueID = cMeshObject::m_NextID;
+	this->m_uniqueID = cGameObject::m_NextID;
 	// Increment
-	cMeshObject::m_NextID++;	// 32 bit - 4 billion
+	cGameObject::m_NextID++;	// 32 bit - 4 billion
 
 //	this->objColour = glm::vec3(1.0f, 1.0f, 1.0f);	// white by default
 
@@ -40,38 +42,44 @@ cMeshObject::cMeshObject()
 
 	// Set shape to NULL
 	this->pTheShape = NULL;
-	this->shapeType = cMeshObject::UNKOWN_SHAPE;
+	this->shapeType = cGameObject::UNKOWN_SHAPE;
 	this->rigidBody = NULL;
+
+
+
+	// Skinned mesh and animations:
+	this->pSimpleSkinnedMesh = NULL;
+	this->pAniState = NULL;
 
 	return;
 }
 
-void cMeshObject::setDiffuseColour(glm::vec3 newDiffuse)
+void cGameObject::setDiffuseColour(glm::vec3 newDiffuse)
 {
 	this->materialDiffuse = glm::vec4(newDiffuse, this->materialDiffuse.a);
 	return;
 }
 
-void cMeshObject::setAlphaTransparency(float newAlpha)
+void cGameObject::setAlphaTransparency(float newAlpha)
 {
 	this->materialDiffuse.a = newAlpha;
 	return;
 }
 
-void cMeshObject::setSpecularColour(glm::vec3 colourRGB)
+void cGameObject::setSpecularColour(glm::vec3 colourRGB)
 {
 	this->materialSpecular = glm::vec4(colourRGB, this->materialSpecular.a);
 	return;
 }
 
-void cMeshObject::setSpecularPower(float specPower)
+void cGameObject::setSpecularPower(float specPower)
 {
 	this->materialSpecular.a = specPower;
 	return;
 }
 
 
-void cMeshObject::setUniformScale(float scale)
+void cGameObject::setUniformScale(float scale)
 {
 	this->nonUniformScale = glm::vec3(scale, scale, scale);
 	return;
@@ -80,10 +88,10 @@ void cMeshObject::setUniformScale(float scale)
 //static unsigned int m_NextID; //= 0;
 
 //static 
-unsigned int cMeshObject::m_NextID = cMeshObject::STARTING_ID_VALUE;
+unsigned int cGameObject::m_NextID = cGameObject::STARTING_ID_VALUE;
 
 
-void cMeshObject::Update(double deltaTime)
+void cGameObject::Update(double deltaTime)
 {
 	if (this->bIsUpdatedByPhysics)
 	{

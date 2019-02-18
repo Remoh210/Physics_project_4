@@ -23,7 +23,7 @@
 #include <vector>		// "smart array" dynamic array
 
 #include "cShaderManager.h"
-#include "cMeshObject.h"
+#include "cGameObject.h"
 #include "cVAOMeshManager.h"
 #include <algorithm>
 #include <windows.h>
@@ -60,11 +60,8 @@ double deltaTime = 0;
 double FPS_last_Time = 0;
 bool bIsDebugMode = false;
 
-void DoPhysicsUpdate( double deltaTime, 
-					  std::vector< cMeshObject* > &vec_pObjectsToDraw );
-
-std::vector< cMeshObject* > vec_pObjectsToDraw;
-std::vector< cMeshObject* > vec_pSpheres;
+std::vector< cGameObject* > vec_pObjectsToDraw;
+std::vector< cGameObject* > vec_pSpheres;
 
 // To the right, up 4.0 units, along the x axis
 
@@ -78,11 +75,11 @@ std::string scene = "Scene1.json";
 
 Camera camera(glm::vec3(0.0f, 0.0f, 0.0f));
 
-bool distToCam(cMeshObject* leftObj, cMeshObject* rightObj) {
+bool distToCam(cGameObject* leftObj, cGameObject* rightObj) {
 	return glm::distance(leftObj->position, camera.Position) > glm::distance(rightObj->position, camera.Position); // here go your sort conditions
 }
 
-std::vector <cMeshObject*> vec_sorted_drawObj;
+std::vector <cGameObject*> vec_sorted_drawObj;
 
 glm::vec3 cameraFront = glm::vec3(0.0f, 0.0f, -1.0f);
 glm::vec3 cameraUp = glm::vec3(0.0f, 1.0f, 0.0f);
@@ -98,8 +95,8 @@ cSceneManager* g_pSceneManager = NULL;
 //cTextRend g_textRend;
 cLightManager* LightManager = NULL;
 
-std::vector<cMeshObject*> vec_transObj;
-std::vector<cMeshObject*> vec_non_transObj;
+std::vector<cGameObject*> vec_transObj;
+std::vector<cGameObject*> vec_non_transObj;
 
 cBasicTextureManager* g_pTheTextureManager = NULL;
 
@@ -111,7 +108,7 @@ static void error_callback(int error, const char* description)
 cAABBHierarchy* g_pTheTerrain = new cAABBHierarchy();
 
 bool loadConfig();
-//void DoPhysicsCheckpointNumberFour(double deltaTime);
+cFBO* g_pFBOMain;
 
 // For now, I'm doing this here, but you might want to do this
 //  in the object, in the "phsyics" thing, or wherever. 
@@ -215,7 +212,7 @@ int main(void)
 
 	::LightManager = new cLightManager();
 	
-
+	::g_pFBOMain = new cFBO();
 
 	//Set Up FBO
 	static const GLenum draw_bufers[] = { GL_COLOR_ATTACHMENT0 };
@@ -303,7 +300,7 @@ int main(void)
 		objIndex != (unsigned int)vec_pObjectsToDraw.size();
 		objIndex++)
 	{
-		cMeshObject* pCurrentMesh = vec_pObjectsToDraw[objIndex];
+		cGameObject* pCurrentMesh = vec_pObjectsToDraw[objIndex];
 		if (pCurrentMesh->materialDiffuse.a < 1.0f) { vec_transObj.push_back(pCurrentMesh); }
 		else { vec_non_transObj.push_back(pCurrentMesh); }
 
@@ -512,12 +509,12 @@ int main(void)
 ////HACK: Draw Debug AABBs...
 //
 //// Get that from FindObjectByID()
-//			cMeshObject* pTheBunny = findObjectByFriendlyName("Ufo2UVb");
-//			cMeshObject* pter = findObjectByFriendlyName("terrain");
+//			cGameObject* pTheBunny = findObjectByFriendlyName("Ufo2UVb");
+//			cGameObject* pter = findObjectByFriendlyName("terrain");
 //			// Highlight the AABB that the rabbit is in (Or the CENTRE of the rabbit, anyway)
 //
 //			float sideLength = 50.0f;
-//			cMeshObject* pCubeForBallsToBounceIn = new cMeshObject();
+//			cGameObject* pCubeForBallsToBounceIn = new cGameObject();
 //
 //			pCubeForBallsToBounceIn->setDiffuseColour(glm::vec3(0.0f, 1.0f, 0.0f));
 //			pCubeForBallsToBounceIn->bDontLight = true;
@@ -599,7 +596,7 @@ int main(void)
 //
 //
 //
-//				cMeshObject* pCubeForBallsToBounceIn = new cMeshObject();
+//				cGameObject* pCubeForBallsToBounceIn = new cGameObject();
 //
 //				pCubeForBallsToBounceIn->setDiffuseColour(glm::vec3(0.0f, 1.0f, 0.0f));
 //				pCubeForBallsToBounceIn->bDontLight = true;
@@ -623,7 +620,7 @@ int main(void)
 		//std::sort(vec_sorted_drawObj.begin(), vec_sorted_drawObj.end(), transp);
 		std::sort(vec_transObj.begin(), vec_transObj.end(), distToCam);
 		
-		cMeshObject* pSkyBox = findObjectByFriendlyName("SkyBoxObject");
+		cGameObject* pSkyBox = findObjectByFriendlyName("SkyBoxObject");
 		// Place skybox object at camera location
 		pSkyBox->position = camera.Position;
 		pSkyBox->bIsVisible = true;
@@ -668,7 +665,7 @@ int main(void)
 			  objIndex != (unsigned int)vec_non_transObj.size();
 			  objIndex++ )
 		{	
-			cMeshObject* pCurrentMesh = vec_non_transObj[objIndex];
+			cGameObject* pCurrentMesh = vec_non_transObj[objIndex];
 			
 			glm::mat4x4 matModel = glm::mat4(1.0f);			// mat4x4 m, p, mvp;
 
@@ -680,7 +677,7 @@ int main(void)
 			objIndex != (unsigned int)vec_transObj.size();
 			objIndex++)
 		{
-			cMeshObject* pCurrentMesh = vec_transObj[objIndex];
+			cGameObject* pCurrentMesh = vec_transObj[objIndex];
 
 			glm::mat4x4 matModel = glm::mat4(1.0f);			// mat4x4 m, p, mvp;
 
@@ -734,7 +731,7 @@ int main(void)
 		//	GLint bAddRefract_UniLoc = glGetUniformLocation(program, "bAddRefract");
 		//	glUniform1f(bAddRefract_UniLoc, (float)GL_TRUE);
 
-		//	cMeshObject* pBunny = findObjectByFriendlyName("Ufo2UVb");
+		//	cGameObject* pBunny = findObjectByFriendlyName("Ufo2UVb");
 
 		//	glm::vec3 oldPos = pBunny->position;
 		//	glm::vec3 oldScale = pBunny->nonUniformScale;
@@ -778,7 +775,7 @@ int main(void)
 			  objIndex != (unsigned int)vec_pObjectsToDraw.size(); 
 			  objIndex++ )
 		{	
-			cMeshObject* pCurrentMesh = vec_pObjectsToDraw[objIndex];
+			cGameObject* pCurrentMesh = vec_pObjectsToDraw[objIndex];
 			
 			pCurrentMesh->Update( deltaTime );
 
@@ -789,14 +786,13 @@ int main(void)
 		
 
 		// The physics update loop
-		DoPhysicsUpdate( deltaTime, vec_pObjectsToDraw );
 
 		//New Dll physics
 		gPhysicsWorld->Update(deltaTime);
 
 		for (int i = 0; i < vec_pObjectsToDraw.size(); i++)
 		{
-			cMeshObject* curMesh = vec_pObjectsToDraw[i];
+			cGameObject* curMesh = vec_pObjectsToDraw[i];
 			if (curMesh->rigidBody != NULL && curMesh->rigidBody->GetShape()->GetShapeType() != nPhysics::SHAPE_TYPE_PLANE) {
 				curMesh->position = curMesh->rigidBody->GetPosition();
 				curMesh->m_meshQOrientation = glm::mat4(curMesh->rigidBody->GetMatRotation());
@@ -806,7 +802,7 @@ int main(void)
 		if (bIsDebugMode) {
 			// Call the debug renderer call
 			for (int i = 0; i < vec_pObjectsToDraw.size(); i++) {
-				cMeshObject* curObj = vec_pObjectsToDraw[i];
+				cGameObject* curObj = vec_pObjectsToDraw[i];
 				curObj->bIsVisible = false;
 				curObj->bDontLight = true;
 				if (curObj->rigidBody != NULL) {
@@ -828,7 +824,7 @@ int main(void)
 		else
 		{
 			for (int i = 0; i < vec_pObjectsToDraw.size(); i++) {
-				cMeshObject* curObj = vec_pObjectsToDraw[i];
+				cGameObject* curObj = vec_pObjectsToDraw[i];
 				if (!curObj->bIsDebug) {
 					curObj->bIsVisible = true;
 					curObj->bIsWireFrame = false;
@@ -849,7 +845,7 @@ int main(void)
 			{
 
 
-				cMeshObject* pDebugSphere = findObjectByFriendlyName("DebugSphere");
+				cGameObject* pDebugSphere = findObjectByFriendlyName("DebugSphere");
 				pDebugSphere->bIsVisible = true;
 				pDebugSphere->bDontLight = true;
 				glm::vec4 oldDiffuse = pDebugSphere->materialDiffuse;
@@ -959,7 +955,7 @@ void UpdateWindowTitle(void)
 	return;
 }
 
-cMeshObject* findObjectByFriendlyName(std::string theNameToFind)
+cGameObject* findObjectByFriendlyName(std::string theNameToFind)
 {
 	for ( unsigned int index = 0; index != vec_pObjectsToDraw.size(); index++ )
 	{
@@ -977,7 +973,7 @@ cMeshObject* findObjectByFriendlyName(std::string theNameToFind)
 }
 
 
-cMeshObject* findObjectByUniqueID(unsigned int ID_to_find)
+cGameObject* findObjectByUniqueID(unsigned int ID_to_find)
 {
 	for ( unsigned int index = 0; index != vec_pObjectsToDraw.size(); index++ )
 	{

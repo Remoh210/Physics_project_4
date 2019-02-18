@@ -5,6 +5,7 @@
 #include <GLFW/glfw3.h>
 
 #include "Error/COpenGLError.h"
+#include "cFBO.h"
 
 // GFLW keyboard callback
 void key_callback( GLFWwindow* window, int key, int scancode, int action, int mods);

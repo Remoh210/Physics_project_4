@@ -101,7 +101,7 @@
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <SubSystem>Console</SubSystem>
-      <AdditionalDependencies>glfw3.lib;freetype271MT.lib;lua5.3.3-static.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>assimp-vc140-mt.lib;glfw3.lib;freetype271MT.lib;lua5.3.3-static.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -114,7 +114,7 @@
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <SubSystem>Console</SubSystem>
-      <AdditionalDependencies>glfw3.lib;freetype.lib;lua53.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>assimp-vc140-mt.lib;glfw3.lib;freetype.lib;lua53.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -131,7 +131,7 @@
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <SubSystem>Console</SubSystem>
-      <AdditionalDependencies>glfw3.lib;freetype271MT.lib;lua5.3.3-static.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>assimp-vc140-mt.lib;glfw3.lib;freetype271MT.lib;lua5.3.3-static.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <StackReserveSize>
       </StackReserveSize>
     </Link>
@@ -150,20 +150,25 @@
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <SubSystem>Console</SubSystem>
-      <AdditionalDependencies>glfw3.lib;freetype.lib;lua53.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>assimp-vc140-mt.lib;glfw3.lib;freetype.lib;lua53.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="cAABB.cpp" />
     <ClCompile Include="cAnimationCurveCommand.cpp" />
+    <ClCompile Include="cAnimationState.cpp" />
+    <ClCompile Include="cAssimpBasic.cpp" />
+    <ClCompile Include="cAssimpBasic_Imp.cpp" />
     <ClCompile Include="cCameraChangeAnim.cpp" />
     <ClCompile Include="cCommandGroup.cpp" />
+    <ClCompile Include="cFBO.cpp" />
     <ClCompile Include="cFollowCurve.cpp" />
     <ClCompile Include="cFollowObjectCommand.cpp" />
     <ClCompile Include="cLightHelper.cpp" />
     <ClCompile Include="cLightManager.cpp" />
     <ClCompile Include="cLuaBrain.cpp" />
-    <ClCompile Include="cMeshObject.cpp" />
+    <ClCompile Include="cGameObject.cpp" />
+    <ClCompile Include="cMesh.cpp" />
     <ClCompile Include="cMeshObject_Quaternion.cpp" />
     <ClCompile Include="cMoveToCommand.cpp" />
     <ClCompile Include="cMoveToEase.cpp" />
@@ -172,6 +177,7 @@
     <ClCompile Include="cSceneManager.cpp" />
     <ClCompile Include="cShader.cpp" />
     <ClCompile Include="cShaderManager.cpp" />
+    <ClCompile Include="cSimpleAssimpSkinnedMeshLoader_OneMesh.cpp" />
     <ClCompile Include="cSimpleDebugRenderer.cpp" />
     <ClCompile Include="cTextRend.cpp" />
     <ClCompile Include="cTriggerCommand.cpp" />
@@ -192,6 +198,12 @@
     <ClCompile Include="PhysicsStuff.cpp" />
     <ClCompile Include="PlayerCollision.cpp" />
     <ClCompile Include="PlyFileLoader.cpp" />
+    <ClCompile Include="Ply\CHRTimer.cpp" />
+    <ClCompile Include="Ply\CPlyFile5nt.cpp" />
+    <ClCompile Include="Ply\CPlyFile5nt_experimental.cpp" />
+    <ClCompile Include="Ply\CPlyFile5nt_planarUV.cpp" />
+    <ClCompile Include="Ply\CStringHelper.cpp" />
+    <ClCompile Include="Ply\CVector3f.cpp" />
     <ClCompile Include="sModelDrawInfo.cpp" />
     <ClCompile Include="SmoothStep.cpp" />
     <ClCompile Include="sNVPair.cpp" />
@@ -206,20 +218,26 @@
     <ClInclude Include="Camera.h" />
     <ClInclude Include="CameraChangeanimr.h" />
     <ClInclude Include="cAnimationCurveCommand.h" />
+    <ClInclude Include="cAnimationState.h" />
+    <ClInclude Include="cAssimpBasic.h" />
+    <ClInclude Include="cAssimpBasic_Imp.h" />
     <ClInclude Include="cCommandGroup.h" />
+    <ClInclude Include="cFBO.h" />
     <ClInclude Include="cFollowObjectCommand.h" />
     <ClInclude Include="cLightHelper.h" />
     <ClInclude Include="cLightManager.h" />
     <ClInclude Include="cLuaBrain.h" />
+    <ClInclude Include="cMesh.h" />
     <ClInclude Include="cMoveToCommand.h" />
     <ClInclude Include="cMoveToEase.h" />
     <ClInclude Include="cMoveToEaseIO.h" />
     <ClInclude Include="cOrientTo.h" />
     <ClInclude Include="cSceneManager.h" />
+    <ClInclude Include="cSimpleAssimpSkinnedMeshLoader_OneMesh.h" />
     <ClInclude Include="cSimpleDebugRenderer.h" />
     <ClInclude Include="cTriggerCommand.h" />
     <ClInclude Include="cVAOMeshManager.h" />
-    <ClInclude Include="cMeshObject.h" />
+    <ClInclude Include="cGameObject.h" />
     <ClInclude Include="cShaderManager.h" />
     <ClInclude Include="cWait.h" />
     <ClInclude Include="DebugRenderer\cDebugRenderer.h" />
@@ -233,11 +251,17 @@
     <ClInclude Include="iCommand.h" />
     <ClInclude Include="linmath.h" />
     <ClInclude Include="ParticleSystem.h" />
+    <ClInclude Include="Ply\CHRTimer.h" />
+    <ClInclude Include="Ply\CPlyFile5nt.h" />
+    <ClInclude Include="Ply\CPlyInfo.h" />
+    <ClInclude Include="Ply\CStringHelper.h" />
+    <ClInclude Include="Ply\CVector3f.h" />
     <ClInclude Include="sModelDrawInfo.h" />
     <ClInclude Include="SmoothStep.h" />
     <ClInclude Include="sNVPair.h" />
     <ClInclude Include="sPlyTriangle.h" />
     <ClInclude Include="sPlyVertex.h" />
+    <ClInclude Include="sVertex_xyz_rgba_n_uv2_bt_4Bones.h" />
     <ClInclude Include="TextureManager\C24BitBMPpixel.h" />
     <ClInclude Include="TextureManager\cBasicTextureManager.h" />
     <ClInclude Include="TextureManager\CTextureFromBMP.h" />

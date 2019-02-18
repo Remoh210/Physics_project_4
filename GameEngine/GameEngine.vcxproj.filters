@@ -94,6 +94,21 @@
     <Filter Include="SimpleDebugRenderer">
       <UniqueIdentifier>{7bbb843f-d748-49f4-8a33-ab48131f6ef5}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Mesh Manager\Assimp">
+      <UniqueIdentifier>{43729307-ad59-4efc-bfb4-6c478d563399}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Mesh Manager\Mesh">
+      <UniqueIdentifier>{acde5187-e625-4039-bc43-86d4baa9ebb6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Mesh Manager\Vertex">
+      <UniqueIdentifier>{45246f65-aa1e-4fcd-a011-94a5ca2dc8df}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="cFBO">
+      <UniqueIdentifier>{eb5ca8f7-4f41-43ae-98b2-6e600595261e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Ply">
+      <UniqueIdentifier>{28cde939-6953-4b0a-8dba-15b3ce32ac62}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="theMain.cpp">
@@ -119,9 +134,6 @@
     </ClCompile>
     <ClCompile Include="cVAOMeshManager.cpp">
       <Filter>Mesh Manager</Filter>
-    </ClCompile>
-    <ClCompile Include="cMeshObject.cpp">
-      <Filter>Header Files</Filter>
     </ClCompile>
     <ClCompile Include="DrawObject_call.cpp">
       <Filter>Resource Files\Source Files</Filter>
@@ -228,6 +240,45 @@
     <ClCompile Include="HotSwap.cpp">
       <Filter>UserIO</Filter>
     </ClCompile>
+    <ClCompile Include="cGameObject.cpp">
+      <Filter>Header Files</Filter>
+    </ClCompile>
+    <ClCompile Include="cAnimationState.cpp">
+      <Filter>Mesh Manager\Assimp</Filter>
+    </ClCompile>
+    <ClCompile Include="cAssimpBasic.cpp">
+      <Filter>Mesh Manager\Assimp</Filter>
+    </ClCompile>
+    <ClCompile Include="cAssimpBasic_Imp.cpp">
+      <Filter>Mesh Manager\Assimp</Filter>
+    </ClCompile>
+    <ClCompile Include="cSimpleAssimpSkinnedMeshLoader_OneMesh.cpp">
+      <Filter>Mesh Manager\Assimp</Filter>
+    </ClCompile>
+    <ClCompile Include="cMesh.cpp">
+      <Filter>Mesh Manager\Mesh</Filter>
+    </ClCompile>
+    <ClCompile Include="cFBO.cpp">
+      <Filter>cFBO</Filter>
+    </ClCompile>
+    <ClCompile Include="Ply\CHRTimer.cpp">
+      <Filter>Ply</Filter>
+    </ClCompile>
+    <ClCompile Include="Ply\CPlyFile5nt.cpp">
+      <Filter>Ply</Filter>
+    </ClCompile>
+    <ClCompile Include="Ply\CPlyFile5nt_experimental.cpp">
+      <Filter>Ply</Filter>
+    </ClCompile>
+    <ClCompile Include="Ply\CPlyFile5nt_planarUV.cpp">
+      <Filter>Ply</Filter>
+    </ClCompile>
+    <ClCompile Include="Ply\CStringHelper.cpp">
+      <Filter>Ply</Filter>
+    </ClCompile>
+    <ClCompile Include="Ply\CVector3f.cpp">
+      <Filter>Ply</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="linmath.h">
@@ -240,9 +291,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="sPlyTriangle.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="cMeshObject.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="cVAOMeshManager.h">
@@ -346,6 +394,45 @@
     </ClInclude>
     <ClInclude Include="cSimpleDebugRenderer.h">
       <Filter>SimpleDebugRenderer</Filter>
+    </ClInclude>
+    <ClInclude Include="cGameObject.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="cSimpleAssimpSkinnedMeshLoader_OneMesh.h">
+      <Filter>Mesh Manager\Assimp</Filter>
+    </ClInclude>
+    <ClInclude Include="cAnimationState.h">
+      <Filter>Mesh Manager\Assimp</Filter>
+    </ClInclude>
+    <ClInclude Include="cAssimpBasic.h">
+      <Filter>Mesh Manager\Assimp</Filter>
+    </ClInclude>
+    <ClInclude Include="cAssimpBasic_Imp.h">
+      <Filter>Mesh Manager\Assimp</Filter>
+    </ClInclude>
+    <ClInclude Include="cMesh.h">
+      <Filter>Mesh Manager\Mesh</Filter>
+    </ClInclude>
+    <ClInclude Include="sVertex_xyz_rgba_n_uv2_bt_4Bones.h">
+      <Filter>Mesh Manager\Vertex</Filter>
+    </ClInclude>
+    <ClInclude Include="cFBO.h">
+      <Filter>cFBO</Filter>
+    </ClInclude>
+    <ClInclude Include="Ply\CHRTimer.h">
+      <Filter>Ply</Filter>
+    </ClInclude>
+    <ClInclude Include="Ply\CPlyFile5nt.h">
+      <Filter>Ply</Filter>
+    </ClInclude>
+    <ClInclude Include="Ply\CPlyInfo.h">
+      <Filter>Ply</Filter>
+    </ClInclude>
+    <ClInclude Include="Ply\CStringHelper.h">
+      <Filter>Ply</Filter>
+    </ClInclude>
+    <ClInclude Include="Ply\CVector3f.h">
+      <Filter>Ply</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

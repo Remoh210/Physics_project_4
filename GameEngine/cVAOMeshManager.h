@@ -22,14 +22,17 @@ public:
 
 	enum eLoadWith
 	{
-		ORIGINAL, ASSIMP
+		/*ORIGINAL,*/
+		PLY5N,
+		ASSIMP
 	};
-	void changeLoaderToOriginal(void);
-	//void changeLoaderToPly5n(void);
+	//void changeLoaderToOriginal(void);
+	void changeLoaderToPly5n(void);
 	void changeLoaderToAssimp(void);
 
-	// Note: the shader program ID is needed to tie 
-	// the buffer to the vertex layout of the shader
+	// Takes the filename from the drawInfo, and loads the model into the cMesh object inside, then
+	//  loads the mesh into the sModelDrawInfo, then into the GPU and VAO
+	// Note: the shader program ID is needed to tie the buffer to the vertex layout of the shader
 	bool LoadModelIntoVAO(sModelDrawInfo &drawInfo,
 		unsigned int shaderProgramID);
 
@@ -48,15 +51,18 @@ public:
 	void SetBasePath(std::string basepath);
 
 private:
+	// Rounds up to multiples of 64
+	unsigned int m_roundUp(unsigned int numToRound, unsigned int multiple);
 
 	// LoadPlyFileData()
 	bool m_LoadModelFromFile(sModelDrawInfo &drawInfo);
-	bool m_LoadModelFromFile_OriginalLoader(sModelDrawInfo &drawInfo);
-	//bool m_LoadModelFromFile_Ply5nLoader(sModelDrawInfo &drawInfo);
+	//	bool m_LoadModelFromFile_OriginalLoader( sModelDrawInfo &drawInfo );	// Was always crappy... :)
+	bool m_LoadModelFromFile_Ply5nLoader(sModelDrawInfo &drawInfo);
 	bool m_LoadModelFromFile_AssimpLoader(sModelDrawInfo &drawInfo);
 
 	//LoadMeshIntoGPUBuffer
-	bool m_LoadDrawInfo_Into_VAO(sModelDrawInfo &drawInfo,
+	// This takes the information from the cMesh, inside the sModelDrawInfo, and loads it into the VAO
+	bool m_LoadMeshInfo_Into_VAO(sModelDrawInfo &drawInfo,
 		unsigned int shaderProgramID);
 
 

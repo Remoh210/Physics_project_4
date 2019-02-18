@@ -11,9 +11,17 @@
 
 #include "cShaderManager.h"
 
-#include "cMeshObject.h"
+#include "cGameObject.h"
+
+#include "cAnimationState.h"
 
 #include <iostream>
+
+
+//std::map<std::string /*name*/, cParticleEmitter* > g_map_pParticleEmitters;
+
+
+
 
 bool HACK_bTextureUniformLocationsLoaded = false;
 GLint tex00_UniLoc = -1;
@@ -28,9 +36,16 @@ GLint tex07_UniLoc = -1;
 GLint texBW_0_UniLoc = -1;
 GLint texBW_1_UniLoc = -1;
 
+// Texture sampler for off screen texture
+GLint texPass1OutputTexture_UniLoc = -1;
+
+
+
 // Will bind the textures in use for this object on this draw call
-void BindTextures(cMeshObject* pCurrentMesh, GLuint shaderProgramID)
+void BindTextures(cGameObject* pCurrentMesh, GLuint shaderProgramID)
 {
+
+
 
 	// This is pretty much a hack, so we should likely pass the shader object 
 	// (pointer) to this function, and to the DrawObject call, too. 
@@ -57,7 +72,77 @@ void BindTextures(cMeshObject* pCurrentMesh, GLuint shaderProgramID)
 
 		HACK_bTextureUniformLocationsLoaded = true;
 
+
+		texPass1OutputTexture_UniLoc = glGetUniformLocation(shaderProgramID, "texPass1OutputTexture");
+
 	}//if(!HACK_bTextureUniformLocationsLoaded )
+
+
+	// ******************************************************************** 
+	//    _  _              _ _       ___ ___  ___    _           _                  _    _         _ _           
+	//   | || |__ _ _ _  __| | |___  | __| _ )/ _ \  | |_ _____ _| |_ _  _ _ _ ___  | |__(_)_ _  __| (_)_ _  __ _ 
+	//   | __ / _` | ' \/ _` | / -_) | _|| _ \ (_) | |  _/ -_) \ /  _| || | '_/ -_) | '_ \ | ' \/ _` | | ' \/ _` |
+	//   |_||_\__,_|_||_\__,_|_\___| |_| |___/\___/   \__\___/_\_\\__|\_,_|_| \___| |_.__/_|_||_\__,_|_|_||_\__, |
+	//                                                                                                      |___/ 
+	// HACK: This is dealing with the SINGLE FBO object, currently.
+	// The cGameObject has a boolean to indicate that is using this
+	// offscreen texture (the FBO). 
+	// If it IS using this, then we bind the texture to that, and exit.
+	// We will be making this more sophisticated so that we can have
+	// multiple FBOs (which we will need and-or want)
+
+	// HACK: hakity hack hack hack hack hack
+	//    _  _   _   ___ _  ___ 
+	//   | || | /_\ / __| |/ / |
+	//   | __ |/ _ \ (__| ' <|_|
+	//   |_||_/_/ \_\___|_|\_(_)
+	//                          	
+	// This lets us "get at" the one, global FBO
+//	extern GLuint g_FBO;
+//	extern GLuint g_FBO_colourTexture;		// <--- texture number of the texture
+//	extern GLuint g_FBO_depthTexture;
+//	extern GLint g_FBO_SizeInPixes;		// = 512 the WIDTH of the framebuffer, in pixels;
+
+	if (pCurrentMesh->b_HACK_UsesOffscreenFBO)
+	{
+		// Connect the texture for this object to the FBO texture
+		// Pick texture unit 16 (just because - I randomly picked that)
+
+		int FBO_Texture_Unit_Michael_Picked = 1;
+
+		// 0x84C0  (or 33984)		
+		// Please bind to texture unit 34,000. Why gawd, why?
+		glActiveTexture(GL_TEXTURE0 + FBO_Texture_Unit_Michael_Picked);
+
+		// Connect the specific texture to THIS texture unit
+//		glBindTexture( GL_TEXTURE_2D, g_FBO_colourTexture );
+		glBindTexture(GL_TEXTURE_2D, ::g_pFBOMain->colourTexture_0_ID);
+
+		// Now pick to read from the normal (output from the 1st pass):
+//		glBindTexture( GL_TEXTURE_2D, ::g_pFBOMain->normalTexture_1_ID );
+//		glBindTexture( GL_TEXTURE_2D, ::g_pFBOMain->depthTexture_ID );
+//		glBindTexture( GL_TEXTURE_2D, ::g_pFBOMain->vertexWorldPos_2_ID );
+
+
+		// Set the sampler (in the shader) to ALSO point to texture unit 16
+		// This one takes the unchanged texture unit numbers 
+//		glUniform1i( tex00_UniLoc, FBO_Texture_Unit_Michael_Picked );
+		glUniform1i(texPass1OutputTexture_UniLoc, FBO_Texture_Unit_Michael_Picked);
+
+
+		// Set the blending to that it's 0th texture sampler
+		// NOTE: it's only the 0th (1st) texture that we are mixing from
+//		glUniform4f( texBW_0_UniLoc, 1.0f, 0.0f, 0.0f, 0.0f );		// <---- Note the 1.0f
+//		glUniform4f( texBW_1_UniLoc, 0.0f, 0.0f, 0.0f, 0.0f );
+
+		// NOTE: Early return (so we don't set any other textures
+		// Again; HACK!!
+		return;
+	}//if ( pCurrentMesh->b_HACK_UsesOffscreenFBO )
+	// ******************************************************************** 
+	// ******************************************************************** 
+	// ******************************************************************** 
+
 
 	// For each texture, bind the texture to a texture unit and sampler
 	// Texture #0 (on the mesh) -- Texture Unit 0 -- Sampler 0
@@ -123,7 +208,30 @@ void BindTextures(cMeshObject* pCurrentMesh, GLuint shaderProgramID)
 }
 
 
-void DrawObject(cMeshObject* pCurrentMesh,
+
+void DrawScene_Simple(std::vector<cGameObject*> vec_pMeshSceneObjects,
+	GLuint shaderProgramID,
+	unsigned int passNumber)
+{
+	for (unsigned int objIndex = 0;
+		objIndex != (unsigned int)vec_pMeshSceneObjects.size();
+		objIndex++)
+	{
+		cGameObject* pCurrentMesh = vec_pMeshSceneObjects[objIndex];
+
+		glm::mat4x4 matModel = glm::mat4(1.0f);			// mat4x4 m, p, mvp;
+
+		DrawObject(pCurrentMesh, matModel, shaderProgramID);
+
+	}//for ( unsigned int objIndex = 0; 
+
+	return;
+}
+
+static float g_HACK_CurrentTime = 0.0f;
+
+
+void DrawObject(cGameObject* pCurrentMesh,
 	glm::mat4x4 &matModel,
 	GLuint shaderProgramID)
 {
@@ -135,47 +243,17 @@ void DrawObject(cMeshObject* pCurrentMesh,
 	}
 
 
+
 	// Set up the texture binding for this object
 	BindTextures(pCurrentMesh, shaderProgramID);
 
 
 
-
-	//glm::mat4 trans = glm::mat4x4(1.0f);
-
-
-	//if (pCurrentMesh->rigidBody != NULL)
-	//{
-	//	glm::vec3 rbPos = pCurrentMesh->rigidBody->GetPosition();
-
-	//	trans = glm::translate(trans, rbPos);
-	//}
-	//else
-	//{
-	//	trans = glm::translate(trans, pCurrentMesh->position);
-	//}
-
-	//matModel = matModel * trans;
-
-
-	//if (pCurrentMesh->rigidBody != NULL)
-	//{
-	//	glm::mat4 orientation;
-	//	orientation = pCurrentMesh->rigidBody->GetMatRotation();
-	//	matModel = matModel * orientation;
-	//}
-	//else
-	//{
-	//	matModel = matModel * glm::mat4(pCurrentMesh->getQOrientation());
-	//}
-
-
-
 	//************************************
-	matModel = glm::mat4x4(1.0f);		// mat4x4_identity(m);
+	//	matModel = glm::mat4x4(1.0f);		// mat4x4_identity(m);
 
 
-	//m = m * rotateZ;
+		//m = m * rotateZ;
 
 	glm::mat4 matTranslation = glm::translate(glm::mat4(1.0f),
 		pCurrentMesh->position);
@@ -261,6 +339,7 @@ void DrawObject(cMeshObject* pCurrentMesh,
 	//				pCurrentMesh->objColour.b ); 
 
 
+
 	// ***************************************************
 
 	// I'll do quick sort or whatever sexy sorts
@@ -329,9 +408,155 @@ void DrawObject(cMeshObject* pCurrentMesh,
 		//glEnable( GL_DEPTH_TEST );	// When drawing, checked the existing depth
 	}
 
+	// *****************************************************************
+	//  ___ _   _                  _ __  __        _    
+	// / __| |_(_)_ _  _ _  ___ __| |  \/  |___ __| |_  
+	// \__ \ / / | ' \| ' \/ -_) _` | |\/| / -_|_-< ' \ 
+	// |___/_\_\_|_||_|_||_\___\__,_|_|  |_\___/__/_||_|
+	//                                                  
+	GLint bIsASkinnedMesh_LocID = glGetUniformLocation(shaderProgramID,
+		"bIsASkinnedMesh");
 
+	// Is this a skinned mesh model or a "regular" static one?
 	sModelDrawInfo modelInfo;
-	modelInfo.meshFileName = pCurrentMesh->meshName;
+	if (pCurrentMesh->pSimpleSkinnedMesh == NULL)
+	{
+		// It's a "regular" mesh
+		modelInfo.meshFileName = pCurrentMesh->meshName;
+
+		glUniform1f(bIsASkinnedMesh_LocID, (float)GL_FALSE);
+	}
+	else
+	{
+		// It ++IS++ skinned mesh
+		modelInfo.meshFileName = pCurrentMesh->pSimpleSkinnedMesh->fileName;
+
+		glUniform1f(bIsASkinnedMesh_LocID, (float)GL_TRUE);
+
+		// Also pass up the bone information...
+		std::vector< glm::mat4x4 > vecFinalTransformation;	// Replaced by	theMesh.vecFinalTransformation
+		std::vector< glm::mat4x4 > vecOffsets;
+
+		//		cAnimationState* pAniState = pCurrentMesh->pAniState->;
+				// Are there any animations in the queue?
+		//		if ( pCurrentMesh->pAniState->vecAnimationQueue.empty() )
+
+		pCurrentMesh->pSimpleSkinnedMesh->BoneTransform(
+			//0.0f,	// curFrameTime,
+			g_HACK_CurrentTime,	// curFrameTime,
+//										"assets/modelsFBX/RPG-Character_Unarmed-Walk(FBX2013).FBX",		// animationToPlay,		//**NEW**
+//										"assets/modelsFBX/RPG-Character_Unarmed-Roll-Backward(FBX2013).fbx",		// animationToPlay,		//**NEW**
+//										"assets/modelsFBX/RPG-Character_Unarmed-Idle(FBX2013).fbx",		// animationToPlay,		//**NEW**
+		pCurrentMesh->currentAnimation,
+		vecFinalTransformation,		// Final bone transforms for mesh
+		pCurrentMesh->vecObjectBoneTransformation,  // final location of bones
+		vecOffsets);                 // local offset for each bone
+
+
+		::g_HACK_CurrentTime += 0.01f;		// Frame time, but we are going at 60HZ
+
+
+		unsigned int numberOfBonesUsed = static_cast<unsigned int>(vecFinalTransformation.size());
+
+		GLint numBonesUsed_UniLoc = glGetUniformLocation(shaderProgramID, "numBonesUsed");
+		glUniform1i(numBonesUsed_UniLoc, numberOfBonesUsed);
+
+		//		const unsigned int TOTALNUMBEROFBONESTOPASSINTOTHESHADERASIDENTIYMATRIXVALUES = 99;
+		//		for ( unsigned int index = 0; index != numberOfBonesUsed; index++ )
+		//		{
+		//			vecFinalTransformation.push_back( glm::mat4(1.0f) );
+		//		}
+
+		glm::mat4x4* pBoneMatrixArray = &(vecFinalTransformation[0]);
+
+		// UniformLoc_bonesArray is the getUniformLoc of "bones[0]" from
+		//	uniform mat4 bones[MAXNUMBEROFBONES] 
+		// in the shader
+		GLint bones_UniLoc = glGetUniformLocation(shaderProgramID, "bones");
+		//		std::cout << "bones_UniLoc: " << bones_UniLoc << std::endl;	std::cout.flush();
+		glUniformMatrix4fv(bones_UniLoc, numberOfBonesUsed, GL_FALSE,
+			(const GLfloat*)glm::value_ptr(*pBoneMatrixArray));
+
+		// Update the extents of the skinned mesh from the bones...
+		//	sMeshDrawInfo.minXYZ_from_SM_Bones(glm::vec3(0.0f)), 
+		//  sMeshDrawInfo.maxXYZ_from_SM_Bones(glm::vec3(0.0f))
+		for (unsigned int boneIndex = 0; boneIndex != numberOfBonesUsed; boneIndex++)
+		{
+			glm::mat4 boneLocal = pCurrentMesh->vecObjectBoneTransformation[boneIndex];
+
+			// HACK: Need to add "uniform scale" to mesh
+	//		float scale = pCurrentMesh->nonUniformScale.x;
+			float scale = 1.0f;	// For now
+			boneLocal = glm::scale(boneLocal, glm::vec3(pCurrentMesh->nonUniformScale.x,
+				pCurrentMesh->nonUniformScale.y,
+				pCurrentMesh->nonUniformScale.z));
+
+			glm::vec4 boneBallLocation = boneLocal * glm::vec4(0.0f, 0.0f, 0.0f, 1.0f);
+			boneBallLocation *= scale;
+
+			// Draw a debug sphere at the location of the bone
+	//		boneBallLocation += glm::vec4(0.0f, 0.0f, 0.0f, 0.0f);
+
+
+	//		::g_pDebugRenderer->addDebugSphere( glm::vec3(boneBallLocation), 
+	//										    glm::vec3( 1.0f, 1.0f, 1.0f ),
+	//										    scale, 0.0f );
+			//DrawDebugBall( glm::vec3(boneBallLocation), glm::vec4(0.0f, 1.0f, 0.0f, 1.0f), 0.2f );
+
+
+			// Bone index [13] = "B_L_Finger31"
+			if (boneIndex == 25)
+			{
+				//DrawDebugBall( glm::vec3(boneBallLocation), glm::vec4(1.0f, 0.0f, 0.0f, 1.0f), 0.5f );
+	//			std::cout << "Bone 13, B_L_Finger31: " 
+	//				<< boneBallLocation.x << ", "
+	//				<< boneBallLocation.y << ", " 
+	//				<< boneBallLocation.z << std::endl;
+
+				cGameObject* pPlayerBody = findObjectByFriendlyName("PlayerBody");
+				pPlayerBody->setUniformScale(10.0f);
+				pPlayerBody->position = boneBallLocation;
+			}
+
+
+
+
+			// Update the extents of the mesh
+			if (boneIndex == 0)
+			{
+				// For the 0th bone, just assume this is the extent
+				pCurrentMesh->minXYZ_from_SM_Bones = glm::vec3(boneBallLocation);
+				pCurrentMesh->maxXYZ_from_SM_Bones = glm::vec3(boneBallLocation);
+			}
+			else
+			{	// It's NOT the 0th bone, so compare with current max and min
+				if (pCurrentMesh->minXYZ_from_SM_Bones.x < boneBallLocation.x) { pCurrentMesh->minXYZ_from_SM_Bones.x = boneBallLocation.x; }
+				if (pCurrentMesh->minXYZ_from_SM_Bones.y < boneBallLocation.y) { pCurrentMesh->minXYZ_from_SM_Bones.y = boneBallLocation.y; }
+				if (pCurrentMesh->minXYZ_from_SM_Bones.z < boneBallLocation.z) { pCurrentMesh->minXYZ_from_SM_Bones.z = boneBallLocation.z; }
+
+				if (pCurrentMesh->maxXYZ_from_SM_Bones.x > boneBallLocation.x) { pCurrentMesh->maxXYZ_from_SM_Bones.x = boneBallLocation.x; }
+				if (pCurrentMesh->maxXYZ_from_SM_Bones.y > boneBallLocation.y)
+				{
+					pCurrentMesh->maxXYZ_from_SM_Bones.y = boneBallLocation.y;
+				}
+				if (pCurrentMesh->maxXYZ_from_SM_Bones.z > boneBallLocation.z)
+				{
+					pCurrentMesh->maxXYZ_from_SM_Bones.z = boneBallLocation.z;
+				}
+			}//if ( boneIndex == 0 )
+
+
+		}
+
+
+	}//if ( pCurrentMesh->pSimpleSkinnedMesh == NULL )
+//  ___ _   _                  _ __  __        _    
+// / __| |_(_)_ _  _ _  ___ __| |  \/  |___ __| |_  
+// \__ \ / / | ' \| ' \/ -_) _` | |\/| / -_|_-< ' \ 
+// |___/_\_\_|_||_|_||_\___\__,_|_|  |_\___/__/_||_|
+//                                                  
+// *****************************************************************
+
 
 	if (g_pTheVAOMeshManager->FindDrawInfoByModelName(modelInfo))
 	{
@@ -352,5 +577,225 @@ void DrawObject(cMeshObject* pCurrentMesh,
 		std::cout << pCurrentMesh->meshName << " was not found" << std::endl;
 	}
 
+
+	for (unsigned int childMeshIndex = 0; childMeshIndex != pCurrentMesh->vec_pChildObjectsToDraw.size(); childMeshIndex++)
+	{
+		glm::mat4 matWorldParent = matModel;
+		DrawObject(pCurrentMesh->vec_pChildObjectsToDraw[childMeshIndex], matWorldParent, shaderProgramID);
+	}
+
 	return;
 }//void DrawObject(void)
+
+
+
+
+
+// Draws any particle emitters that are active
+//void updateAndDrawParticles(double deltaTime,
+//	GLuint shaderProgramID,
+//	glm::vec3 cameraEye)
+//{
+//
+//	// These GetUniformLocation() calls should NOT be in the draw call
+//	// (you should get these at the start and cache them in the cShaderObject, perhaps)
+//	GLint bIsParticleImposter_UniLoc = glGetUniformLocation(shaderProgramID, "bIsParticleImposter");
+//	GLint ParticleImposterAlphaOverride_UniLoc = glGetUniformLocation(shaderProgramID, "ParticleImposterAlphaOverride");
+//	GLint ParticleImposterBlackThreshold_UniLoc = glGetUniformLocation(shaderProgramID, "ParticleImposterBlackThreshold");
+//
+//	// Black threshold is where the imposter will discard 
+//	// i.e. At or below this value, the imposter isn't draw. 
+//	// (range is from 0.0 to 1.0)
+//	glUniform1f(ParticleImposterBlackThreshold_UniLoc, 0.25f);
+//
+//	//// STARTOF: Star shaped smoke particle
+//	//std::map<std::string /*name*/, cParticleEmitter* >::iterator itPE_Smoke01
+//	//	= ::g_map_pParticleEmitters.find("Smoke01");
+//
+//	//if (itPE_Smoke01 != ::g_map_pParticleEmitters.end())
+//	//{
+//
+//	//	cParticleEmitter* pPE_Smoke01 = itPE_Smoke01->second;
+//
+//	//	// Update the particle emitter
+//	//	cGameObject* pParticleMesh = findObjectByFriendlyName("SmokeObjectStar");
+//	//	glm::mat4 matParticleIndentity = glm::mat4(1.0f);
+//	//	glm::vec3 oldPosition = pParticleMesh->position;
+//	//	glm::quat oldOrientation = pParticleMesh->getQOrientation();
+//	//	glm::vec3 oldScale = pParticleMesh->nonUniformScale;
+//
+//	//	pParticleMesh->setMeshOrientationEulerAngles(0.0f, 0.0f, 0.0f);
+//	//	pParticleMesh->bIsVisible = true;
+//
+//
+//	//	// Set up the shader
+//	//	glUniform1f(bIsParticleImposter_UniLoc, (float)GL_TRUE);
+//
+//
+//	//	pPE_Smoke01->Update(deltaTime);
+//
+//	//	std::vector<sParticle> vecParticlesToDraw;
+//	//	pPE_Smoke01->getAliveParticles(vecParticlesToDraw);
+//
+//	//	pPE_Smoke01->sortParticlesBackToFront(vecParticlesToDraw, cameraEye);
+//
+//	//	unsigned int numParticles = (unsigned int)vecParticlesToDraw.size();
+//	//	//			std::cout << "Drawing " << numParticles << " particles" << std::end;
+//
+//	//	unsigned int count = 0;
+//	//	for (unsigned int index = 0; index != numParticles; index++)
+//	//	{
+//	//		if (vecParticlesToDraw[index].lifeRemaining > 0.0f)
+//	//		{
+//	//			// Draw it
+//	//			pParticleMesh->position = vecParticlesToDraw[index].position;
+//	//			pParticleMesh->setUniformScale(vecParticlesToDraw[index].scale);
+//	//			pParticleMesh->setQOrientation(vecParticlesToDraw[index].qOrientation);
+//
+//	//			// This is for the "death" transparency
+//	//			glUniform1f(ParticleImposterAlphaOverride_UniLoc, vecParticlesToDraw[index].transparency);
+//
+//	//			DrawObject(pParticleMesh, matParticleIndentity, shaderProgramID);
+//	//			count++;
+//	//		}
+//	//	}
+//	//	//			std::cout << "Drew " << count << " particles" << std::endl;
+//	//	pParticleMesh->bIsVisible = false;
+//	//	pParticleMesh->position = oldPosition;
+//	//	pParticleMesh->setQOrientation(oldOrientation);
+//	//	pParticleMesh->nonUniformScale = oldScale;
+//	//	glUniform1f(bIsParticleImposter_UniLoc, (float)GL_FALSE);
+//	//	glUniform1f(ParticleImposterAlphaOverride_UniLoc, 1.0f);
+//	//	// ***************************************************************************
+//	//}
+//	//// ENDOF: Star shaped smoke particle
+//
+//
+//	//// STARTOF: flat 2D smoke particle
+//	//std::map<std::string /*name*/, cParticleEmitter* >::iterator itPE_Smoke02
+//	//	= ::g_map_pParticleEmitters.find("Smoke02");
+//
+//	//if (itPE_Smoke02 != ::g_map_pParticleEmitters.end())
+//	//{
+//
+//	//	cParticleEmitter* pPE_Smoke02 = itPE_Smoke02->second;
+//
+//	//	// Update the particle emitter
+//	//	cGameObject* pParticleMesh = findObjectByFriendlyName("SmokeObjectQuad");
+//	//	glm::mat4 matParticleIndentity = glm::mat4(1.0f);
+//	//	glm::vec3 oldPosition = pParticleMesh->position;
+//	//	glm::quat oldOrientation = pParticleMesh->getQOrientation();
+//	//	glm::vec3 oldScale = pParticleMesh->nonUniformScale;
+//
+//	//	pParticleMesh->setMeshOrientationEulerAngles(0.0f, 0.0f, 0.0f);
+//	//	pParticleMesh->bIsVisible = true;
+//
+//
+//	//	// Set up the shader
+//	//	glUniform1f(bIsParticleImposter_UniLoc, (float)GL_TRUE);
+//
+//
+//	//	pPE_Smoke02->Update(deltaTime);
+//
+//	//	std::vector<sParticle> vecParticlesToDraw;
+//	//	pPE_Smoke02->getAliveParticles(vecParticlesToDraw);
+//
+//	//	pPE_Smoke02->sortParticlesBackToFront(vecParticlesToDraw, cameraEye);
+//
+//	//	unsigned int numParticles = (unsigned int)vecParticlesToDraw.size();
+//	//	//			std::cout << "Drawing " << numParticles << " particles" << std::end;
+//
+//	//	unsigned int count = 0;
+//	//	for (unsigned int index = 0; index != numParticles; index++)
+//	//	{
+//	//		if (vecParticlesToDraw[index].lifeRemaining > 0.0f)
+//	//		{
+//	//			// Draw it
+//	//			pParticleMesh->position = vecParticlesToDraw[index].position;
+//	//			pParticleMesh->setUniformScale(vecParticlesToDraw[index].scale);
+//	//			pParticleMesh->setQOrientation(vecParticlesToDraw[index].qOrientation);
+//
+//	//			// This is for the "death" transparency
+//	//			glUniform1f(ParticleImposterAlphaOverride_UniLoc, vecParticlesToDraw[index].transparency);
+//
+//	//			DrawObject(pParticleMesh, matParticleIndentity, shaderProgramID);
+//	//			count++;
+//	//		}
+//	//	}
+//	//	//			std::cout << "Drew " << count << " particles" << std::endl;
+//	//	pParticleMesh->bIsVisible = false;
+//	//	pParticleMesh->position = oldPosition;
+//	//	pParticleMesh->setQOrientation(oldOrientation);
+//	//	pParticleMesh->nonUniformScale = oldScale;
+//	//	glUniform1f(bIsParticleImposter_UniLoc, (float)GL_FALSE);
+//	//	glUniform1f(ParticleImposterAlphaOverride_UniLoc, 1.0f);
+//	//	// ***************************************************************************
+//	//}
+//	//// ENDOF: Star shaped smoke particle
+//
+//
+//
+//
+//	//// STARTOF: flat 2D plasma explosion
+//	//std::map<std::string /*name*/, cParticleEmitter* >::iterator itPE_Plasma_01
+//	//	= ::g_map_pParticleEmitters.find("PlasmaExplosion");
+//
+//	//if (itPE_Plasma_01 != ::g_map_pParticleEmitters.end())
+//	//{
+//
+//	//	cParticleEmitter* pPE_Plasma_01 = itPE_Plasma_01->second;
+//
+//	//	// Update the particle emitter
+//	//	cGameObject* pParticleMesh = findObjectByFriendlyName("PlasmaRingImposterObject");
+//	//	glm::mat4 matParticleIndentity = glm::mat4(1.0f);
+//	//	glm::vec3 oldPosition = pParticleMesh->position;
+//	//	glm::quat oldOrientation = pParticleMesh->getQOrientation();
+//	//	glm::vec3 oldScale = pParticleMesh->nonUniformScale;
+//
+//	//	pParticleMesh->setMeshOrientationEulerAngles(0.0f, 0.0f, 0.0f);
+//	//	pParticleMesh->bIsVisible = true;
+//
+//
+//	//	// Set up the shader
+//	//	glUniform1f(bIsParticleImposter_UniLoc, (float)GL_TRUE);
+//
+//
+//	//	pPE_Plasma_01->Update(deltaTime);
+//
+//	//	std::vector<sParticle> vecParticlesToDraw;
+//	//	pPE_Plasma_01->getAliveParticles(vecParticlesToDraw);
+//
+//	//	pPE_Plasma_01->sortParticlesBackToFront(vecParticlesToDraw, cameraEye);
+//
+//	//	unsigned int numParticles = (unsigned int)vecParticlesToDraw.size();
+//	//	//			std::cout << "Drawing " << numParticles << " particles" << std::end;
+//
+//	//	unsigned int count = 0;
+//	//	for (unsigned int index = 0; index != numParticles; index++)
+//	//	{
+//	//		if (vecParticlesToDraw[index].lifeRemaining > 0.0f)
+//	//		{
+//	//			// Draw it
+//	//			pParticleMesh->position = vecParticlesToDraw[index].position;
+//	//			pParticleMesh->setUniformScale(vecParticlesToDraw[index].scale);
+//	//			pParticleMesh->setQOrientation(vecParticlesToDraw[index].qOrientation);
+//
+//	//			// This is for the "death" transparency
+//	//			glUniform1f(ParticleImposterAlphaOverride_UniLoc, vecParticlesToDraw[index].transparency);
+//
+//	//			DrawObject(pParticleMesh, matParticleIndentity, shaderProgramID);
+//	//			count++;
+//	//		}
+//	//	}
+//	//	//			std::cout << "Drew " << count << " particles" << std::endl;
+//	//	pParticleMesh->bIsVisible = false;
+//	//	pParticleMesh->position = oldPosition;
+//	//	pParticleMesh->setQOrientation(oldOrientation);
+//	//	pParticleMesh->nonUniformScale = oldScale;
+//	//	glUniform1f(bIsParticleImposter_UniLoc, (float)GL_FALSE);
+//	//	glUniform1f(ParticleImposterAlphaOverride_UniLoc, 1.0f);
+//	//	// ***************************************************************************
+//	//}
+//	// ENDOF: flat 2D plasma explosion
+//	return;
+//}

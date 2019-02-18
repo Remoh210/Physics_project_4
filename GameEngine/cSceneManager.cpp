@@ -49,8 +49,8 @@ bool cSceneManager::saveScene(std::string filename) {
 	//GameObjects
 	/*or rapidjson::Value myArray; ;
 	     myArray.SetArray() */
-	for (std::vector<cMeshObject*>::iterator it = vec_pObjectsToDraw.begin(); it != vec_pObjectsToDraw.end(); ++it) {
-		cMeshObject* CurModel = *it;
+	for (std::vector<cGameObject*>::iterator it = vec_pObjectsToDraw.begin(); it != vec_pObjectsToDraw.end(); ++it) {
+		cGameObject* CurModel = *it;
 		if (!CurModel->bIsDebug) {
 			rapidjson::Value ObjValue(rapidjson::kObjectType);
 			rapidjson::Value FriendlyName(CurModel->friendlyName.c_str(), allocator);
@@ -314,7 +314,7 @@ bool cSceneManager::loadScene(std::string filename) {
 
 	for (rapidjson::SizeType i = 0; i < GameObject.Size(); i++) {
 
-		cMeshObject *CurModel = new cMeshObject();
+		cGameObject *CurModel = new cGameObject();
 		sModelDrawInfo curModelInfo;
 
 		CurModel->friendlyName = GameObject[i]["Name"].GetString();
@@ -446,7 +446,7 @@ bool cSceneManager::loadScene(std::string filename) {
 			CurLight->position[i] = PositionArray[i].GetFloat();
 		}
 		if (LightObject[i].HasMember("ObjectLookAt")) {
-			cMeshObject* LookAtObj = findObjectByFriendlyName(LightObject[i]["ObjectLookAt"].GetString());
+			cGameObject* LookAtObj = findObjectByFriendlyName(LightObject[i]["ObjectLookAt"].GetString());
 			if (LookAtObj != NULL) {
 				CurLight->SetRelativeDirectionByLookAt(LookAtObj);
 			}

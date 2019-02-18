@@ -5,13 +5,13 @@
 #include <vector>
 #include <glm/glm.hpp>
 #include <glm/vec3.hpp>
-#include "cMeshObject.h"
+#include "cGameObject.h"
 #include "sNVPair.h"
 #include "SmoothStep.h"
 
 //struct sNVPair
 //{
-//	cMeshObject* pMeshObj;
+//	cGameObject* pMeshObj;
 //	std::string name;
 //	std::string sValue;
 //	float fValue;

@@ -1,5 +1,5 @@
-#ifndef _cMeshObject_HG_
-#define _cMeshObject_HG_
+#ifndef _cGameObject_HG_
+#define _cGameObject_HG_
 
 #include <glm/glm.hpp>
 #include <glm/vec3.hpp>
@@ -10,6 +10,12 @@
 #include <Interfaces/iRigidBody.h>
 
 #include "DebugRenderer/iDebugRenderer.h"
+
+
+class cSimpleAssimpSkinnedMesh;	// Forward declare
+class cAnimationState;			// Forward declare 
+
+
 
 struct sSphere
 {
@@ -43,10 +49,10 @@ struct sTextureInfo
 	float strength;		
 };
 
-class cMeshObject
+class cGameObject
 {
 public:
-	cMeshObject();
+	cGameObject();
 
 private:
 	
@@ -75,6 +81,8 @@ public:
 	bool bIsVisible;
 	bool bIsDebug;
 
+	bool b_HACK_UsesOffscreenFBO;
+
 	// ignore this for now...
 	// Around its own axis (NOT the origin)
 	//glm::vec3 orientation;
@@ -92,7 +100,7 @@ public:
 	bool bDontLight;		// If true, just object colour is used
 
 	// Child objects inside this one
-	std::vector< cMeshObject* > vec_pChildObjectsToDraw;
+	std::vector< cGameObject* > vec_pChildObjectsToDraw;
 
 	// Things we can use to find this object 
 	std::string friendlyName;		// Human "Bob" "Ali" "Player"
@@ -139,6 +147,19 @@ public:
 
 	// Textures...
 	std::vector<sTextureInfo> vecTextures;
+
+	cSimpleAssimpSkinnedMesh*	pSimpleSkinnedMesh;
+	// HACK
+	std::string currentAnimation;
+	cAnimationState*	pAniState;
+
+	// Extent Values for skinned mesh
+	// These can be updated per frame, from the "update skinned mesh" call
+	glm::vec3 minXYZ_from_SM_Bones;
+	glm::vec3 maxXYZ_from_SM_Bones;
+	// Store all the bones for this model, being updated per frame
+	std::vector< glm::mat4x4 > vecObjectBoneTransformation;
+
 
 private:
 	unsigned int m_uniqueID;			// Number that's unique to this instance

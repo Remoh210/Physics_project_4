@@ -2,7 +2,7 @@
 #include "globalStuff.h"
 
 
-cSimpleDebugRenderer::cSimpleDebugRenderer(cMeshObject* mUnitSphere, GLuint IDprogram)
+cSimpleDebugRenderer::cSimpleDebugRenderer(cGameObject* mUnitSphere, GLuint IDprogram)
 	:mUnitSphere(mUnitSphere),
 	mShaderProgram(IDprogram)
 {

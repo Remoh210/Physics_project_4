@@ -19,6 +19,7 @@ sModelDrawInfo::sModelDrawInfo()
 	// These are copied to the GPU
 	this->pVerticesToVBO = NULL;
 	this->pIndices = NULL;
+	this->pMeshData = NULL;
 
 	this->maxX = this->maxY = this->maxZ = 0.0f;
 	this->minX = this->minY = this->minZ = 0.0f;

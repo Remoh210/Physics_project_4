@@ -30,8 +30,8 @@ private:
 	glm::vec3 idealRelPosition;
 
 	
-	cMeshObject* theObj;
-	cMeshObject* targetObj;
+	cGameObject* theObj;
+	cGameObject* targetObj;
 
 	bool b_Started;
 	bool m_bIsDone;

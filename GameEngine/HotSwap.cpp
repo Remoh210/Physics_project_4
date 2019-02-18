@@ -31,7 +31,7 @@ void SwapThePhysics()
 	}
 	for (int i = 0; i < vec_pObjectsToDraw.size(); i++)
 	{
-		cMeshObject* CurObj = vec_pObjectsToDraw[i];
+		cGameObject* CurObj = vec_pObjectsToDraw[i];
 		if (CurObj->rigidBody != NULL)
 		{
 			nPhysics::iShape* CurShape = NULL;

@@ -144,7 +144,7 @@ void sLight::SetRelativeDirectionByLookAt(glm::vec3 pointInWorldXYZ)
 	return;
 }
 
-void sLight::SetRelativeDirectionByLookAt(cMeshObject* lookAtObj)
+void sLight::SetRelativeDirectionByLookAt(cGameObject* lookAtObj)
 {
 	// The vector from what I'm looking at to where I am, then normalize
 	this->ObjectLookAt = lookAtObj;

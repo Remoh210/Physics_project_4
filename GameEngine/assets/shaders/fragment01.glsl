@@ -2,10 +2,15 @@
 //fragment01.glsl
 
 // In from a previous stage (vertex shader)
-in vec3 color;			// in from the vertex shader
+in vec4 color;			// in from the vertex shader
 in vec4 vertPosWorld;
-in vec3 vertNormal;		// "Model space" (only rotation)
+in vec4 vertNormal;		// "Model space" (only rotation)
 in vec4 vertUV_x2;		// Texture coordinates
+// NOTE: for now, these aren't being used, so they are ALMOST 
+//   clamped to zero, then added to the colour (so the compiler won't turf them)
+in vec4 vertTanXYZ;			// Tangent to the surface
+in vec4 vertBiNormXYZ;		// bi-normal (or bi-tangent) to the surface
+
 
 uniform vec4 objectDiffuse;		// becomes objectDiffuse in the shader
 uniform vec4 objectSpecular;	// rgb + a, which is the power)
@@ -33,7 +38,23 @@ uniform float ParticleImposterAlphaOverride;
 
 
 //vec4 gl_FragColor
-out vec4 finalOutputColour;		// Any name, but must be vec4
+//out vec4 finalOutputColour;		// Any name, but must be vec4
+//out vec4 finalOutputColour[3];		// Any name, but must be vec4
+	// Colour was #0
+	// Normal was #1
+	// Vertex World Location #2
+// Or list them in the order that they will be used
+out vec4 finalOutputColour;			// GL_COLOR_ATTACHMENT0
+out vec4 finalOutputNormal;			// GL_COLOR_ATTACHMENT1
+out vec4 finalOutputVertWorldPos;	// GL_COLOR_ATTACHMENT2
+
+//struct sOutput
+//{
+//	vec4 Colour;
+//	vec4 Normal;
+//	vec4 vertPos;
+//};
+//out sOutput finalOutoutData;
 
 struct sLight
 {
@@ -68,6 +89,11 @@ uniform sampler2D texture05;
 uniform sampler2D texture06;
 uniform sampler2D texture07;
 
+// For the 2 pass rendering
+uniform float renderPassNumber;	// 1 = 1st pass, 2nd for offscreen to quad
+uniform sampler2D texPass1OutputTexture;
+
+
 // Cube map texture (NOT a sampler3D)
 uniform samplerCube textureSkyBox;
 uniform bool useSkyBoxTexture;
@@ -83,17 +109,31 @@ uniform vec4 texBlendWeights[2];	// x is 0, y is 1, z is 2
 uniform float wholeObjectAlphaTransparency;
 
 
-// For the 2 pass rendering
-uniform float renderPassNumber;	// 1 = 1st pass, 2nd for offscreen to quad
-uniform sampler2D pass1OutputTexture;
 
 void main()
 {
+	// output black to all layers
+	finalOutputColour = vec4( 0.0f, 0.0f, 0.0f, 1.0f );
+	finalOutputNormal = vec4( 0.0f, 0.0f, 0.0f, 1.0f );
+	finalOutputVertWorldPos = vertPosWorld;
+
+
 	// Are we in the 2nd pass? 
 	if ( int(renderPassNumber) == 2 )
 	{ 
+//		vec3 ObjectColour = texture( texObjectColour, vertUV_x2.st ).rgb;
+//		vec3 ObjectNormal = texture( texObjectColour, vertUV_x2.st ).rgb;
+	
 		// 2nd pass (very simple)
-		finalOutputColour.rgba = texture( pass1OutputTexture, vertUV_x2.st );
+		finalOutputColour.rgb = texture( texPass1OutputTexture, vertUV_x2.st ).rgb;
+		
+//		float bw =   0.2126f * finalOutputColour.r
+//                   + 0.7152f * finalOutputColour.g 
+//				   + 0.0722f * finalOutputColour.b;
+//		
+//		finalOutputColour.rgb = vec3(bw,bw,bw);
+		
+		finalOutputColour.a = 1.0f;
 		return;
 	}
 	
@@ -103,6 +143,12 @@ void main()
 
 
 	vec4 materialDiffuse = vec4(0.0f, 0.0f, 0.0f, 1.0f);
+	
+	// FOR NOW, I'm adding the bi-normal and tangent here
+	// (so they won't be optimized out)
+	materialDiffuse.xyz += ( vertTanXYZ.xyz * 0.001f);
+	materialDiffuse.xyz += ( vertBiNormXYZ.xyz * 0.001f);
+
 	
 	vec4 materialSpecular = objectSpecular;
 
@@ -118,6 +164,9 @@ void main()
 		
 		finalOutputColour.rgb = skyPixelColour;
 		finalOutputColour.a = 1.0f;
+		
+		finalOutputNormal.rgb = vertNormal.xyz;
+		finalOutputNormal.a = 1.0f;
 		return;
 	}
 	
@@ -172,7 +221,7 @@ void main()
 	if ( useVertexColour )
 	{
 		//gl_FragColor = vec4(color, 1.0);
-		materialDiffuse = vec4( color, 1.0f );
+		materialDiffuse = color;
 	}
 	else
 	{
@@ -204,7 +253,12 @@ void main()
 	if ( bDontUseLighting )
 	{
 		// Just exit early
-		finalOutputColour = objectDiffuse;
+		//finalOutputColour = objectDiffuse;
+		finalOutputColour = materialDiffuse;
+		
+		finalOutputNormal.rgb = vertNormal.xyz;
+		finalOutputNormal.a = 1.0f;
+
 		return;
 	}
 	
@@ -213,7 +267,8 @@ void main()
 //theLights[0].diffuseColour;
 //theLights[0].atten;
 
-	vec3 norm = normalize(vertNormal);
+	vec3 norm = normalize(vertNormal.xyz);
+	
 	vec4 finalObjectColour = vec4( 0.0f, 0.0f, 0.0f, 1.0f );
 	
 	for ( int index = 0; index < NUMBEROFLIGHTS; index++ )
@@ -257,6 +312,10 @@ void main()
 			finalOutputColour.rgb = finalObjectColour.rgb;
 			finalOutputColour.a = wholeObjectAlphaTransparency;
 
+			// Also output the normal to colour #1
+			finalOutputNormal.rgb = vertNormal.xyz;
+			finalOutputNormal.r = 1.0f;
+			finalOutputNormal.a = 1.0f;
 			return;		
 		}
 		
@@ -267,7 +326,7 @@ void main()
 		vec3 vLightToVertex = theLights[index].position.xyz - vertPosWorld.xyz;
 		float distanceToLight = length(vLightToVertex);	
 		vec3 lightVector = normalize(vLightToVertex);
-		float dotProduct = dot(lightVector, norm);	 
+		float dotProduct = dot(lightVector, norm.xyz);	 
 		
 		dotProduct = max( 0.0f, dotProduct );	
 		
@@ -277,7 +336,7 @@ void main()
 		// Specular 
 		vec3 lightSpecularContrib = vec3(0.0f);
 			
-		vec3 reflectVector = reflect( -lightVector, normalize(norm) );
+		vec3 reflectVector = reflect( -lightVector, normalize(norm.xyz) );
 
 		// Get eye or view vector
 		// The location of the vertex in the world to your eye
@@ -355,6 +414,12 @@ void main()
 	
 	finalOutputColour.rgb = finalObjectColour.rgb;
 	finalOutputColour.a = wholeObjectAlphaTransparency;
+	
+		// Also output the normal to colour #1
+	finalOutputNormal.rgb = vertNormal.xyz;
+//	finalOutputNormal.r = 1.0f;
+	finalOutputNormal.a = 1.0f;
+
 	
 	// Brigher for the dim projector
 //	finalOutputColour.rgb *= 1.25f;

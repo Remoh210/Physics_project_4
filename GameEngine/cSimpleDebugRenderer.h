@@ -1,16 +1,16 @@
 #pragma once
-#include "cMeshObject.h"
+#include "cGameObject.h"
 #include "globalOpenGLStuff.h"
 class cSimpleDebugRenderer
 {
 public:
-	cSimpleDebugRenderer(cMeshObject* mUnitSphere, GLuint IDprogram);
+	cSimpleDebugRenderer(cGameObject* mUnitSphere, GLuint IDprogram);
 
 	void drawSphere(glm::vec3 pos, float rad);
 	
 
 private:
-	cMeshObject* mUnitSphere;
-	cMeshObject* mUnitPlane;
+	cGameObject* mUnitSphere;
+	cGameObject* mUnitPlane;
 	GLuint mShaderProgram;
 };

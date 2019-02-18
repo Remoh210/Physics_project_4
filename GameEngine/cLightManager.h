@@ -1,7 +1,7 @@
 #pragma once
 
 #include "globalOpenGLStuff.h"
-#include "cMeshObject.h"
+#include "cGameObject.h"
 #include <glm/glm.hpp>
 #include <glm/vec4.hpp>
 #include <vector>
@@ -51,9 +51,9 @@ struct sLight
 	void SetRelativeDirection(glm::vec3 relDirection);
 	void SetRelativeDirectionByEulerAngles(glm::vec3 directionAngle);
 	void SetRelativeDirectionByLookAt(glm::vec3 pointInWorldXYZ);
-	void SetRelativeDirectionByLookAt(cMeshObject* lookAtObj);
-	cMeshObject* ObjectRelativeTo;
-	cMeshObject* ObjectLookAt;
+	void SetRelativeDirectionByLookAt(cGameObject* lookAtObj);
+	cGameObject* ObjectRelativeTo;
+	cGameObject* ObjectLookAt;
 
 
 	bool AtenSphere;

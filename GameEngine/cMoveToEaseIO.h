@@ -17,7 +17,7 @@ public:
 
 private:
 	int m_uniqueID;
-	cMeshObject* objToMove;
+	cGameObject* objToMove;
 
 	glm::vec3 initPosition;
 	glm::vec3 finalPosition;
@@ -34,6 +34,6 @@ private:
 	bool b_first;
 	bool m_bIsDone;
 
-	cMeshObject* targetGO;
+	cGameObject* targetGO;
 };
 

@@ -76,7 +76,7 @@ void cLuaBrain::DeleteScript(std::string scriptName)
 }
 
 // Passes a pointer to the game object vector
-void cLuaBrain::SetObjectVector(std::vector< cMeshObject* >* p_vecGOs)
+void cLuaBrain::SetObjectVector(std::vector< cGameObject* >* p_vecGOs)
 {
 	this->m_p_vecGOs = p_vecGOs;
 	return;
@@ -193,7 +193,7 @@ void cLuaBrain::Update(float deltaTime)
 	std::string objectFriendlyName = lua_tostring(L, 1);	/* get argument */
 
 	// Exist? 
-	cMeshObject* pGO = cLuaBrain::m_findObjectByFriendlyName(objectFriendlyName);
+	cGameObject* pGO = cLuaBrain::m_findObjectByFriendlyName(objectFriendlyName);
 
 	if (pGO == nullptr)
 	{	// No, it's invalid
@@ -223,7 +223,7 @@ int cLuaBrain::l_GetObjectState(lua_State *L)
 	std::string objectFriendlyName = lua_tostring(L, 1);	/* get argument */
 
 	// Exist? 
-	cMeshObject* pGO = cLuaBrain::m_findObjectByFriendlyName(objectFriendlyName);
+	cGameObject* pGO = cLuaBrain::m_findObjectByFriendlyName(objectFriendlyName);
 
 	if (pGO == nullptr)
 	{	// No, it's invalid
@@ -245,20 +245,20 @@ int cLuaBrain::l_GetObjectState(lua_State *L)
 }
 
 /*static*/
-std::vector< cMeshObject* >* cLuaBrain::m_p_vecGOs;
+std::vector< cGameObject* >* cLuaBrain::m_p_vecGOs;
 
 
 // returns nullptr if not found
-/*static*/ cMeshObject* cLuaBrain::m_findObjectByFriendlyName(std::string friendlyname)
+/*static*/ cGameObject* cLuaBrain::m_findObjectByFriendlyName(std::string friendlyname)
 {
-	for (std::vector<cMeshObject*>::iterator itGO = cLuaBrain::m_p_vecGOs->begin();
+	for (std::vector<cGameObject*>::iterator itGO = cLuaBrain::m_p_vecGOs->begin();
 		itGO != cLuaBrain::m_p_vecGOs->end(); itGO++)
 	{
 		if ((*itGO)->friendlyName == friendlyname)
 		{	// Found it!
 			return (*itGO);
 		}
-	}//for ( std::vector<cMeshObject*>::iterator itGO...
+	}//for ( std::vector<cGameObject*>::iterator itGO...
 	// Didn't find it
 	return nullptr;
 }
@@ -375,12 +375,12 @@ int cLuaBrain::l_newCom(lua_State *L)
 	{
 		commandGroup = cLuaBrain::m_findCGbyName(groupName, luaCommandGroup);
 	}
-	cMeshObject* theObject;
+	cGameObject* theObject;
 	
 	//CAMERA HACK
 	if (ObjFriendlyName == "camera" || ObjFriendlyName == "Camera") 
 	{
-		cMeshObject* p_camObj = new cMeshObject();
+		cGameObject* p_camObj = new cGameObject();
 		p_camObj->friendlyName = "cameraObj";
 		p_camObj->position = camera.Position;
 		theObject = p_camObj;
@@ -392,7 +392,7 @@ int cLuaBrain::l_newCom(lua_State *L)
 
 	
 
-	cMeshObject* targetObj;
+	cGameObject* targetObj;
 	if (targetFriendlyName != "")
 		targetObj = cLuaBrain::m_findObjectByFriendlyName(targetFriendlyName);
 	else

@@ -15,7 +15,7 @@ extern cLightManager* LightManager;
 int lightIndex = 0;
 bool firstMouse = true;
 
-void switchVis(cMeshObject* obj) {obj->bIsVisible = !obj->bIsVisible;}
+void switchVis(cGameObject* obj) {obj->bIsVisible = !obj->bIsVisible;}
 
 float lastX = SCR_WIDTH / 2.0f;
 float lastY = SCR_HEIGHT / 2.0f;
@@ -24,20 +24,20 @@ std::string Answer;
 void ManageScene(GLFWwindow* window);
 
 bool bIsPicked = false;
-cMeshObject* closedModel;
+cGameObject* closedModel;
 bool bMouseInWindow = false;
 
 bool IsPicked = false;
 void commandsInterface();
 
-cMeshObject* CloseToObj(std::vector<cMeshObject*> models);
+cGameObject* CloseToObj(std::vector<cGameObject*> models);
 
-cMeshObject* cloesetObj;
+cGameObject* cloesetObj;
 
-void SwitchToWireFrame(std::vector<cMeshObject*> models);
+void SwitchToWireFrame(std::vector<cGameObject*> models);
 
 
-void SwitchToSolid(std::vector<cMeshObject*> models);
+void SwitchToSolid(std::vector<cGameObject*> models);
 
 
 void key_callback( GLFWwindow* window, 
@@ -294,7 +294,7 @@ bool AreAllModifiersUp(GLFWwindow* window)
 	if ( IsCtrlDown(window) )	{ return false;	} 
 	if ( IsAltDown(window) )	{ return false; }
 	// Yup, they are all UP
-//	cMeshObject* player = findObjectByFriendlyName("Ufo2UVb");
+//	cGameObject* player = findObjectByFriendlyName("Ufo2UVb");
 
 	//player->bIsUpdatedByPhysics = true;
 	if (glfwGetKey(window, GLFW_KEY_UP)) { 
@@ -519,20 +519,20 @@ void ProcessAsynKeys(GLFWwindow* window)
 }
 
 
-void SwitchToWireFrame(std::vector<cMeshObject*> models)
+void SwitchToWireFrame(std::vector<cGameObject*> models)
 {
-	for (std::vector<cMeshObject*>::iterator it = models.begin(); it != models.end(); ++it)
+	for (std::vector<cGameObject*>::iterator it = models.begin(); it != models.end(); ++it)
 	{
-		cMeshObject* CurModel = *it;
+		cGameObject* CurModel = *it;
 		CurModel->bIsWireFrame = true;
 	}
 }
 
-void SwitchToSolid(std::vector<cMeshObject*> models)
+void SwitchToSolid(std::vector<cGameObject*> models)
 {
-	for (std::vector<cMeshObject*>::iterator it = models.begin(); it != models.end(); ++it)
+	for (std::vector<cGameObject*>::iterator it = models.begin(); it != models.end(); ++it)
 	{
-		cMeshObject* CurModel = *it;
+		cGameObject* CurModel = *it;
 		CurModel->bIsWireFrame = false;
 
 	}

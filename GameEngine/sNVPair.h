@@ -3,7 +3,7 @@
 
 #include <string>
 #include <vector>
-#include "cMeshObject.h"
+#include "cGameObject.h"
 #include <glm/glm.hpp>
 #include <glm/vec3.hpp>
 
@@ -22,7 +22,7 @@ struct sNVPair
 	//TODO:	sNVPair(std::string textToParse);
 	std::string name;
 	std::string sValue;
-	cMeshObject* pMeshObj;
+	cGameObject* pMeshObj;
 	float fValue;
 	int iValue;
 	glm::vec3 v3Value;

@@ -17,7 +17,7 @@ public:
 	glm::vec3 m_adjustVelocity(glm::vec3 vVel);
 
 private:
-	cMeshObject* objToMove;
+	cGameObject* objToMove;
 	glm::vec3 destination;
 	glm::vec3 start;
 	glm::vec3 currentLocation;

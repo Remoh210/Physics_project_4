@@ -18,7 +18,7 @@ public:
 
 
 private:
-	cMeshObject* theObj;
+	cGameObject* theObj;
 
 	double initialTime;
 	double elapsedTime;
@@ -35,7 +35,7 @@ private:
 	bool b_Started;
 	bool b_IsDone;
 
-	cMeshObject* targetObj;
+	cGameObject* targetObj;
 };
 
 #endif

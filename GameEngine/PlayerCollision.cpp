@@ -10,8 +10,8 @@
 void PlayerColTest(double deltaTime, GLuint shaderProgramID)
 {
 //	// Get the MiG-29
-//	cMeshObject* pMig29 = findObjectByFriendlyName("mig");
-//	cMeshObject* pDebugBall = findObjectByFriendlyName("DebugSphere");
+//	cGameObject* pMig29 = findObjectByFriendlyName("mig");
+//	cGameObject* pDebugBall = findObjectByFriendlyName("DebugSphere");
 //	// So show that the points move with the mig, I'll update the position and orientation here	
 //	if (camera.Front.y > 0.3f) { pMig29->adjMeshOrientationEulerAngles(glm::vec3(0.01f, 0.0f, 0.0f), false); }
 //	if (camera.Front.y < -0.3f) { pMig29->adjMeshOrientationEulerAngles(glm::vec3(-0.01f, 0.0f, 0.0f), false); }

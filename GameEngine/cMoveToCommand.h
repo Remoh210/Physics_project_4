@@ -17,7 +17,7 @@ public:
 
 
 private:
-	cMeshObject* objToMove;
+	cGameObject* objToMove;
 	glm::vec3 destination;
 	glm::vec3 start;
 	glm::vec3 currentLocation;

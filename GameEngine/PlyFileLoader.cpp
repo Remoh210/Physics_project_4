@@ -187,16 +187,16 @@ void saveLightInfo(std::string filename, std::vector<sLight*> lights)
 }
 
 //Save Models Info to the file
-void saveModelInfo(std::string filename, std::vector<cMeshObject*> models)
+void saveModelInfo(std::string filename, std::vector<cGameObject*> models)
 {
 	filename = "SceneInfo/" + filename;
 	std::string line;
 	std::ofstream file(filename.c_str());
 	if (file.is_open())
 	{
-		for (std::vector<cMeshObject*>::iterator it = models.begin(); it != models.end(); ++it)
+		for (std::vector<cGameObject*>::iterator it = models.begin(); it != models.end(); ++it)
 		{
-			cMeshObject* CurModel = *it;
+			cGameObject* CurModel = *it;
 			if (CurModel->bIsDebug == false) {
 				file << "Friendly_Name " << CurModel->friendlyName << "\n";
 				file << "Mesh_Name " << CurModel->meshName << "\n";
@@ -294,13 +294,13 @@ void loadCameraInfo(std::string filename)
 //Colour  0.2 0.8 0.3
 
 
-void loadModels(std::string filename, std::vector<cMeshObject*> models)
+void loadModels(std::string filename, std::vector<cGameObject*> models)
 {
 	std::ifstream file(("SceneInfo/" + filename).c_str());
 
 	if (!file.is_open()) { return; }
 
-	std::map<std::string, cMeshObject*> meshObjects;
+	std::map<std::string, cGameObject*> meshObjects;
 	for (unsigned int x = 0; x < models.size(); x++)
 	{
 		std::string friendlyName = models[x]->friendlyName;
@@ -317,7 +317,7 @@ void loadModels(std::string filename, std::vector<cMeshObject*> models)
 		if (meshObjects.find(friendlyName) == meshObjects.end()) continue;
 
 		std::cout << "Loading models " << friendlyName << std::endl;
-		cMeshObject *CurModel = meshObjects.at(friendlyName);
+		cGameObject *CurModel = meshObjects.at(friendlyName);
 
 		file >> unused >> CurModel->meshName;
 		file >> unused >> CurModel->position.x >> CurModel->position.y >> CurModel->position.z;
@@ -408,7 +408,7 @@ void CreateModels(std::string filename, cVAOMeshManager* pTheVAOMeshManager, GLu
 
 	//if (!file.is_open()) { return; }
 
-	//std::map<std::string, cMeshObject*> meshObjects;
+	//std::map<std::string, cGameObject*> meshObjects;
 	//for (unsigned int x = 0; x < models.size(); x++)
 	//{
 	//	std::string friendlyName = models[x]->friendlyName;
@@ -430,7 +430,7 @@ void CreateModels(std::string filename, cVAOMeshManager* pTheVAOMeshManager, GLu
 	//	if (meshObjects.find(friendlyName) == meshObjects.end()) continue;
 
 	//	std::cout << "Loading models " << friendlyName << std::endl;
-		cMeshObject *CurModel = new cMeshObject();
+		cGameObject *CurModel = new cGameObject();
 		sModelDrawInfo curModelInfo;
 	//	ufoTexture.name = "metal.bmp";
 //		ufoTexture.strength = 1.0f;

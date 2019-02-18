@@ -10,7 +10,7 @@ extern "C" {
 
 #include <string>
 #include <vector>
-#include "cMeshObject.h"
+#include "cGameObject.h"
 #include <map>
 #include "cCommandGroup.h"
 
@@ -27,7 +27,7 @@ public:
 					 std::string scriptSource );
 	void DeleteScript( std::string scriptName );
 	void LoadScriptFile(std::string scriptName);
-	void SetObjectVector( std::vector< cMeshObject* >* p_vecGOs );
+	void SetObjectVector( std::vector< cGameObject* >* p_vecGOs );
 	void Update(float deltaTime);
 	void UpdateCG(float deltaTime);
 
@@ -45,15 +45,15 @@ public:
 
 	
 
-	cMeshObject* pMyGameObject;
+	cGameObject* pMyGameObject;
 
 private:
 	std::map< std::string /*scriptName*/, 
 			  std::string /*scriptSource*/ > m_mapScripts;
 
-	static std::vector< cMeshObject* >* m_p_vecGOs;
+	static std::vector< cGameObject* >* m_p_vecGOs;
 	// returns nullptr if not found
-	static cMeshObject* m_findObjectByFriendlyName(std::string friendlyname);
+	static cGameObject* m_findObjectByFriendlyName(std::string friendlyname);
 	static cCommandGroup* m_findCGbyName(std::string groupName, cCommandGroup lua_CG);
 	static cCommandGroup* m_findSubCGbyName(std::string subGroupName, cCommandGroup lua_CG);
 	

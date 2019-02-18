@@ -1,6 +1,6 @@
-#include "cMeshObject.h"
+#include "cGameObject.h"
 
-void cMeshObject::setMeshOrientationEulerAngles(glm::vec3 newAnglesEuler, bool bIsDegrees /*=false*/)
+void cGameObject::setMeshOrientationEulerAngles(glm::vec3 newAnglesEuler, bool bIsDegrees /*=false*/)
 {
 	if (bIsDegrees)
 	{
@@ -13,14 +13,14 @@ void cMeshObject::setMeshOrientationEulerAngles(glm::vec3 newAnglesEuler, bool b
 	return;
 }
 
-void cMeshObject::setMeshOrientationEulerAngles(float x, float y, float z, bool bIsDegrees /*=false*/)
+void cGameObject::setMeshOrientationEulerAngles(float x, float y, float z, bool bIsDegrees /*=false*/)
 {
 	return this->setMeshOrientationEulerAngles(glm::vec3(x, y, z), bIsDegrees);
 }
 
 
 
-glm::vec3 cMeshObject::getMeshOrientationEulerAngles(bool bIsDegrees /*=false*/)
+glm::vec3 cGameObject::getMeshOrientationEulerAngles(bool bIsDegrees /*=false*/)
 {
 	glm::vec3 rot = glm::eulerAngles(this->m_meshQOrientation);
 	if (bIsDegrees)
@@ -36,7 +36,7 @@ glm::vec3 cMeshObject::getMeshOrientationEulerAngles(bool bIsDegrees /*=false*/)
 }
 
 
-void cMeshObject::adjMeshOrientationEulerAngles(glm::vec3 adjAngleEuler, bool bIsDegrees /*=false*/)
+void cGameObject::adjMeshOrientationEulerAngles(glm::vec3 adjAngleEuler, bool bIsDegrees /*=false*/)
 {
 	if (bIsDegrees)
 	{
@@ -55,12 +55,12 @@ void cMeshObject::adjMeshOrientationEulerAngles(glm::vec3 adjAngleEuler, bool bI
 	return;
 }
 
-void cMeshObject::adjMeshOrientationEulerAngles(float x, float y, float z, bool bIsDegrees /*=false*/)
+void cGameObject::adjMeshOrientationEulerAngles(float x, float y, float z, bool bIsDegrees /*=false*/)
 {
 	return this->adjMeshOrientationEulerAngles(glm::vec3(x, y, z), bIsDegrees);
 }
 
-void cMeshObject::adjMeshOrientationQ(glm::quat adjOrientQ)
+void cGameObject::adjMeshOrientationQ(glm::quat adjOrientQ)
 {
 	this->m_meshQOrientation *= adjOrientQ;
 	return;
