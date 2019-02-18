@@ -285,7 +285,9 @@ int main(void)
 	//gPhysicsWorld->AddBody(rigidBody);
 
 
-	// loading
+
+	LoadSkinnedMeshModel(::vec_pObjectsToDraw, program);
+
 	LoadModelTypes(::g_pTheVAOMeshManager, program);
 	::g_pSceneManager->loadScene(scene);
 	::LightManager->LoadUniformLocations(program);
@@ -311,98 +313,10 @@ int main(void)
 	double lastTime = glfwGetTime();
 
 
-	//***************************************************************
-
 	
-	//sLight* pTheOneLight = NULL;
-	//sLight* pTheSecondLight = NULL;
-	//sLight* pTheThirdLight = NULL;
-	//sLight* pTheForthLight = NULL;
-
-//	{
-//		sLight* pTheMainLight = new sLight();
-//		pTheMainLight->position = glm::vec4(1.0f, 400.0f, 0.0f, 1.0f);
-//		pTheMainLight->atten.x = 0.0f;	// 			float constAtten = 0.0f;
-//		pTheMainLight->atten.y = 0.0001f;	//			float linearAtten = 0.01f;
-//		pTheMainLight->atten.z = 0.00001f;	//			float quadAtten = 0.001f;
-//		pTheMainLight->diffuse = glm::vec4(1.0f, 1.0f, 1.0f, 1.0f);// White light
-//		pTheMainLight->param2.x = 1.0f;
-//		pTheMainLight->SetLightType(sLight::POINT_LIGHT);
-//		pTheMainLight->SetSpotConeAngles(15.0f, 35.0f);
-//		//	pTheOneLight->SetSpotConeAngles( 15.0f, 45.0f );
-//			// Direction is RELATIVE to the LIGHT (for spots)
-//			// Straight down... 
-//		pTheMainLight->SetRelativeDirection(glm::vec3(0.0f, -1.0f, 1.0f));
-//		//pTheForthLight->AtenSphere - false;
-//		pTheMainLight->lightName = "MainLight";
-//		LightManager->vecLights.push_back(pTheMainLight);
-//		LightManager->LoadUniformLocations(program);
-//	}
-//
-//	for(int light_count = 0; light_count < 4;  light_count++)
-//	{
-//		sLight* pTorch = new sLight();
-//		pTorch->position = glm::vec4(light_count * 10.0f, 400.0f, 0.0f, 1.0f);
-//		pTorch->atten.x = 0.0f;	// 			float constAtten = 0.0f;
-//		pTorch->atten.y = 0.0001f;	//			float linearAtten = 0.01f;
-//		pTorch->atten.z = 0.000015f;	//			float quadAtten = 0.001f;
-//		pTorch->diffuse = glm::vec4(232 /250.0f, 109 / 250.0f, 27/250.0f, 1.0f);// White light
-//		pTorch->param2.x = 0.0f;
-//		pTorch->SetLightType(sLight::SPOT_LIGHT);
-//		pTorch->SetRelativeDirectionByLookAt(findObjectByFriendlyName("table"));
-//		//pTheForthLight->AtenSphere - false;
-//		pTorch->lightName = "Torch_Light" + std::to_string(light_count);
-//		LightManager->vecLights.push_back(pTorch);
-//		LightManager->LoadUniformLocations(program);
-//	}
-//
-//	{
-//		sLight* ChestLight = new sLight();
-//		ChestLight->position = glm::vec4(-675.0f, 40.0f, 520.0f, 1.0f);
-//		ChestLight->atten.x = 0.0f;	// 			float constAtten = 0.0f;
-//		ChestLight->atten.y = 0.0001f;	//			float linearAtten = 0.01f;
-//		ChestLight->atten.z = 0.000021f;	//			float quadAtten = 0.001f;
-//		ChestLight->diffuse = glm::vec4(246 / 250.0f, 10/ 250.0f, 10 / 215.0f, 0.0f);
-//		ChestLight->SetLightType(sLight::SPOT_LIGHT);
-//		ChestLight->param2.x = 0.0f;
-//		//pTheForthLight->AtenSphere - false;
-//		ChestLight->lightName = "ChestLight";
-//		LightManager->vecLights.push_back(ChestLight);
-//		LightManager->LoadUniformLocations(program);
-//	}
-//
-//
-//	{
-//		sLight* ChestLight = new sLight();
-//		ChestLight->position = glm::vec4(-675.0f, 40.0f, 520.0f, 1.0f);
-//		ChestLight->atten.x = 0.0f;	// 			float constAtten = 0.0f;
-//		ChestLight->atten.y = 0.0001f;	//			float linearAtten = 0.01f;
-//		ChestLight->atten.z = 0.000021f;	//			float quadAtten = 0.001f;
-//		ChestLight->diffuse = glm::vec4(0.64f, 0.027f, 0.9f, 1.0f);
-//		ChestLight->param2.x = 0.0f;
-//		ChestLight->lightName = "QuestLight";
-//		LightManager->vecLights.push_back(ChestLight);
-//		LightManager->LoadUniformLocations(program);
-//	}
-//
-//	//saveLightInfo("Default.txt")
 	cLightHelper* pLightHelper = new cLightHelper();
 	
-//
-//	
-//
-//	//Reload from the file
-////	saveModelInfo("Models.txt", vec_pObjectsToDraw);
-////	saveLightInfo("lights.txt", LightManager->vecLights);
-//	//loadModels("Models.txt", vec_pObjectsToDraw);
-//	loadLights("lights.txt", LightManager->vecLights);
-//	loadCameraInfo("camera.txt");
-	//HACK; TODO save and load camera look at
-	//camera.b_controlledByScript = true;
-	//camera.SetViewMatrix(glm::lookAt(camera.Position, glm::vec3(285.0f, 245.0f, 825.0f), camera.WorldUp));
 	
-
-
 
 
 	//::p_LuaScripts = new cLuaBrain();
@@ -505,116 +419,7 @@ int main(void)
 
 
 
-//		{// START OF: AABB debug stuff
-////HACK: Draw Debug AABBs...
-//
-//// Get that from FindObjectByID()
-//			cGameObject* pTheBunny = findObjectByFriendlyName("Ufo2UVb");
-//			cGameObject* pter = findObjectByFriendlyName("terrain");
-//			// Highlight the AABB that the rabbit is in (Or the CENTRE of the rabbit, anyway)
-//
-//			float sideLength = 50.0f;
-//			cGameObject* pCubeForBallsToBounceIn = new cGameObject();
-//
-//			pCubeForBallsToBounceIn->setDiffuseColour(glm::vec3(0.0f, 1.0f, 0.0f));
-//			pCubeForBallsToBounceIn->bDontLight = true;
-//			pCubeForBallsToBounceIn->position = pTheBunny->position;
-//			pCubeForBallsToBounceIn->friendlyName = "CubeBallsBounceIn";
-//			pCubeForBallsToBounceIn->meshName = "cube_flat_shaded_xyz_n_uv.ply";		// "cube_flat_shaded_xyz.ply";
-//			pCubeForBallsToBounceIn->setUniformScale(sideLength / 2);
-//			pCubeForBallsToBounceIn->bIsWireFrame = true;
-//			glm::mat4 iden = glm::mat4(1.0f);
-//			DrawObject(pCubeForBallsToBounceIn, iden, program);
-//
-//			unsigned long long ID_of_AABB_We_are_in = cAABB::generateID(pTheBunny->position, sideLength);
-//
-//			// Is there a box here? 
-//			std::map< unsigned long long /*ID of the AABB*/, cAABB* >::iterator itAABB_Bunny
-//				= ::g_pTheTerrain->m_mapAABBs.find(ID_of_AABB_We_are_in);
-//
-//			// Is there an AABB there? 
-//			if (itAABB_Bunny != ::g_pTheTerrain->m_mapAABBs.end())
-//			{
-//				// Yes, then get the triangles and do narrow phase collision
-//
-//			//	std::cout << "ID = " << ID_of_AABB_We_are_in
-//				//	<< " with " << itAABB_Bunny->second->vecTriangles.size() << " triangles" << std::endl;
-//
-//				vec_cur_AABB_tris = itAABB_Bunny->second->vecTriangles;
-//				// *******************************************************************
-//				// Here you can pass this vector of triangles into your narrow phase (aka project #1)
-//				// and do whatever collision response you want
-//				// *******************************************************************
-//			}
-//			else
-//			{
-//				if (vec_cur_AABB_tris.size() > 0) {
-//					vec_cur_AABB_tris.clear();
-//				}
-//				//	std::cout << "ID = " << ID_of_AABB_We_are_in << " NOT PRESENT near bunny" << std::endl;
-//			}
-//
-//
-//			std::map< unsigned long long /*ID of the AABB*/, cAABB* >::iterator itAABB
-//				= ::g_pTheTerrain->m_mapAABBs.begin();
-//			for (; itAABB != ::g_pTheTerrain->m_mapAABBs.end(); itAABB++)
-//			{
-//
-//				// You could draw a mesh cube object at the location, 
-//				// but be careful that it's scalled and placed at the right location.
-//				// i.e. our cube is centred on the origin and is ++2++ units wide, 
-//				// because it's +1 unit from the centre (on all sides).
-//
-//				// Since this is debug, and the "draw debug line thing" is working, 
-//				// this will just draw a bunch of lines... 
-//
-//				cAABB* pCurrentAABB = itAABB->second;
-//
-//				glm::vec3 cubeCorners[6];
-//
-//				cubeCorners[0] = pCurrentAABB->getMinXYZ();
-//				cubeCorners[1] = pCurrentAABB->getMinXYZ();
-//				cubeCorners[2] = pCurrentAABB->getMinXYZ();
-//				cubeCorners[3] = pCurrentAABB->getMinXYZ();
-//				cubeCorners[4] = pCurrentAABB->getMinXYZ();
-//				cubeCorners[5] = pCurrentAABB->getMinXYZ();
-//
-//				// Max XYZ
-//				cubeCorners[1].x += pCurrentAABB->getSideLength();
-//				cubeCorners[1].y += pCurrentAABB->getSideLength();
-//				cubeCorners[1].z += pCurrentAABB->getSideLength();
-//
-//				cubeCorners[2].x += pCurrentAABB->getSideLength();
-//
-//				cubeCorners[3].y += pCurrentAABB->getSideLength();
-//
-//				cubeCorners[4].z += pCurrentAABB->getSideLength();
-//
-//				// TODO: And the other corners... 
-//				cubeCorners[5].x += pCurrentAABB->getSideLength();
-//				cubeCorners[5].y += pCurrentAABB->getSideLength();
-//
-//
-//
-//				cGameObject* pCubeForBallsToBounceIn = new cGameObject();
-//
-//				pCubeForBallsToBounceIn->setDiffuseColour(glm::vec3(0.0f, 1.0f, 0.0f));
-//				pCubeForBallsToBounceIn->bDontLight = true;
-//				pCubeForBallsToBounceIn->position = pCurrentAABB->getCentre();
-//				pCubeForBallsToBounceIn->friendlyName = "CubeBallsBounceIn";
-//				pCubeForBallsToBounceIn->meshName = "cube_flat_shaded_xyz_n_uv.ply";		// "cube_flat_shaded_xyz.ply";
-//				pCubeForBallsToBounceIn->setUniformScale(pCurrentAABB->getSideLength() / 2);
-//				pCubeForBallsToBounceIn->bIsWireFrame = true;
-//				glm::mat4 iden = glm::mat4(1.0f);
-//				DrawObject(pCubeForBallsToBounceIn, iden, program);
-//
-//
-//				// Draw line from minXYZ to maxXYZ
-//				//::g_pDebugRenderer->addLine(cubeCorners[0], cubeCorners[1],
-//					//glm::vec3(1, 1, 1), 0.0f);
-//			}
-//		}// END OF: Scope for aabb debug stuff
-		// 
+//	
 
 
 		//std::sort(vec_sorted_drawObj.begin(), vec_sorted_drawObj.end(), transp);

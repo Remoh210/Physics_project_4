@@ -42,6 +42,7 @@ struct sModelDrawInfo
 	sModelDrawInfo();
 
 	std::string meshFileName;
+	std::string friendlyName;	// The one we want to use for actual drawing
 
 	unsigned int VAO_ID;					//***
 

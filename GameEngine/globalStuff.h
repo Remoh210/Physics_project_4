@@ -82,12 +82,7 @@ extern cLightManager* LightManager;
 extern cTextRend* g_textRenderer;
 extern cSimpleDebugRenderer* g_simpleDubugRenderer;
 
-// 
-// This is a global pointer to a mesh object. 
-// You can get at object like this, or you can 
-// search for them using the findObjectBy...() 
-// functions.
-extern cGameObject* g_pRogerRabbit;
+extern cSimpleAssimpSkinnedMesh* g_pRPGSkinnedMesh; //= NULL;
 // 
 
 // Signature for the ply loader function
@@ -116,6 +111,9 @@ void loadLights(std::string filename, std::vector<sLight*> lights);
 void DrawObject( cGameObject* pCurrentMesh,
 				 glm::mat4x4 &matModel, 
 				 GLuint shaderProgramID );
+
+void LoadSkinnedMeshModel(std::vector<cGameObject*> &vec_pObjectsToDraw,
+	unsigned int shaderProgramID);
 
 
 // *****************************************************************

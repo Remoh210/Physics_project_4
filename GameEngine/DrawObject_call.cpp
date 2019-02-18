@@ -505,18 +505,18 @@ void DrawObject(cGameObject* pCurrentMesh,
 
 
 			// Bone index [13] = "B_L_Finger31"
-			if (boneIndex == 25)
-			{
-				//DrawDebugBall( glm::vec3(boneBallLocation), glm::vec4(1.0f, 0.0f, 0.0f, 1.0f), 0.5f );
-	//			std::cout << "Bone 13, B_L_Finger31: " 
-	//				<< boneBallLocation.x << ", "
-	//				<< boneBallLocation.y << ", " 
-	//				<< boneBallLocation.z << std::endl;
+	//		if (boneIndex == 25)
+	//		{
+	//			//DrawDebugBall( glm::vec3(boneBallLocation), glm::vec4(1.0f, 0.0f, 0.0f, 1.0f), 0.5f );
+	////			std::cout << "Bone 13, B_L_Finger31: " 
+	////				<< boneBallLocation.x << ", "
+	////				<< boneBallLocation.y << ", " 
+	////				<< boneBallLocation.z << std::endl;
 
-				cGameObject* pPlayerBody = findObjectByFriendlyName("PlayerBody");
-				pPlayerBody->setUniformScale(10.0f);
-				pPlayerBody->position = boneBallLocation;
-			}
+	//			cGameObject* pPlayerBody = findObjectByFriendlyName("PlayerBody");
+	//			pPlayerBody->setUniformScale(10.0f);
+	//			pPlayerBody->position = boneBallLocation;
+	//		}
 
 
 

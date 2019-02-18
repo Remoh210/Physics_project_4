@@ -282,7 +282,7 @@ bool cSceneManager::loadScene(std::string filename) {
 
 	std::string fileToLoadFullPath = this->m_basePath + "/" + filename;
 
-	vec_pObjectsToDraw.clear();
+	//vec_pObjectsToDraw.clear();
 	//LightManager->vecLights.clear();
 	::g_pTheTextureManager->SetBasePath("assets/textures");
 	rapidjson::Document doc;
