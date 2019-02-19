@@ -115,7 +115,7 @@ float cSimpleAssimpSkinnedMesh::FindAnimationTotalTime(std::string animationName
 	}
 
 	// This is scaling the animation from 0 to 1
-	return (float)itAnimation->second.pAIScene->mAnimations[0]->mDuration;	
+	return (float)itAnimation->second.pAIScene->mAnimations[0]->mDuration;
 }
 
 
@@ -225,7 +225,7 @@ void cSimpleAssimpSkinnedMesh::BoneTransform( float TimeInSeconds,
 	                                           this->pScene->mAnimations[0]->mTicksPerSecond : 25.0 );
 
 	float TimeInTicks = TimeInSeconds * TicksPerSecond;
-	float AnimationTime = fmod(TimeInTicks, (float)this->pScene->mAnimations[0]->mDuration);
+	float AnimationTime = fmod(TimeInTicks, FindAnimationTotalTime(animationName));
 	
 	// use the "animation" file to look up these nodes
 	// (need the matOffset information from the animation file)
@@ -567,12 +567,21 @@ void cSimpleAssimpSkinnedMesh::CalcGLMInterpolatedScaling(float AnimationTime, c
 	return;
 }
 
-float cSimpleAssimpSkinnedMesh::GetDuration(void)
-{
-	float duration = (float)(this->pScene->mAnimations[0]->mDuration / this->pScene->mAnimations[0]->mTicksPerSecond);
+//float cSimpleAssimpSkinnedMesh::GetDuration(const std::string animName)
+//{
+	//std::map< std::string /*animation FRIENDLY name*/,
+	//	sAnimationInfo >::iterator itAnimation = this->mapAnimationFriendlyNameTo_pScene.find(animName);
 
-	return duration; 
-}
+	//// Found it? 
+	//if (itAnimation == this->mapAnimationFriendlyNameTo_pScene.end())
+	//{	// Nope.
+	//	return 0.0f;
+	//}
+
+	//float duration = (float)(mapAnimationFriendlyNameTo_pScene.find(animName).second->pAIScene-mAnimations[0]->mDuration / itAnimation->second->mAnimations[0]->mTicksPerSecond);
+
+	//return duration;
+//}
 
 
 // Returns NULL (0) if there is no mesh at that index

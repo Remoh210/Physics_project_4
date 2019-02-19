@@ -203,23 +203,24 @@ void LoadSkinnedMeshModel(std::vector<cGameObject*> &vec_pObjectsToDraw,
 //	if ( ! ::g_pSkinnedMesh01->LoadMeshFromFile( "assets/modelsFBX/RPG-Character_Unarmed-Idle(FBX2013).fbx" ) ) 
 //	if ( ! ::g_pSkinnedMesh01->LoadMeshFromFile( "assets/modelsMD5/hellknight/attack2.md5anim" ) ) 
 //	if ( ! ::g_pSkinnedMesh01->LoadMeshFromFile( "assets/modelsFBX/RPG-Character_Unarmed-Fall(FBX2013).fbx" ) ) 
-	if (!::g_pRPGSkinnedMesh->LoadMeshFromFile("RPG-Character", "assets/modelsFBX/RPG-Character(FBX2013).FBX"))
+	if (!::g_pRPGSkinnedMesh->LoadMeshFromFile("RPG-Character", "assets/modelsFBX/kachujin_g_rosales.fbx"))
 	{
 		std::cout << "Error: problem loading the skinned mesh" << std::endl;
 	}
 	std::vector<std::string> vecBoneNames;
 	::g_pRPGSkinnedMesh->GetListOfBoneIDandNames(vecBoneNames);
+	//::g_pRPGSkinnedMesh->pScene->mAnimations[0] = NULL;
 
-	// Now load another animation file... 
-	::g_pRPGSkinnedMesh->LoadMeshAnimation("Idle", "assets/modelsFBX/RPG-Character_Unarmed-Idle(FBX2013).fbx");
-	::g_pRPGSkinnedMesh->LoadMeshAnimation("Unarmed-Attack-Kick-L1", "assets/modelsFBX/RPG-Character_Unarmed-Attack-Kick-L1(FBX2013).FBX");
-	::g_pRPGSkinnedMesh->LoadMeshAnimation("Unarmed-Walk", "assets/modelsFBX/RPG-Character_Unarmed-Walk(FBX2013).FBX");
-	::g_pRPGSkinnedMesh->LoadMeshAnimation("Unarmed-Fall", "assets/modelsFBX/RPG-Character_Unarmed-Fall(FBX2013).fbx");
-	::g_pRPGSkinnedMesh->LoadMeshAnimation("Roll-Backward", "assets/modelsFBX/RPG-Character_Unarmed-Roll-Backward(FBX2013).fbx");
-	::g_pRPGSkinnedMesh->LoadMeshAnimation("Roll-Forwards", "assets/modelsFBX/RPG-Character_Unarmed-Roll-Forward(FBX2013).FBX");
-	::g_pRPGSkinnedMesh->LoadMeshAnimation("Roll-Left", "assets/modelsFBX/RPG-Character_Unarmed-Roll-Left(FBX2013).FBX");
-	::g_pRPGSkinnedMesh->LoadMeshAnimation("Roll-Right", "assets/modelsFBX/RPG-Character_Unarmed-Roll-Right(FBX2013).FBX");
-	::g_pRPGSkinnedMesh->LoadMeshAnimation("Unarmed-Jump", "assets/modelsFBX/RPG-Character_Unarmed-Jump(FBX2013).FBX");
+	//// Now load another animation file... 
+	//::g_pRPGSkinnedMesh->LoadMeshAnimation("Idle", "assets/modelsFBX/test_idle.fbx");
+	//::g_pRPGSkinnedMesh->LoadMeshAnimation("Unarmed-Attack-Kick-L1", "assets/modelsFBX/kick.dae");
+	::g_pRPGSkinnedMesh->LoadMeshAnimation("Unarmed-Walk", "assets/modelsFBX/Walking.fbx");
+	::g_pRPGSkinnedMesh->LoadMeshAnimation("Unarmed-Fall", "assets/modelsFBX/Arms Hip Hop Dance.fbx");
+	//::g_pRPGSkinnedMesh->LoadMeshAnimation("Roll-Backward", "assets/modelsFBX/RPG-Character_Unarmed-Roll-Backward(FBX2013).fbx");
+	//::g_pRPGSkinnedMesh->LoadMeshAnimation("Roll-Forwards", "assets/modelsFBX/RPG-Character_Unarmed-Roll-Forward(FBX2013).FBX");
+	//::g_pRPGSkinnedMesh->LoadMeshAnimation("Roll-Left", "assets/modelsFBX/RPG-Character_Unarmed-Roll-Left(FBX2013).FBX");
+	//::g_pRPGSkinnedMesh->LoadMeshAnimation("Roll-Right", "assets/modelsFBX/RPG-Character_Unarmed-Roll-Right(FBX2013).FBX");
+	//::g_pRPGSkinnedMesh->LoadMeshAnimation("Unarmed-Jump", "assets/modelsFBX/RPG-Character_Unarmed-Jump(FBX2013).FBX");
 
 	::g_pRPGSkinnedMesh->friendlyName = "RPG-Character";
 
@@ -249,12 +250,14 @@ void LoadSkinnedMeshModel(std::vector<cGameObject*> &vec_pObjectsToDraw,
 
 		{	// Bind pose Skinned Mesh object
 			cGameObject* pTestSM = new cGameObject();
-			pTestSM->setDiffuseColour(glm::vec3(1.0f, 1.0f, 0.0f));	// Yellow
-			pTestSM->setAlphaTransparency(1.0f);
+			pTestSM->setDiffuseColour(glm::vec3(0.0f, 0.0f, 0.0f));	// Yellow
+			//pTestSM->setAlphaTransparency(1.0f);
+			//pTestSM->setMeshOrientationEulerAngles(-90.0f, 0.0f, 0.0f, true);
+			pTestSM->setSpecularPower(100.0f);
 			pTestSM->friendlyName = "SM_Object";
 			pTestSM->position = glm::vec3(0.0f, 0.0f, 0.0f);
 			pTestSM->setUniformScale(1.0f);
-			pTestSM->meshName = "RPG-Character.ply";
+			//pTestSM->meshName = "RPG-Character.ply";
 
 			// Wireframe, to make it easier to see (for now)
 //			pTestSM->bIsWireFrame = true;
@@ -269,12 +272,11 @@ void LoadSkinnedMeshModel(std::vector<cGameObject*> &vec_pObjectsToDraw,
 			cAnimationState* pAniState;
 			pTestSM->pAniState = new cAnimationState();
 
-			pTestSM->pAniState->defaultAnimation.name = "Idle";
-
-
+			pTestSM->pAniState->defaultAnimation.name = "Unarmed-Walk";
+			pTestSM->currentAnimation = "Unarmed-Walk";
 
 			sTextureInfo testObjectTexture;
-			testObjectTexture.name = "grass.bmp";
+			testObjectTexture.name = "metal.bmp";
 			testObjectTexture.strength = 1.0f;
 
 			pTestSM->vecTextures.push_back(sTextureInfo(testObjectTexture));
