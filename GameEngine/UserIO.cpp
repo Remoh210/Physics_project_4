@@ -37,7 +37,24 @@ cGameObject* cloesetObj;
 
 void SwitchToWireFrame(std::vector<cGameObject*> models);
 
-
+void setVelZ(cGameObject* sm, float vel)
+{
+	glm::vec3 velocity = sm->rigidBody->GetVelocity();
+	velocity.z = vel;
+	sm->rigidBody->SetVelocity(velocity);
+}
+void setVelX(cGameObject* sm, float vel)
+{
+	glm::vec3 velocity = sm->rigidBody->GetVelocity();
+	velocity.x = vel;
+	sm->rigidBody->SetVelocity(velocity);
+}
+void setVelY(cGameObject* sm, float vel)
+{
+	glm::vec3 velocity = sm->rigidBody->GetVelocity();
+	velocity.y = vel;
+	sm->rigidBody->SetVelocity(velocity);
+}
 void SwitchToSolid(std::vector<cGameObject*> models);
 
 
@@ -146,41 +163,48 @@ void key_callback( GLFWwindow* window,
 
 
 
-	cGameObject* pSM = findObjectByFriendlyName("SM_Object");
+	cGameObject* pSM = findObjectByFriendlyName("chan");
 
-	if (key == GLFW_KEY_1 && action == GLFW_PRESS)
+
+	glm::vec3 velocity = pSM->rigidBody->GetVelocity();
+	pSM->currentAnimation = "Idle";
+	velocity.x = 0.0f;
+	velocity.z = 0.0f;
+	pSM->rigidBody->SetVelocity(velocity);
+	if (glfwGetKey(window, GLFW_KEY_1))
 	{
 		pSM->currentAnimation = "Idle";
 		//pSM->currentAnimation =  "assets/modelsFBX/RPG-Character_Unarmed-Idle(FBX2013).fbx";
 
 
 	}
-	if (key == GLFW_KEY_2 && action == GLFW_PRESS)
+	if (glfwGetKey(window, GLFW_KEY_2))
 	{
-		pSM->currentAnimation = "Unarmed-Attack-Kick-L1";
-		//pSM->currentAnimation = "assets/modelsFBX/RPG-Character_Unarmed-Attack-Kick-L1(FBX2013).FBX";
+		pSM->currentAnimation = "Walk-forward";
+		setVelZ(pSM, 13.f);
+		//pSM->rigidBody->SetVelocity(glm::vec3(0.f, 0.f,20.0f ));
 
-		// Add an animation state
-		cAnimationState* pKick = new cAnimationState();
-		pKick->defaultAnimation.name = "Unarmed-Attack-Kick-L1";
+		//pSM->currentAnimation = "Unarmed-Attack-Kick-L1";
+		////pSM->currentAnimation = "assets/modelsFBX/RPG-Character_Unarmed-Attack-Kick-L1(FBX2013).FBX";
+
+		//// Add an animation state
+		//cAnimationState* pKick = new cAnimationState();
+		//pKick->defaultAnimation.name = "Unarmed-Attack-Kick-L1";
 
 	}
-	if (key == GLFW_KEY_3 && action == GLFW_PRESS)
+	if (glfwGetKey(window, GLFW_KEY_3))
 	{
-		pSM->currentAnimation = "Unarmed-Walk";
-		//pSM->currentAnimation = "assets/modelsFBX/RPG-Character_Unarmed-Walk(FBX2013).FBX";
-	}
-	if (key == GLFW_KEY_4 && action == GLFW_PRESS)
-	{
-		pSM->currentAnimation = "Unarmed-Fall";
+		pSM->currentAnimation = "Walk-backward";
+		setVelZ(pSM, -13.f);
+		//pSM->rigidBody->SetVelocity(glm::vec3(0.f, 0.f, -20.f));
 		//pSM->currentAnimation = "assets/modelsFBX/RPG-Character_Unarmed-Fall(FBX2013).fbx";
 	}
 
 
-	//VISABILITY
-	if (glfwGetKey(window, GLFW_KEY_SEMICOLON ))
+
+	if (glfwGetKey(window, GLFW_KEY_4))
 	{
-		//switchVis(vec_pObjectsToDraw.at(index));
+		pSM->currentAnimation = "Action1";
 	}
 
 

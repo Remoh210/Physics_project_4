@@ -3,6 +3,7 @@
 #include <cstdio>
 #include <fstream>
 #include <iostream>
+#include "cAnimationState.h"
 
 #include <rapidjson/document.h>
 #include <rapidjson/filereadstream.h>
@@ -17,6 +18,8 @@
 
 cSceneManager::cSceneManager() {};
 
+bool AssimpSM_to_VAO_Converter(cSimpleAssimpSkinnedMesh* pTheAssimpSM,
+	unsigned int shaderProgramID);
 
 void cSceneManager::setBasePath(std::string basepath)
 {
@@ -317,12 +320,143 @@ bool cSceneManager::loadScene(std::string filename) {
 		cGameObject *CurModel = new cGameObject();
 		sModelDrawInfo curModelInfo;
 
-		CurModel->friendlyName = GameObject[i]["Name"].GetString();
-		CurModel->meshName = GameObject[i]["Mesh"].GetString();
+		CurModel->friendlyName = GameObject[i]["Name"].GetString();	
 		CurModel->bIsVisible = GameObject[i]["Visible"].GetBool();
 		CurModel->bIsUpdatedByPhysics = GameObject[i]["Use_Physics"].GetBool();
 		CurModel->bIsWireFrame = GameObject[i]["Wireframe"].GetBool();
-		curModelInfo.meshFileName = GameObject[i]["Mesh"].GetString();
+
+		//if ply;
+		if(GameObject[i].HasMember("Mesh"))
+		{
+			CurModel->meshName = GameObject[i]["Mesh"].GetString();
+			curModelInfo.meshFileName = GameObject[i]["Mesh"].GetString();
+			g_pTheVAOMeshManager->LoadModelIntoVAO(curModelInfo, program);
+		}
+		//if Skinned Mesh;
+		if (GameObject[i].HasMember("SkinnedMesh"))
+		{
+			//curModelInfo.meshFileName = GameObject[i]["SkinnedMesh"].GetString();
+			CurModel->meshName = GameObject[i]["SkinnedMesh"].GetString();
+			cSimpleAssimpSkinnedMesh* curSkinnedMesh = new cSimpleAssimpSkinnedMesh();
+			if (!curSkinnedMesh->LoadMeshFromFile(CurModel->friendlyName, CurModel->meshName))
+			{
+				std::cout << "Error: problem loading the skinned mesh" << std::endl;
+			}
+			if (GameObject[i].HasMember("Animation"))
+			{
+				std::string Idle = (GameObject[i]["Animation"].HasMember("Idle")) ? GameObject[i]["Animation"]["Idle"].GetString() : "";
+				if (Idle != "") {
+					curSkinnedMesh->LoadMeshAnimation("Idle", Idle);
+				}
+
+				std::string Forward = (GameObject[i]["Animation"].HasMember("Walk-forward")) ? GameObject[i]["Animation"]["Walk-forward"].GetString() : "";
+				if (Forward != "") {
+					curSkinnedMesh->LoadMeshAnimation("Walk-forward", Forward);
+				}
+
+				std::string Run = (GameObject[i]["Animation"].HasMember("Run-forward")) ? GameObject[i]["Animation"]["Run-forward"].GetString() : "";
+				if (Run != "") {
+					curSkinnedMesh->LoadMeshAnimation("Run-forward", Run);
+				}
+
+				std::string Backward = (GameObject[i]["Animation"].HasMember("Walk-backward")) ? GameObject[i]["Animation"]["Walk-backward"].GetString() : "";
+				if (Backward != "") {
+					curSkinnedMesh->LoadMeshAnimation("Walk-backward", Backward);
+				}
+
+				std::string StrafeL = (GameObject[i]["Animation"].HasMember("Strafe-Left")) ? GameObject[i]["Animation"]["Strafe-Left"].GetString() : "";
+				if (StrafeL != "") {
+					curSkinnedMesh->LoadMeshAnimation("Strafe-Left", StrafeL);
+				}
+
+				std::string StrafeR = (GameObject[i]["Animation"].HasMember("Strafe-Right")) ? GameObject[i]["Animation"]["Strafe-Right"].GetString() : "";
+				if (StrafeR != "") {
+					curSkinnedMesh->LoadMeshAnimation("Strafe-Right", StrafeR);
+				}
+
+				std::string TurnL = (GameObject[i]["Animation"].HasMember("Turn-Left")) ? GameObject[i]["Animation"]["Turn-Left"].GetString() : "";
+				if (TurnL != "") {
+					curSkinnedMesh->LoadMeshAnimation("Turn-Left", TurnL);
+				}
+
+				std::string TurnR = (GameObject[i]["Animation"].HasMember("Turn-Right")) ? GameObject[i]["Animation"]["Turn-Right"].GetString() : "";
+				if (TurnR != "") {
+					curSkinnedMesh->LoadMeshAnimation("Turn-Right", TurnR);
+				}
+
+				std::string Jump1 = (GameObject[i]["Animation"].HasMember("Jump1")) ? GameObject[i]["Animation"]["Jump1"].GetString() : "";
+				if (Jump1 != "") {
+					curSkinnedMesh->LoadMeshAnimation("Jump1", Jump1);
+				}
+
+				std::string Jump2 = (GameObject[i]["Animation"].HasMember("Jump2")) ? GameObject[i]["Animation"]["Jump2"].GetString() : "";
+				if (Jump2 != "") {
+					curSkinnedMesh->LoadMeshAnimation("Jump2", Jump2);
+				}
+
+				std::string Action1 = (GameObject[i]["Animation"].HasMember("Action1")) ? GameObject[i]["Animation"]["Action1"].GetString() : "";
+				if (Action1 != "") {
+					curSkinnedMesh->LoadMeshAnimation("Action1", Action1);
+				}
+
+				std::string Action2 = (GameObject[i]["Animation"].HasMember("Action2")) ? GameObject[i]["Animation"]["Action2"].GetString() : "";
+				if (Action2 != "") {
+					curSkinnedMesh->LoadMeshAnimation("Action2", Action2);
+				}
+
+				std::string Action3 = (GameObject[i]["Animation"].HasMember("Action3")) ? GameObject[i]["Animation"]["Action3"].GetString() : "";
+				if (Action3 != "") {
+					curSkinnedMesh->LoadMeshAnimation("Action3", Action3);
+				}
+
+				std::string Action4 = (GameObject[i]["Animation"].HasMember("Action4")) ? GameObject[i]["Animation"]["Action4"].GetString() : "";
+				if (Action4 != "") {
+					curSkinnedMesh->LoadMeshAnimation("Action4", Action4);
+				}
+
+				std::string Action5 = (GameObject[i]["Animation"].HasMember("Action5")) ? GameObject[i]["Animation"]["Action5"].GetString() : "";
+				if (Action5 != "") {
+					curSkinnedMesh->LoadMeshAnimation("Action5", Action5);
+				}
+
+
+				//std::vector<std::string> vec_anim_name;
+				//vec_anim_name.push_back((GameObject[i]["Animation"].HasMember("Idle")) ? GameObject[i]["Animation"]["Idle"].GetString() : "");
+				//vec_anim_name.push_back((GameObject[i]["Animation"].HasMember("Walk-forward")) ? GameObject[i]["Animation"]["Walk-forward"].GetString() : "");
+				//vec_anim_name.push_back((GameObject[i]["Animation"].HasMember("Walk-backwards")) ? GameObject[i]["Animation"]["Idle"].GetString() : "");
+				//vec_anim_name.push_back((GameObject[i]["Animation"].HasMember("Idle")) ? GameObject[i]["Animation"]["Idle"].GetString() : "");
+				//vec_anim_name.push_back((GameObject[i]["Animation"].HasMember("Idle")) ? GameObject[i]["Animation"]["Idle"].GetString() : "");
+				//vec_anim_name.push_back((GameObject[i]["Animation"].HasMember("Idle")) ? GameObject[i]["Animation"]["Idle"].GetString() : "");
+				//vec_anim_name.push_back((GameObject[i]["Animation"].HasMember("Idle")) ? GameObject[i]["Animation"]["Idle"].GetString() : "");
+				//vec_anim_name.push_back((GameObject[i]["Animation"].HasMember("Idle")) ? GameObject[i]["Animation"]["Idle"].GetString() : "");
+				//vec_anim_name.push_back((GameObject[i]["Animation"].HasMember("Idle")) ? GameObject[i]["Animation"]["Idle"].GetString() : "");
+				//vec_anim_name.push_back((GameObject[i]["Animation"].HasMember("Idle")) ? GameObject[i]["Animation"]["Idle"].GetString() : "");
+				//vec_anim_name.push_back((GameObject[i]["Animation"].HasMember("Idle")) ? GameObject[i]["Animation"]["Idle"].GetString() : "");
+				//vec_anim_name.push_back((GameObject[i]["Animation"].HasMember("Idle")) ? GameObject[i]["Animation"]["Idle"].GetString() : "");
+
+				//for (int i = 0; i < vec_anim_name.size(); i++) {
+				//	std::string animName = vec_anim_name[i];
+				//	if (animName != "") {
+				//		curSkinnedMesh->LoadMeshAnimation(animName, GameObject[i]["Animation"][animName.c_str()].GetString());
+				//	}
+				//}
+
+				//cAnimationState* pAniState;
+				CurModel->pSimpleSkinnedMesh = curSkinnedMesh;
+				CurModel->pAniState = new cAnimationState();
+				CurModel->pAniState->defaultAnimation.name = "Idle";
+				CurModel->currentAnimation = "Idle";
+
+			}
+			if (!AssimpSM_to_VAO_Converter(curSkinnedMesh, program))
+			{
+				std::cout << "Error: Didn't copy the skinned mesh into the VAO format." << std::endl;
+			}
+
+		}
+
+		
+		
 		
 
 		const rapidjson::Value& PositionArray = GameObject[i]["Position"];
@@ -376,6 +510,7 @@ bool cSceneManager::loadScene(std::string filename) {
 			}
 		}
 
+
 		if(GameObject[i].HasMember("RigidBody"))
 		{
 			nPhysics::iShape* CurShape = NULL;
@@ -416,7 +551,7 @@ bool cSceneManager::loadScene(std::string filename) {
 		}
 
 		vec_pObjectsToDraw.push_back(CurModel);
-		g_pTheVAOMeshManager->LoadModelIntoVAO(curModelInfo, program);
+
 	
 	}
 

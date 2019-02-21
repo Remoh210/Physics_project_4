@@ -114,7 +114,7 @@
             "Wireframe": false,
             "Position": [
                 0.0,
-                -10.0,
+                0.0,
                 0.0
             ],
             "DiffuseRGB_Alpha": [
@@ -147,7 +147,7 @@
             ],
             "RigidBody": {
                 "Type": "PLANE",
-                "Constant": -10.0,
+                "Constant": 0.0,
                 "Normal": [
                     0.0,
                     1.0,

@@ -33,7 +33,7 @@ namespace nPhysics {
 			rbInfo.m_restitution = 0.9;
 			rbInfo.m_friction = 10.0;
 			mBody = new btRigidBody(rbInfo);
-
+			
 
 
 			break;
@@ -57,13 +57,14 @@ namespace nPhysics {
 			startTransform.setRotation(nConvert::ToBullet(def.quatOrientation));
 			mMotionState = new btDefaultMotionState(startTransform);
 			btRigidBody::btRigidBodyConstructionInfo rbInfo(mass, mMotionState, colShape, localInertia);
-			rbInfo.m_restitution = 0.95;
-			rbInfo.m_friction = 10.0;
+			//just for now (for character collision)
+			rbInfo.m_restitution = 0.0;
+			rbInfo.m_friction = 0.0;
 			mBody = new btRigidBody(rbInfo);
 			mBody->setLinearVelocity(nConvert::ToBullet(def.Velocity));
 			mBody->setAngularVelocity(nConvert::ToBullet(def.AngularVelocity));
-
-
+			//mBody->setAngularFactor(btVector3(0.0f, 1.0f, 0.0f));
+			mBody->setSleepingThresholds(0.0f, 0.0f);
 
 			break;
 		}
@@ -112,7 +113,8 @@ namespace nPhysics {
 	glm::mat4 cBulletRigidBody::GetMatRotation()
 	{
 		btQuaternion btQuat = this->mBody->getOrientation();
-		glm::quat quatRot(btQuat.getW(), btQuat.getX(), btQuat.getY(), btQuat.getZ());
+
+		glm::quat quatRot = nConvert::ToSimple(btQuat);
 		return glm::toMat4(quatRot);
 	}
 

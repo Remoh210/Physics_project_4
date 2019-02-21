@@ -599,16 +599,25 @@ int main(void)
 		{
 			cGameObject* curMesh = vec_pObjectsToDraw[i];
 			if (curMesh->rigidBody != NULL && curMesh->rigidBody->GetShape()->GetShapeType() != nPhysics::SHAPE_TYPE_PLANE) {
-				curMesh->position = curMesh->rigidBody->GetPosition();
+				
+				float rad;
+				curMesh->rigidBody->GetShape()->GetSphereRadius(rad);
+				if (curMesh->friendlyName == "chan") { 
+					curMesh->position = curMesh->rigidBody->GetPosition();
+					curMesh->position.y = curMesh->rigidBody->GetPosition().y - rad; 
+				}
+				else{ curMesh->position = curMesh->rigidBody->GetPosition(); }
 				curMesh->m_meshQOrientation = glm::mat4(curMesh->rigidBody->GetMatRotation());
+				//HACK CHARACTER
+
 			}
 		}
 
 		if (bIsDebugMode) {
-			// Call the debug renderer call
+			// Call the debug renderer
 			for (int i = 0; i < vec_pObjectsToDraw.size(); i++) {
 				cGameObject* curObj = vec_pObjectsToDraw[i];
-				curObj->bIsVisible = false;
+				//curObj->bIsVisible = false;
 				curObj->bDontLight = true;
 				if (curObj->rigidBody != NULL) {
 					if (curObj->rigidBody->GetShape()->GetShapeType() == nPhysics::SHAPE_TYPE_SPHERE) {

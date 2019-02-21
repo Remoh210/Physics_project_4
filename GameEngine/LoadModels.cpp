@@ -186,122 +186,123 @@ bool AssimpSM_to_VAO_Converter(cSimpleAssimpSkinnedMesh* pTheAssimpSM,
 void LoadSkinnedMeshModel(std::vector<cGameObject*> &vec_pObjectsToDraw,
 	GLuint shaderProgramID)
 {
-	::g_pRPGSkinnedMesh = new cSimpleAssimpSkinnedMesh();
-
-	//if ( ! ::g_pRPGSkinnedMesh->LoadMeshFromFile( "assets/modelsMD5monsters/hellknight/attack2.md5anim" ) ) 
-	//{
-	//	std::cout << "Didn't load the army pilot" << std::endl;
-	//}
-
-	//if ( ! ::g_pRPGSkinnedMesh->LoadMeshFromFile( "assets/modelsFBX/ArmyPilot(FBX2013).fbx" ) ) 
-	//{
-	//	std::cout << "Didn't load the army pilot" << std::endl;
-	//}
-	//	if ( ! ::g_pSkinnedMesh01->LoadMeshFromFile( "assets/modelsFBX/RPG-Character(FBX2013).FBX" ) ) 
-//	if ( ! ::g_pSkinnedMesh01->LoadMeshFromFile( "assets/modelsFBX/RPG-Character_Unarmed-Attack-Kick-L1(FBX2013).FBX" ) ) 
-//	if ( ! ::g_pSkinnedMesh01->LoadMeshFromFile( "assets/modelsFBX/RPG-Character_Unarmed-Walk(FBX2013).FBX" ) ) 
-//	if ( ! ::g_pSkinnedMesh01->LoadMeshFromFile( "assets/modelsFBX/RPG-Character_Unarmed-Idle(FBX2013).fbx" ) ) 
-//	if ( ! ::g_pSkinnedMesh01->LoadMeshFromFile( "assets/modelsMD5/hellknight/attack2.md5anim" ) ) 
-//	if ( ! ::g_pSkinnedMesh01->LoadMeshFromFile( "assets/modelsFBX/RPG-Character_Unarmed-Fall(FBX2013).fbx" ) ) 
-	if (!::g_pRPGSkinnedMesh->LoadMeshFromFile("RPG-Character", "assets/modelsFBX/kachujin_g_rosales.fbx"))
-	{
-		std::cout << "Error: problem loading the skinned mesh" << std::endl;
-	}
-	std::vector<std::string> vecBoneNames;
-	::g_pRPGSkinnedMesh->GetListOfBoneIDandNames(vecBoneNames);
-	//::g_pRPGSkinnedMesh->pScene->mAnimations[0] = NULL;
-
-	//// Now load another animation file... 
-	//::g_pRPGSkinnedMesh->LoadMeshAnimation("Idle", "assets/modelsFBX/test_idle.fbx");
-	//::g_pRPGSkinnedMesh->LoadMeshAnimation("Unarmed-Attack-Kick-L1", "assets/modelsFBX/kick.dae");
-	::g_pRPGSkinnedMesh->LoadMeshAnimation("Unarmed-Walk", "assets/modelsFBX/Walking.fbx");
-	::g_pRPGSkinnedMesh->LoadMeshAnimation("Unarmed-Fall", "assets/modelsFBX/Arms Hip Hop Dance.fbx");
-	//::g_pRPGSkinnedMesh->LoadMeshAnimation("Roll-Backward", "assets/modelsFBX/RPG-Character_Unarmed-Roll-Backward(FBX2013).fbx");
-	//::g_pRPGSkinnedMesh->LoadMeshAnimation("Roll-Forwards", "assets/modelsFBX/RPG-Character_Unarmed-Roll-Forward(FBX2013).FBX");
-	//::g_pRPGSkinnedMesh->LoadMeshAnimation("Roll-Left", "assets/modelsFBX/RPG-Character_Unarmed-Roll-Left(FBX2013).FBX");
-	//::g_pRPGSkinnedMesh->LoadMeshAnimation("Roll-Right", "assets/modelsFBX/RPG-Character_Unarmed-Roll-Right(FBX2013).FBX");
-	//::g_pRPGSkinnedMesh->LoadMeshAnimation("Unarmed-Jump", "assets/modelsFBX/RPG-Character_Unarmed-Jump(FBX2013).FBX");
-
-	::g_pRPGSkinnedMesh->friendlyName = "RPG-Character";
-
-	cMesh* pTheMesh = ::g_pRPGSkinnedMesh->CreateMeshObjectFromCurrentModel();
-
-	if (pTheMesh)
-	{
-		std::cout << "Mesh got loaded" << std::endl;
-	}
-	else
-	{
-		std::cout << "Didn't load the skinned mesh model" << std::endl;
-	}
-
-	// Copy the mesh information from assimp into our cMesh object, 
-	// then into the sModelDrawInfo thing, and pass to the VAOManager
-
-	if (!AssimpSM_to_VAO_Converter(::g_pRPGSkinnedMesh, shaderProgramID))
-	{
-		std::cout << "Error: Didn't copy the skinned mesh into the VAO format." << std::endl;
-	}
-	else
-	{
-		std::cout << "Copied the skinned mesh into the VAO format" << std::endl;
-
-		// Add this mesh model into the "models to draw" vector
-
-		{	// Bind pose Skinned Mesh object
-			cGameObject* pTestSM = new cGameObject();
-			pTestSM->setDiffuseColour(glm::vec3(0.0f, 0.0f, 0.0f));	// Yellow
-			//pTestSM->setAlphaTransparency(1.0f);
-			//pTestSM->setMeshOrientationEulerAngles(-90.0f, 0.0f, 0.0f, true);
-			pTestSM->setSpecularPower(100.0f);
-			pTestSM->friendlyName = "SM_Object";
-			pTestSM->position = glm::vec3(0.0f, 0.0f, 0.0f);
-			pTestSM->setUniformScale(1.0f);
-			//pTestSM->meshName = "RPG-Character.ply";
-
-			// Wireframe, to make it easier to see (for now)
-//			pTestSM->bIsWireFrame = true;
-//			pTestSM->bDontLight = true;
-
-			// Set this mesh to the skinned mesh object
-			pTestSM->pSimpleSkinnedMesh = ::g_pRPGSkinnedMesh;
-			// HACK
-			//pTestSM->currentAnimation = "assets/modelsFBX/RPG-Character_Unarmed-Idle(FBX2013).fbx";
-//			pTestSM->currentAnimation = "Idle";
-
-			cAnimationState* pAniState;
-			pTestSM->pAniState = new cAnimationState();
-
-			pTestSM->pAniState->defaultAnimation.name = "Unarmed-Walk";
-			pTestSM->currentAnimation = "Unarmed-Walk";
-
-			sTextureInfo testObjectTexture;
-			testObjectTexture.name = "metal.bmp";
-			testObjectTexture.strength = 1.0f;
-
-			pTestSM->vecTextures.push_back(sTextureInfo(testObjectTexture));
-			pTestSM->setUniformScale(1.0f);
-			vec_pObjectsToDraw.push_back(pTestSM);
-		}
-	}//if ( ! AssimpSM_to_VAO_Converter(
-
-	//if ( pTheMesh )
-	//{
-	//	if ( ! pVAOManager->loadMeshIntoVAO( *pTheMesh, shaderID, false ) )
-	//	{
-	//		std::cout << "Could not load skinned mesh model into new VAO" << std::endl;
-	//	}
-	//}
-	//else
-	//{
-	//	std::cout << "Could not create a cMesh object from skinned mesh file" << std::endl;
-	//}
-	//// Delete temporary mesh if still around
-	//if ( pTheMesh )
-	//{
-	//	delete pTheMesh;
-	//}
-
+//	::g_pRPGSkinnedMesh = new cSimpleAssimpSkinnedMesh();
+//
+//	//if ( ! ::g_pRPGSkinnedMesh->LoadMeshFromFile( "assets/modelsMD5monsters/hellknight/attack2.md5anim" ) ) 
+//	//{
+//	//	std::cout << "Didn't load the army pilot" << std::endl;
+//	//}
+//
+//	//if ( ! ::g_pRPGSkinnedMesh->LoadMeshFromFile( "assets/modelsFBX/ArmyPilot(FBX2013).fbx" ) ) 
+//	//{
+//	//	std::cout << "Didn't load the army pilot" << std::endl;
+//	//}
+//	//	if ( ! ::g_pSkinnedMesh01->LoadMeshFromFile( "assets/modelsFBX/RPG-Character(FBX2013).FBX" ) ) 
+////	if ( ! ::g_pSkinnedMesh01->LoadMeshFromFile( "assets/modelsFBX/RPG-Character_Unarmed-Attack-Kick-L1(FBX2013).FBX" ) ) 
+////	if ( ! ::g_pSkinnedMesh01->LoadMeshFromFile( "assets/modelsFBX/RPG-Character_Unarmed-Walk(FBX2013).FBX" ) ) 
+////	if ( ! ::g_pSkinnedMesh01->LoadMeshFromFile( "assets/modelsFBX/RPG-Character_Unarmed-Idle(FBX2013).fbx" ) ) 
+////	if ( ! ::g_pSkinnedMesh01->LoadMeshFromFile( "assets/modelsMD5/hellknight/attack2.md5anim" ) ) 
+////	if ( ! ::g_pSkinnedMesh01->LoadMeshFromFile( "assets/modelsFBX/RPG-Character_Unarmed-Fall(FBX2013).fbx" ) ) 
+//
+//	//if (!::g_pRPGSkinnedMesh->LoadMeshFromFile("RPG-Character", "assets/modelsFBX/kachujin_g_rosales.fbx"))
+//	//{
+//	//	std::cout << "Error: problem loading the skinned mesh" << std::endl;
+//	//}
+//	std::vector<std::string> vecBoneNames;
+//	::g_pRPGSkinnedMesh->GetListOfBoneIDandNames(vecBoneNames);
+//	//::g_pRPGSkinnedMesh->pScene->mAnimations[0] = NULL;
+//
+//	//// Now load another animation file... 
+//	//::g_pRPGSkinnedMesh->LoadMeshAnimation("Idle", "assets/modelsFBX/test_idle.fbx");
+//	//::g_pRPGSkinnedMesh->LoadMeshAnimation("Unarmed-Attack-Kick-L1", "assets/modelsFBX/kick.dae");
+//	::g_pRPGSkinnedMesh->LoadMeshAnimation("Unarmed-Walk", "assets/modelsFBX/Walking.fbx");
+//	//::g_pRPGSkinnedMesh->LoadMeshAnimation("Unarmed-Fall", "assets/modelsFBX/Arms Hip Hop Dance.fbx");
+//	//::g_pRPGSkinnedMesh->LoadMeshAnimation("Roll-Backward", "assets/modelsFBX/RPG-Character_Unarmed-Roll-Backward(FBX2013).fbx");
+//	//::g_pRPGSkinnedMesh->LoadMeshAnimation("Roll-Forwards", "assets/modelsFBX/RPG-Character_Unarmed-Roll-Forward(FBX2013).FBX");
+//	//::g_pRPGSkinnedMesh->LoadMeshAnimation("Roll-Left", "assets/modelsFBX/RPG-Character_Unarmed-Roll-Left(FBX2013).FBX");
+//	//::g_pRPGSkinnedMesh->LoadMeshAnimation("Roll-Right", "assets/modelsFBX/RPG-Character_Unarmed-Roll-Right(FBX2013).FBX");
+//	//::g_pRPGSkinnedMesh->LoadMeshAnimation("Unarmed-Jump", "assets/modelsFBX/RPG-Character_Unarmed-Jump(FBX2013).FBX");
+//
+//	::g_pRPGSkinnedMesh->friendlyName = "RPG-Character";
+//
+//	cMesh* pTheMesh = ::g_pRPGSkinnedMesh->CreateMeshObjectFromCurrentModel();
+//
+//	if (pTheMesh)
+//	{
+//		std::cout << "Mesh got loaded" << std::endl;
+//	}
+//	else
+//	{
+//		std::cout << "Didn't load the skinned mesh model" << std::endl;
+//	}
+//
+//	// Copy the mesh information from assimp into our cMesh object, 
+//	// then into the sModelDrawInfo thing, and pass to the VAOManager
+//
+//	if (!AssimpSM_to_VAO_Converter(::g_pRPGSkinnedMesh, shaderProgramID))
+//	{
+//		std::cout << "Error: Didn't copy the skinned mesh into the VAO format." << std::endl;
+//	}
+//	else
+//	{
+//		std::cout << "Copied the skinned mesh into the VAO format" << std::endl;
+//
+//		// Add this mesh model into the "models to draw" vector
+//
+//		{	// Bind pose Skinned Mesh object
+//			cGameObject* pTestSM = new cGameObject();
+//			pTestSM->setDiffuseColour(glm::vec3(0.0f, 0.0f, 0.0f));	// Yellow
+//			//pTestSM->setAlphaTransparency(1.0f);
+//			//pTestSM->setMeshOrientationEulerAngles(-90.0f, 0.0f, 0.0f, true);
+//			pTestSM->setSpecularPower(100.0f);
+//			pTestSM->friendlyName = "SM_Object";
+//			pTestSM->position = glm::vec3(0.0f, 0.0f, 0.0f);
+//			pTestSM->setUniformScale(0.10f);
+//			//pTestSM->meshName = "earth.ply";
+//
+//			// Wireframe, to make it easier to see (for now)
+////			pTestSM->bIsWireFrame = true;
+////			pTestSM->bDontLight = true;
+//
+//			// Set this mesh to the skinned mesh object
+//			pTestSM->pSimpleSkinnedMesh = ::g_pRPGSkinnedMesh;
+//			// HACK
+//			//pTestSM->currentAnimation = "assets/modelsFBX/RPG-Character_Unarmed-Idle(FBX2013).fbx";
+////			pTestSM->currentAnimation = "Idle";
+//
+//			cAnimationState* pAniState;
+//			pTestSM->pAniState = new cAnimationState();
+//
+//			pTestSM->pAniState->defaultAnimation.name = "Unarmed-Walk";
+//			pTestSM->currentAnimation = "Unarmed-Walk";
+//
+//			sTextureInfo testObjectTexture;
+//			testObjectTexture.name = "metal.bmp";
+//			testObjectTexture.strength = 1.0f;
+//
+//			pTestSM->vecTextures.push_back(sTextureInfo(testObjectTexture));
+//
+//			vec_pObjectsToDraw.push_back(pTestSM);
+//		}
+//	}//if ( ! AssimpSM_to_VAO_Converter(
+//
+//	//if ( pTheMesh )
+//	//{
+//	//	if ( ! pVAOManager->loadMeshIntoVAO( *pTheMesh, shaderID, false ) )
+//	//	{
+//	//		std::cout << "Could not load skinned mesh model into new VAO" << std::endl;
+//	//	}
+//	//}
+//	//else
+//	//{
+//	//	std::cout << "Could not create a cMesh object from skinned mesh file" << std::endl;
+//	//}
+//	//// Delete temporary mesh if still around
+//	//if ( pTheMesh )
+//	//{
+//	//	delete pTheMesh;
+//	//}
+//
 
 	return;
 }
