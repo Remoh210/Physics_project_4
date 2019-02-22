@@ -106,16 +106,16 @@ bool AssimpSM_to_VAO_Converter(cSimpleAssimpSkinnedMesh* pTheAssimpSM,
 		{
 			// Assume there's 1... (at least)
 			theSMDrawInfo.pMeshData->pVertices[vertIndex].u0
-				= pTheAssimpSM->pScene->mMeshes[0]->mTextureCoords[0]->x;
+				= pTheAssimpSM->pScene->mMeshes[0]->mTextureCoords[0][vertIndex].x;
 			theSMDrawInfo.pMeshData->pVertices[vertIndex].v0
-				= pTheAssimpSM->pScene->mMeshes[0]->mTextureCoords[0]->y;
+				= pTheAssimpSM->pScene->mMeshes[0]->mTextureCoords[0][vertIndex].y;
 		}
 		if (pTheAssimpSM->pScene->mMeshes[0]->HasTextureCoords(1))	// 2nd UV coords
 		{
 			theSMDrawInfo.pMeshData->pVertices[vertIndex].u0
-				= pTheAssimpSM->pScene->mMeshes[0]->mTextureCoords[1]->x;
+				= pTheAssimpSM->pScene->mMeshes[0]->mTextureCoords[1][vertIndex].x;
 			theSMDrawInfo.pMeshData->pVertices[vertIndex].v0
-				= pTheAssimpSM->pScene->mMeshes[0]->mTextureCoords[1]->y;
+				= pTheAssimpSM->pScene->mMeshes[0]->mTextureCoords[1][vertIndex].y;
 		}
 		// TODO: add additional texture coordinates (mTextureCoords[1], etc.)
 

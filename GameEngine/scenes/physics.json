@@ -62,7 +62,7 @@
 		  "SkinnedMesh" : "assets/modelsFBX/chan.fbx",
           "Animation": {
             "Idle" : "assets/modelsFBX/chan-idle.fbx",
-		        "Walk-forward" : "assets/modelsFBX/chan-walk-forward.fbx",
+		    "Walk-forward" : "assets/modelsFBX/chan-walk-forward.fbx",
             "Walk-backward" : "assets/modelsFBX/chan-walk-backward.fbx",
             "Action1" : "assets/modelsFBX/chan-dance.fbx"
 		  },
@@ -84,7 +84,7 @@
               1.0,
               1.0,
               1.0,
-              100.0
+              100000.0
           ],
           "Rotation": [
               0.0,
@@ -98,7 +98,7 @@
           ],
           "Textures": [
               {
-                  "Name": "moonTex.bmp",
+                  "Name": "chanTex.bmp",
                   "Strength": 1.0
               },
               {
