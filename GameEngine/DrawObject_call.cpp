@@ -223,6 +223,9 @@ void DrawScene_Simple(std::vector<cGameObject*> vec_pMeshSceneObjects,
 				pCurrentMesh->bIsWireFrame = true;
 				pCurrentMesh->bDontLight = true;
 				pCurrentMesh->position = nodePosition;
+				float radius;
+				pCurrentMesh->softBody->GetNodeRadius(nodeIndex, radius);
+				pCurrentMesh->setUniformScale(radius);
 				glm::mat4x4 matModel = glm::mat4(1.0f);
 				DrawObject(pCurrentMesh, matModel, shaderProgramID);
 			}

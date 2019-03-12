@@ -28,6 +28,14 @@ namespace nPhysics
 	{
 
 	}
+	bool cSphereShape::GetAABB(const glm::mat4 & transform, glm::vec3 & minBoundsOut, glm::vec3 & maxBoundsOut)
+	{
+		const glm::vec4& pos = transform[3];
+		minBoundsOut.x = pos.x - mRadius;
+		minBoundsOut.y = pos.y - mRadius;
+		minBoundsOut.z = pos.z - mRadius;
+		return true;
+	}
 	//float cSphereShape::GetRadius()
 	//{
 	//	return mRadius;
@@ -63,6 +71,18 @@ namespace nPhysics
 	cPlaneShape::~cPlaneShape()
 	{
 
+	}
+
+	bool cPlaneShape::GetAABB(const glm::mat4 & transform, glm::vec3 & minBoundsOut, glm::vec3 & maxBoundsOut)
+	{
+		minBoundsOut.x = std::numeric_limits<float>::min();
+		minBoundsOut.y = std::numeric_limits<float>::min();
+		minBoundsOut.z = std::numeric_limits<float>::min();
+
+		maxBoundsOut.x = std::numeric_limits<float>::max();
+		maxBoundsOut.y = std::numeric_limits<float>::max();
+		maxBoundsOut.z = std::numeric_limits<float>::max();
+		return true;
 	}
 
 	//float cPlaneShape::GetPlaneConstant()

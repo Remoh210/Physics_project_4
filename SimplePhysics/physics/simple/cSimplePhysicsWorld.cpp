@@ -98,6 +98,15 @@ namespace nPhysics
 
 	}
 
+	bool cSimplePhysicsWorld::CollideRigidBodySoftBody(cSimpleRigidBody* rigidBody, cSimpleSoftBody* softBody)
+	{
+		for (size_t i = 0; i < softBody->mNodes.size(); i++)
+		{
+			
+		}
+		return false;
+	}
+
 
 	bool cSimplePhysicsWorld::RemoveBody(iRigidBody* body)
 	{
@@ -283,6 +292,22 @@ namespace nPhysics
 				std::vector<cSimpleSoftBody*>::iterator itSoft = mSoftBodies.begin();
 				while(itSoft != mSoftBodies.end())
 				{
+					(*itSoft)->UpdateInternal(dt, mGravity);
+					itSoft++;
+				}
+
+				//SoftBody RigidBody collision
+
+				itSoft = mSoftBodies.begin();
+				while (itSoft != mSoftBodies.end())
+				{
+					std::vector<cSimpleRigidBody*>::iterator it = mBodies.begin();
+					while (it != mBodies.end())
+					{
+						CollideRigidBodySoftBody(*it, *itSoft);
+						it++;
+					}
+
 					(*itSoft)->UpdateInternal(dt, mGravity);
 					itSoft++;
 				}

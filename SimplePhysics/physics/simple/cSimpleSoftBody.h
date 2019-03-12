@@ -6,7 +6,7 @@ namespace nPhysics
 {
 	class cSimpleSoftBody : public iSoftBody
 	{
-
+		friend class cSimplePhysicsWorld;
 		class cNode;
 		class cSpring
 		{
@@ -36,10 +36,13 @@ namespace nPhysics
 
 			bool HasNeighbor(cNode* other);
 			void Intgrate(float dt);
+			void ComputeRadius();
 
 			glm::vec3 Position;
+			glm::vec3 PreviousPosition;
 			glm::vec3 Velocity;
 			glm::vec3 SpringForce;
+			float Radius;
 			float Mass;
 			std::vector<cSpring*> Springs;
 		};
@@ -50,7 +53,11 @@ namespace nPhysics
 		virtual ~cSimpleSoftBody();
 
 		virtual void GetNodePostion(size_t index, glm::vec3& positionOut);
+		virtual void GetNodeRadius(size_t index, float& nodeRadiusOut);
 		virtual size_t NumNodes();
+
+
+		void GetAABB(glm::vec3& minBoundsOut, glm::vec3& maxBoundsOut);
 
 		void UpdateInternal(float dt, const glm::vec3& gravity);
 
@@ -60,6 +67,16 @@ namespace nPhysics
 		cSimpleSoftBody(const cSimpleSoftBody& other) : iSoftBody(other) {}
 		cSimpleSoftBody& operator=(const cSimpleSoftBody& other) { return *this; }
 	private:
+		void CollideNodes(cNode* nodeA, cNode* nodeB);
+		glm::vec3 mWindDirection;
+		float mWindMagnitude;
+		float Yaw;
+		float Pitch;
+
+		void UpdateAABB();
+		glm::vec3 mMinBounds;
+		glm::vec3 mMaxBounds;
+
 		std::vector<cNode*> mNodes;
 		std::vector<cSpring*> mSprings;
 

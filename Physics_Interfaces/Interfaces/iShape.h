@@ -9,6 +9,7 @@ namespace nPhysics
 		virtual ~iShape() {};
 
 		inline eShapeType GetShapeType() const { return mShapeType; }
+		virtual bool GetAABB(const glm::mat4& transform, glm::vec3& minBoundsOut, glm::vec3& maxBoundsOut) { return false; } /*=0*/
 		virtual bool GetSphereRadius(float& radiusOut) { return false; }
 		virtual bool GetPlaneConstant(float& planeConstantOut) { return false; }
 		virtual bool GetPlaneNormal(glm::vec3& planeNormalOut) { return false; }

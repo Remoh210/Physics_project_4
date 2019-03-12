@@ -534,7 +534,6 @@ bool cSceneManager::loadScene(std::string filename) {
 					{
 						
 						def.Nodes.push_back(nPhysics::sSoftBodyNodeDef(cornerA + sepAtoB * float(idxA) + sepAtoC * float(idxB), 1.0f));
-						//def.Nodes.push_back(nPhysics::sSoftBodyNodeDef(position, 1.0f));
 						position.x += 5.0f;
 					}
 					position.y += 5.0f;

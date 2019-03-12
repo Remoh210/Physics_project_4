@@ -59,7 +59,7 @@
       },
       {
           "Name": "jupiter2",
-          "Mesh": "earth.ply",
+          "Mesh": "Sphere_320.ply",
           "Visible": true,
           "Use_Physics": true,
           "Wireframe": false,
@@ -86,9 +86,9 @@
               0.0
           ],
           "Scale": [
-              2.0,
-              2.0,
-              2.0
+              1.0,
+              1.0,
+              1.0
           ],
 
           "RigidBody": {

@@ -109,6 +109,13 @@ namespace nPhysics
 		this->mAcceleration = accel;
 	}
 
+	void cSimpleRigidBody::GetAABB(glm::vec3 & minBoundsOut, glm::vec3 & maxBoundsOut)
+	{
+		glm::mat4 transform;
+		transform = this->GetTransform();
+		mShape->GetAABB(transform, minBoundsOut, maxBoundsOut);
+	}
+
 	void cSimpleRigidBody::SetVelocity(glm::vec3 velocity)
 	{
 		this->mVelocity = velocity;

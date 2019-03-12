@@ -10,7 +10,7 @@ namespace nPhysics
 		cSphereShape(float radius);
 
 		virtual ~cSphereShape();
-
+		virtual bool GetAABB(const glm::mat4& transform, glm::vec3& minBoundsOut, glm::vec3& maxBoundsOut);
 		virtual bool GetSphereRadius(float& radiusOut) { radiusOut = this->mRadius; return true; }
 
 	private:
@@ -28,7 +28,7 @@ namespace nPhysics
 		cPlaneShape(const glm::vec3& normal, float planeConst);
 
 		virtual ~cPlaneShape();
-
+		virtual bool GetAABB(const glm::mat4& transform, glm::vec3& minBoundsOut, glm::vec3& maxBoundsOut);
 		virtual bool GetPlaneConstant(float& planeConstantOut) { planeConstantOut = this->mPlaneConst; return true; };
 		virtual bool GetPlaneNormal(glm::vec3& planeNormalOut) { planeNormalOut = this->mNormal; return true; };
 

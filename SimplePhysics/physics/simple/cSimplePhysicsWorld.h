@@ -41,12 +41,14 @@ namespace nPhysics
 
 		virtual bool AddBody(iSoftBody* body);
 		virtual bool RemoveBody(iSoftBody* body);
+		
 
 		virtual void Update(float dt);
 
 	private:
 		iDebugRenderer* mDebugRenderer;
 		bool CollisionTest(cSimpleRigidBody* bodyA, cSimpleRigidBody* bodyB);
+		bool CollideRigidBodySoftBody(cSimpleRigidBody* rigidBody, cSimpleSoftBody* softBody);
 		glm::vec3 mGravity;
 		std::vector<cSimpleRigidBody*> mBodies;
 		std::vector<cSimpleSoftBody*> mSoftBodies;
