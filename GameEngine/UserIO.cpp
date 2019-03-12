@@ -163,25 +163,26 @@ void key_callback( GLFWwindow* window,
 
 
 
-	cGameObject* pSM = findObjectByFriendlyName("chan");
+	//cGameObject* pSM = findObjectByFriendlyName("chan");
 
 
-	glm::vec3 velocity = pSM->rigidBody->GetVelocity();
-	pSM->currentAnimation = "Idle";
-	velocity.x = 0.0f;
-	velocity.z = 0.0f;
-	pSM->rigidBody->SetVelocity(velocity);
+	//glm::vec3 velocity = pSM->rigidBody->GetVelocity();
+	//pSM->currentAnimation = "Idle";
+	//velocity.x = 0.0f;
+	//velocity.z = 0.0f;
+
+	//pSM->rigidBody->SetVelocity(velocity);
 	if (glfwGetKey(window, GLFW_KEY_1))
 	{
-		pSM->currentAnimation = "Idle";
+		//pSM->currentAnimation = "Idle";
 		//pSM->currentAnimation =  "assets/modelsFBX/RPG-Character_Unarmed-Idle(FBX2013).fbx";
 
 
 	}
 	if (glfwGetKey(window, GLFW_KEY_2))
 	{
-		pSM->currentAnimation = "Walk-forward";
-		setVelZ(pSM, 13.f);
+		//pSM->currentAnimation = "Walk-forward";
+		//setVelZ(pSM, 13.f);
 		//pSM->rigidBody->SetVelocity(glm::vec3(0.f, 0.f,20.0f ));
 
 		//pSM->currentAnimation = "Unarmed-Attack-Kick-L1";
@@ -194,8 +195,8 @@ void key_callback( GLFWwindow* window,
 	}
 	if (glfwGetKey(window, GLFW_KEY_3))
 	{
-		pSM->currentAnimation = "Walk-backward";
-		setVelZ(pSM, -13.f);
+		//pSM->currentAnimation = "Walk-backward";
+		//setVelZ(pSM, -13.f);
 		//pSM->rigidBody->SetVelocity(glm::vec3(0.f, 0.f, -20.f));
 		//pSM->currentAnimation = "assets/modelsFBX/RPG-Character_Unarmed-Fall(FBX2013).fbx";
 	}
@@ -204,7 +205,7 @@ void key_callback( GLFWwindow* window,
 
 	if (glfwGetKey(window, GLFW_KEY_4))
 	{
-		pSM->currentAnimation = "Action1";
+		//pSM->currentAnimation = "Action1";
 	}
 
 

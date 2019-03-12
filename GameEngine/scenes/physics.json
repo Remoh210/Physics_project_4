@@ -54,24 +54,271 @@
           "RigidBody": {
               "Type": "SPHERE",
               "Radius": 10.0,
-              "Mass": 50.0
+              "Mass": 10.0
           }
       },
-	  {
-          "Name": "chan",
-		  "SkinnedMesh" : "assets/modelsFBX/chan.fbx",
-          "Animation": {
-            "Idle" : "assets/modelsFBX/chan-idle.fbx",
-		    "Walk-forward" : "assets/modelsFBX/chan-walk-forward.fbx",
-            "Walk-backward" : "assets/modelsFBX/chan-walk-backward.fbx",
-            "Action1" : "assets/modelsFBX/chan-dance.fbx"
-		  },
+      {
+          "Name": "jupiter2",
+          "Mesh": "earth.ply",
           "Visible": true,
           "Use_Physics": true,
           "Wireframe": false,
           "Position": [
-              0.0,
               10.0,
+              120.277694702148439,
+              10.0
+          ],
+          "DiffuseRGB_Alpha": [
+              0.0,
+              1.0,
+              0.0,
+              1.0
+          ],
+          "SpecularRGB_Alpha": [
+              1.0,
+              1.0,
+              1.0,
+              100.0
+          ],
+          "Rotation": [
+              0.0,
+              0.0,
+              0.0
+          ],
+          "Scale": [
+              2.0,
+              2.0,
+              2.0
+          ],
+
+          "RigidBody": {
+              "Type": "CLOTH",
+              "SpringConstant" : 30.0,
+              "NumNodesAB": 8,
+              "NumNodesAC": 7,
+              "CornerA" : [
+                -8.0,
+                115.0,
+                -5.0
+              ],
+              "CornerB" : [
+                8.0,
+                115.0,
+                -5.0
+              ],
+            "CornerC" : [
+                -8.0,
+                103.0,
+                -5.0
+              ]
+
+          }
+      },
+      {
+          "Name": "neptune",
+          "Mesh": "earth.ply",
+          "Visible": true,
+          "Use_Physics": true,
+          "Wireframe": false,
+          "Position": [
+              40.0,
+              360.0,
+              10.0
+          ],
+          "DiffuseRGB_Alpha": [
+              0.0,
+              0.0,
+              0.0,
+              1.0
+          ],
+          "SpecularRGB_Alpha": [
+              1.0,
+              1.0,
+              1.0,
+              100.0
+          ],
+          "Rotation": [
+              0.0,
+              0.0,
+              0.0
+          ],
+          "Scale": [
+              25.0,
+              25.0,
+              25.0
+          ],
+          "Textures": [
+              {
+                  "Name": "NeptuneTex.bmp",
+                  "Strength": 1.0
+              },
+              {
+                  "Name": "testTex.bmp",
+                  "Strength": 0.0
+              }
+          ],
+          "RigidBody": {
+              "Type": "SPHERE",
+              "Radius": 25.0,
+              "Mass": 25.0
+          }
+      },
+      {
+          "Name": "neptune",
+          "Mesh": "earth.ply",
+          "Visible": true,
+          "Use_Physics": true,
+          "Wireframe": false,
+          "Position": [
+              10.0,
+              280.0,
+              -10.0
+          ],
+          "DiffuseRGB_Alpha": [
+              0.0,
+              0.0,
+              0.0,
+              1.0
+          ],
+          "SpecularRGB_Alpha": [
+              1.0,
+              1.0,
+              1.0,
+              100.0
+          ],
+          "Rotation": [
+              0.0,
+              0.0,
+              0.0
+          ],
+          "Scale": [
+              11.0,
+              11.0,
+              11.0
+          ],
+          "Textures": [
+              {
+                  "Name": "NeptuneTex.bmp",
+                  "Strength": 1.0
+              },
+              {
+                  "Name": "testTex.bmp",
+                  "Strength": 0.0
+              }
+          ],
+          "RigidBody": {
+              "Type": "SPHERE",
+              "Radius": 11.0,
+              "Mass": 11.0
+          }
+      },
+	   {
+          "Name": "earth1",
+          "Mesh": "earth.ply",
+          "Visible": true,
+          "Use_Physics": true,
+          "Wireframe": false,
+          "Position": [
+              -30.0,
+              200.0,
+              -50.0
+          ],
+          "DiffuseRGB_Alpha": [
+              0.0,
+              0.0,
+              0.0,
+              1.0
+          ],
+          "SpecularRGB_Alpha": [
+              1.0,
+              1.0,
+              1.0,
+              100.0
+          ],
+          "Rotation": [
+              0.0,
+              0.0,
+              0.0
+          ],
+          "Scale": [
+              20.0,
+              20.0,
+              20.0
+          ],
+          "Textures": [
+              {
+                  "Name": "earthTex.bmp",
+                  "Strength": 1.0
+              },
+              {
+                  "Name": "testTex.bmp",
+                  "Strength": 0.0
+              }
+          ],
+          "RigidBody": {
+              "Type": "SPHERE",
+              "Radius": 20.0,
+              "Mass": 20.0
+          }
+      },
+      {
+           "Name": "earth2",
+           "Mesh": "earth.ply",
+           "Visible": true,
+           "Use_Physics": true,
+           "Wireframe": false,
+           "Position": [
+               5.0,
+               193.0,
+               16.0
+           ],
+           "DiffuseRGB_Alpha": [
+               0.0,
+               0.0,
+               0.0,
+               1.0
+           ],
+           "SpecularRGB_Alpha": [
+               1.0,
+               1.0,
+               1.0,
+               100.0
+           ],
+           "Rotation": [
+               0.0,
+               0.0,
+               0.0
+           ],
+           "Scale": [
+               12.0,
+               12.0,
+               12.0
+           ],
+           "Textures": [
+               {
+                   "Name": "earthTex.bmp",
+                   "Strength": 1.0
+               },
+               {
+                   "Name": "testTex.bmp",
+                   "Strength": 0.0
+               }
+           ],
+           "RigidBody": {
+               "Type": "SPHERE",
+               "Radius": 12.0,
+               "Mass": 12.0
+           }
+       },
+      {
+          "Name": "venus",
+          "Mesh": "earth.ply",
+          "Visible": true,
+          "Use_Physics": true,
+          "Wireframe": false,
+          "Position": [
+              -8.0,
+              30.0,
               0.0
           ],
           "DiffuseRGB_Alpha": [
@@ -84,7 +331,7 @@
               1.0,
               1.0,
               1.0,
-              100000.0
+              100.0
           ],
           "Rotation": [
               0.0,
@@ -92,13 +339,111 @@
               0.0
           ],
           "Scale": [
-              0.1,
-              0.1,
-              0.1
+              15.0,
+              15.0,
+              15.0
           ],
           "Textures": [
               {
-                  "Name": "chanTex.bmp",
+                  "Name": "VenusTex.bmp",
+                  "Strength": 1.0
+              },
+              {
+                  "Name": "testTex.bmp",
+                  "Strength": 0.0
+              }
+          ],
+          "RigidBody": {
+              "Type": "SPHERE",
+              "Radius": 15.0,
+              "Mass": 15.0
+          }
+      },
+      {
+          "Name": "venus2",
+          "Mesh": "earth.ply",
+          "Visible": true,
+          "Use_Physics": true,
+          "Wireframe": false,
+          "Position": [
+              -80.0,
+              260.0,
+              -50.0
+          ],
+          "DiffuseRGB_Alpha": [
+              0.0,
+              0.0,
+              0.0,
+              1.0
+          ],
+          "SpecularRGB_Alpha": [
+              1.0,
+              1.0,
+              1.0,
+              100.0
+          ],
+          "Rotation": [
+              0.0,
+              0.0,
+              0.0
+          ],
+          "Scale": [
+              9.0,
+              9.0,
+              9.0
+          ],
+          "Textures": [
+              {
+                  "Name": "VenusTex.bmp",
+                  "Strength": 1.0
+              },
+              {
+                  "Name": "testTex.bmp",
+                  "Strength": 0.0
+              }
+          ],
+          "RigidBody": {
+              "Type": "SPHERE",
+              "Radius": 9.0,
+              "Mass": 9.0
+          }
+      },
+      {
+          "Name": "venus2",
+          "Mesh": "earth.ply",
+          "Visible": true,
+          "Use_Physics": true,
+          "Wireframe": false,
+          "Position": [
+              80.0,
+              270.0,
+              -30.0
+          ],
+          "DiffuseRGB_Alpha": [
+              0.0,
+              0.0,
+              0.0,
+              1.0
+          ],
+          "SpecularRGB_Alpha": [
+              1.0,
+              1.0,
+              1.0,
+              100.0
+          ],
+          "Rotation": [
+              0.0,
+              0.0,
+              0.0
+          ],
+          "Scale": [
+              10.0,
+              10.0,
+              10.0
+          ],
+          "Textures": [
+              {
+                  "Name": "VenusTex.bmp",
                   "Strength": 1.0
               },
               {
@@ -112,6 +457,447 @@
               "Mass": 10.0
           }
       },
+      {
+          "Name": "moon2",
+          "Mesh": "earth.ply",
+          "Visible": true,
+          "Use_Physics": true,
+          "Wireframe": false,
+          "Position": [
+              -8.0,
+              240.0,
+              20.0
+          ],
+          "DiffuseRGB_Alpha": [
+              0.0,
+              0.0,
+              0.0,
+              1.0
+          ],
+          "SpecularRGB_Alpha": [
+              1.0,
+              1.0,
+              1.0,
+              100.0
+          ],
+          "Rotation": [
+              0.0,
+              0.0,
+              0.0
+          ],
+          "Scale": [
+              13.0,
+              13.0,
+              13.0
+          ],
+          "Textures": [
+              {
+                  "Name": "moonTex.bmp",
+                  "Strength": 1.0
+              },
+              {
+                  "Name": "testTex.bmp",
+                  "Strength": 0.0
+              }
+          ],
+          "RigidBody": {
+              "Type": "SPHERE",
+              "Radius": 13.0,
+              "Mass": 13.0
+          }
+      },
+      {
+          "Name": "moon3",
+          "Mesh": "earth.ply",
+          "Visible": true,
+          "Use_Physics": true,
+          "Wireframe": false,
+          "Position": [
+              16.0,
+              245.0,
+              -20.0
+          ],
+          "DiffuseRGB_Alpha": [
+              0.0,
+              0.0,
+              0.0,
+              1.0
+          ],
+          "SpecularRGB_Alpha": [
+              1.0,
+              1.0,
+              1.0,
+              100.0
+          ],
+          "Rotation": [
+              0.0,
+              0.0,
+              0.0
+          ],
+          "Scale": [
+              8.0,
+              8.0,
+              8.0
+          ],
+          "Textures": [
+              {
+                  "Name": "moonTex.bmp",
+                  "Strength": 1.0
+              },
+              {
+                  "Name": "testTex.bmp",
+                  "Strength": 0.0
+              }
+          ],
+          "RigidBody": {
+              "Type": "SPHERE",
+              "Radius": 8.0,
+              "Mass": 8.0
+          }
+      },
+      {
+          "Name": "moon4",
+          "Mesh": "earth.ply",
+          "Visible": true,
+          "Use_Physics": true,
+          "Wireframe": false,
+          "Position": [
+              66.0,
+              185.0,
+              -60.0
+          ],
+          "DiffuseRGB_Alpha": [
+              0.0,
+              0.0,
+              0.0,
+              1.0
+          ],
+          "SpecularRGB_Alpha": [
+              1.0,
+              1.0,
+              1.0,
+              100.0
+          ],
+          "Rotation": [
+              0.0,
+              0.0,
+              0.0
+          ],
+          "Scale": [
+              23.0,
+              23.0,
+              23.0
+          ],
+          "Textures": [
+              {
+                  "Name": "moonTex.bmp",
+                  "Strength": 1.0
+              },
+              {
+                  "Name": "testTex.bmp",
+                  "Strength": 0.0
+              }
+          ],
+          "RigidBody": {
+              "Type": "SPHERE",
+              "Radius": 23.0,
+              "Mass": 22.0
+          }
+      },
+      {
+          "Name": "mars2",
+          "Mesh": "earth.ply",
+          "Visible": true,
+          "Use_Physics": true,
+          "Wireframe": false,
+          "Position": [
+              -17.0,
+              155.0,
+              0.0
+          ],
+          "DiffuseRGB_Alpha": [
+              0.0,
+              0.0,
+              0.0,
+              1.0
+          ],
+          "SpecularRGB_Alpha": [
+              1.0,
+              1.0,
+              1.0,
+              100.0
+          ],
+          "Rotation": [
+              0.0,
+              0.0,
+              0.0
+          ],
+          "Scale": [
+              15.0,
+              15.0,
+              15.0
+          ],
+          "Textures": [
+              {
+                  "Name": "MarsTex.bmp",
+                  "Strength": 1.0
+              },
+              {
+                  "Name": "testTex.bmp",
+                  "Strength": 0.0
+              }
+          ],
+          "RigidBody": {
+              "Type": "SPHERE",
+              "Radius": 15.0,
+              "Mass": 15.0
+          }
+      },
+	   {
+          "Name": "mars3",
+          "Mesh": "earth.ply",
+          "Visible": true,
+          "Use_Physics": true,
+          "Wireframe": false,
+          "Position": [
+              -48.0,
+              40.0,
+              0.0
+          ],
+          "DiffuseRGB_Alpha": [
+              0.0,
+              0.0,
+              0.0,
+              1.0
+          ],
+          "SpecularRGB_Alpha": [
+              1.0,
+              1.0,
+              1.0,
+              100.0
+          ],
+          "Rotation": [
+              0.0,
+              0.0,
+              0.0
+          ],
+          "Scale": [
+              12.0,
+              12.0,
+              12.0
+          ],
+          "Textures": [
+              {
+                  "Name": "MarsTex.bmp",
+                  "Strength": 1.0
+              },
+              {
+                  "Name": "testTex.bmp",
+                  "Strength": 0.0
+              }
+          ],
+          "RigidBody": {
+              "Type": "SPHERE",
+              "Radius": 12.0,
+              "Mass": 12.0
+          }
+      },
+	   {
+          "Name": "mars4",
+          "Mesh": "earth.ply",
+          "Visible": true,
+          "Use_Physics": true,
+          "Wireframe": false,
+          "Position": [
+              48.0,
+              170.0,
+              23.0
+          ],
+          "DiffuseRGB_Alpha": [
+              0.0,
+              0.0,
+              0.0,
+              1.0
+          ],
+          "SpecularRGB_Alpha": [
+              1.0,
+              1.0,
+              1.0,
+              100.0
+          ],
+          "Rotation": [
+              0.0,
+              0.0,
+              0.0
+          ],
+          "Scale": [
+              17.0,
+              17.0,
+              17.0
+          ],
+          "Textures": [
+              {
+                  "Name": "MarsTex.bmp",
+                  "Strength": 1.0
+              },
+              {
+                  "Name": "testTex.bmp",
+                  "Strength": 0.0
+              }
+          ],
+          "RigidBody": {
+              "Type": "SPHERE",
+              "Radius": 17.0,
+              "Mass": 17.0
+          }
+      },
+      {
+           "Name": "sun",
+           "Mesh": "earth.ply",
+           "Visible": true,
+           "Use_Physics": true,
+           "Wireframe": false,
+           "Position": [
+               50.0,
+               150.0,
+               -20.0
+           ],
+           "DiffuseRGB_Alpha": [
+               0.0,
+               0.0,
+               0.0,
+               1.0
+           ],
+           "SpecularRGB_Alpha": [
+               1.0,
+               1.0,
+               1.0,
+               100.0
+           ],
+           "Rotation": [
+               0.0,
+               0.0,
+               0.0
+           ],
+           "Scale": [
+               30.0,
+               30.0,
+               30.0
+           ],
+           "Textures": [
+               {
+                   "Name": "sunTex.bmp",
+                   "Strength": 1.0
+               },
+               {
+                   "Name": "testTex.bmp",
+                   "Strength": 0.0
+               }
+           ],
+           "RigidBody": {
+               "Type": "SPHERE",
+               "Radius": 30.0,
+               "Mass": 50.0
+           }
+       },
+       {
+            "Name": "sun",
+            "Mesh": "earth.ply",
+            "Visible": true,
+            "Use_Physics": true,
+            "Wireframe": false,
+            "Position": [
+                30.0,
+                320.0,
+                30.0
+            ],
+            "DiffuseRGB_Alpha": [
+                0.0,
+                0.0,
+                0.0,
+                1.0
+            ],
+            "SpecularRGB_Alpha": [
+                1.0,
+                1.0,
+                1.0,
+                100.0
+            ],
+            "Rotation": [
+                0.0,
+                0.0,
+                0.0
+            ],
+            "Scale": [
+                20.0,
+                20.0,
+                20.0
+            ],
+            "Textures": [
+                {
+                    "Name": "milkywayTex.bmp",
+                    "Strength": 1.0
+                },
+                {
+                    "Name": "testTex.bmp",
+                    "Strength": 0.0
+                }
+            ],
+            "RigidBody": {
+                "Type": "SPHERE",
+                "Radius": 20.0,
+                "Mass": 20.0
+            }
+        },
+       {
+            "Name": "jpupiter",
+            "Mesh": "earth.ply",
+            "Visible": true,
+            "Use_Physics": true,
+            "Wireframe": false,
+            "Position": [
+                -10.0,
+                70.0,
+                -40.0
+            ],
+            "DiffuseRGB_Alpha": [
+                0.0,
+                0.0,
+                0.0,
+                1.0
+            ],
+            "SpecularRGB_Alpha": [
+                1.0,
+                1.0,
+                1.0,
+                100.0
+            ],
+            "Rotation": [
+                0.0,
+                0.0,
+                0.0
+            ],
+            "Scale": [
+                19.0,
+                19.0,
+                19.0
+            ],
+            "Textures": [
+                {
+                    "Name": "jupiterTex.bmp",
+                    "Strength": 1.0
+                },
+                {
+                    "Name": "testTex.bmp",
+                    "Strength": 0.0
+                }
+            ],
+            "RigidBody": {
+                "Type": "SPHERE",
+                "Radius": 19.0,
+                "Mass": 19.0
+            }
+        },
 
         {
             "Name": "plane_floor",
@@ -121,7 +907,7 @@
             "Wireframe": false,
             "Position": [
                 0.0,
-                0.0,
+                -2.0,
                 0.0
             ],
             "DiffuseRGB_Alpha": [
@@ -142,9 +928,9 @@
                 0.0
             ],
             "Scale": [
-                100.0,
-                100.0,
-                100.0
+                300.0,
+                300.0,
+                300.0
             ],
             "Textures": [
                 {
@@ -154,7 +940,7 @@
             ],
             "RigidBody": {
                 "Type": "PLANE",
-                "Constant": 0.0,
+                "Constant": -2.0,
                 "Normal": [
                     0.0,
                     1.0,
@@ -171,8 +957,8 @@
             "Wireframe": false,
             "Position": [
                 0.0,
-                98.0,
-                -100.0
+                298.0,
+                -300.0
             ],
             "DiffuseRGB_Alpha": [
                 0.0,
@@ -192,9 +978,9 @@
                 0.0
             ],
             "Scale": [
-                100.0,
-                100.0,
-                100.0
+                300.0,
+                300.0,
+                300.0
             ],
             "Textures": [
                 {
@@ -204,7 +990,7 @@
             ],
             "RigidBody": {
                 "Type": "PLANE",
-                "Constant": -100.0,
+                "Constant": -300.0,
                 "Normal": [
                     0.0,
                     0.0,
@@ -221,8 +1007,8 @@
             "Wireframe": false,
             "Position": [
                 0.0,
-                98.0,
-                100.0
+                298.0,
+                300.0
             ],
             "DiffuseRGB_Alpha": [
                 0.0,
@@ -242,9 +1028,9 @@
                 0.0
             ],
             "Scale": [
-                100.0,
-                100.0,
-                100.0
+                300.0,
+                300.0,
+                300.0
             ],
             "Textures": [
                 {
@@ -254,7 +1040,7 @@
             ],
             "RigidBody": {
                 "Type": "PLANE",
-                "Constant": -100.0,
+                "Constant": -300.0,
                 "Normal": [
                     0.0,
                     0.0,
@@ -270,8 +1056,8 @@
             "Use_Physics": true,
             "Wireframe": false,
             "Position": [
-                100.0,
-                98.0,
+                300.0,
+                298.0,
                 0.0
             ],
             "DiffuseRGB_Alpha": [
@@ -292,9 +1078,9 @@
                 90.0
             ],
             "Scale": [
-                100.0,
-                100.0,
-                100.0
+                300.0,
+                300.0,
+                300.0
             ],
             "Textures": [
                 {
@@ -304,7 +1090,7 @@
             ],
             "RigidBody": {
                 "Type": "PLANE",
-                "Constant": -100.0,
+                "Constant": -300.0,
                 "Normal": [
                     -1.0,
                     0.0,
@@ -320,8 +1106,8 @@
             "Use_Physics": true,
             "Wireframe": false,
             "Position": [
-                -100.0,
-                98.0,
+                -300.0,
+                298.0,
                 0.0
             ],
             "DiffuseRGB_Alpha": [
@@ -342,9 +1128,9 @@
                 -90.0
             ],
             "Scale": [
-                100.0,
-                100.0,
-                100.0
+                300.0,
+                300.0,
+                300.0
             ],
             "Textures": [
                 {
@@ -354,7 +1140,7 @@
             ],
             "RigidBody": {
                 "Type": "PLANE",
-                "Constant": -100.0,
+                "Constant": -300.0,
                 "Normal": [
                     1.0,
                     0.0,

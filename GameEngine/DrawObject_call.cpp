@@ -139,17 +139,7 @@ void BindTextures(cGameObject* pCurrentMesh, GLuint shaderProgramID)
 		// Again; HACK!!
 		return;
 	}//if ( pCurrentMesh->b_HACK_UsesOffscreenFBO )
-	// ******************************************************************** 
-	// ******************************************************************** 
-	// ******************************************************************** 
 
-
-	// For each texture, bind the texture to a texture unit and sampler
-	// Texture #0 (on the mesh) -- Texture Unit 0 -- Sampler 0
-	// Texture #1 (on the mesh) -- Texture Unit 1 -- Sampler 1
-	// ....
-
-	// Set all the blend weights (strengths) to zero
 	float blendWeights[8] = { 0 };
 
 
@@ -209,6 +199,8 @@ void BindTextures(cGameObject* pCurrentMesh, GLuint shaderProgramID)
 
 
 
+
+
 void DrawScene_Simple(std::vector<cGameObject*> vec_pMeshSceneObjects,
 	GLuint shaderProgramID,
 	unsigned int passNumber)
@@ -218,12 +210,33 @@ void DrawScene_Simple(std::vector<cGameObject*> vec_pMeshSceneObjects,
 		objIndex++)
 	{
 		cGameObject* pCurrentMesh = vec_pMeshSceneObjects[objIndex];
+		
 
-		glm::mat4x4 matModel = glm::mat4(1.0f);			// mat4x4 m, p, mvp;
+		if(pCurrentMesh->softBody != NULL)
+		{
+			size_t nodes = pCurrentMesh->softBody->NumNodes();
+			
+			for (size_t nodeIndex = 0; nodeIndex < nodes; nodeIndex++)
+			{
+				glm::vec3 nodePosition;
+				pCurrentMesh->softBody->GetNodePostion(nodeIndex, nodePosition); 
+				pCurrentMesh->bIsWireFrame = true;
+				pCurrentMesh->bDontLight = true;
+				pCurrentMesh->position = nodePosition;
+				glm::mat4x4 matModel = glm::mat4(1.0f);
+				DrawObject(pCurrentMesh, matModel, shaderProgramID);
+			}
+			
+		}
 
-		DrawObject(pCurrentMesh, matModel, shaderProgramID);
+		else
+		{
+			glm::mat4x4 matModel = glm::mat4(1.0f);
+			DrawObject(pCurrentMesh, matModel, shaderProgramID);
+		}
+		
 
-	}//for ( unsigned int objIndex = 0; 
+	}
 
 	return;
 }
@@ -265,22 +278,6 @@ void DrawObject(cGameObject* pCurrentMesh,
 
 	matModel = matModel * matQrotation;
 
-	//glm::mat4 postRot_X = glm::rotate( glm::mat4(1.0f), 
-	//									pCurrentMesh->postRotation.x, 
-	//									glm::vec3( 1.0f, 0.0, 0.0f ) );
-	//matModel = matModel * postRot_X;
-	//
-	//glm::mat4 postRot_Y = glm::rotate( glm::mat4(1.0f), 
-	//									pCurrentMesh->postRotation.y, 
-	//									glm::vec3( 0.0f, 1.0, 0.0f ) );
-	//matModel = matModel * postRot_Y;
-	//
-	//glm::mat4 postRot_Z = glm::rotate( glm::mat4(1.0f), 
-	//									pCurrentMesh->postRotation.z, 
-	//									glm::vec3( 0.0f, 0.0, 1.0f ) );
-	//matModel = matModel * postRot_Z;
-
-		// Calculate the inverse transpose before the scaling
 	glm::mat4 matModelInvTrans = glm::inverse(glm::transpose(matModel));
 
 	// And now scale
@@ -290,76 +287,36 @@ void DrawObject(cGameObject* pCurrentMesh,
 	matModel = matModel * matScale;
 
 
-	//************************************
 
-		//mat4x4_mul(mvp, p, m);
-		//mvp = p * view * m; 
 
 	glUseProgram(shaderProgramID);
 
-	// HACK: We wil deal with these uniform issues later...
-
-	// Loading the uniform variables here (rather than the inner draw loop)
-//	GLint objectColour_UniLoc = glGetUniformLocation( shaderProgramID, "objectColour" );
 	GLint objectDiffuse_UniLoc = glGetUniformLocation(shaderProgramID, "objectDiffuse");
 	GLint objectSpecular_UniLoc = glGetUniformLocation(shaderProgramID, "objectSpecular");
-
-	//uniform vec3 lightPos;
-	//uniform float lightAtten;
 	GLint lightPos_UniLoc = glGetUniformLocation(shaderProgramID, "lightPos");
 	GLint lightBrightness_UniLoc = glGetUniformLocation(shaderProgramID, "lightBrightness");
 	GLint useVertexColour_UniLoc = glGetUniformLocation(shaderProgramID, "useVertexColour");
-
-	//	// uniform mat4 MVP;	THIS ONE IS NO LONGER USED	
-	//uniform mat4 matModel;	// M
-	//uniform mat4 matView;		// V
-	//uniform mat4 matProj;		// P
-	//GLint mvp_location = glGetUniformLocation(program, "MVP");
 	GLint matModel_location = glGetUniformLocation(shaderProgramID, "matModel");
 	GLint matModelInvTrans_location = glGetUniformLocation(shaderProgramID, "matModelInvTrans");
 	GLint matView_location = glGetUniformLocation(shaderProgramID, "matView");
 	GLint matProj_location = glGetUniformLocation(shaderProgramID, "matProj");
-
 	GLint bDontUseLighting_UniLoc = glGetUniformLocation(shaderProgramID, "bDontUseLighting");
 
 	glUniformMatrix4fv(matModel_location, 1, GL_FALSE, glm::value_ptr(matModel));
 	glUniformMatrix4fv(matModelInvTrans_location, 1, GL_FALSE, glm::value_ptr(matModelInvTrans));
 
 
-	// Set the object to "wireframe"
-//			glPolygonMode( GL_FRONT_AND_BACK , GL_LINE );	//GL_FILL
-	glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);	//GL_FILL
-
-	//GLint objectColour_UniLoc 
-	//	= glGetUniformLocation( program, "objectColour" );
-
-	//glUniform3f( objectColour_UniLoc, 
-	//				pCurrentMesh->objColour.r, 
-	//				pCurrentMesh->objColour.g, 
-	//				pCurrentMesh->objColour.b ); 
+	glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);	
 
 
-
-	// ***************************************************
-
-	// I'll do quick sort or whatever sexy sorts
-	// One pass of bubble sort is fine...
-
-	// Enable blend or "alpha" transparency
 	glEnable(GL_BLEND);
 
-	//glDisable( GL_BLEND );
-	// Source == already on framebuffer
-	// Dest == what you're about to draw
-	// This is the "regular alpha blend transparency"
+
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
 	GLint wholeObjectAlphaTransparency_LocID = glGetUniformLocation(shaderProgramID,
 		"wholeObjectAlphaTransparency");
-	// Take the 4th value from the material and pass it as alpha
 	glUniform1f(wholeObjectAlphaTransparency_LocID, pCurrentMesh->materialDiffuse.a);
-
-	// ****************************************************
 
 
 	glUniform4f(objectDiffuse_UniLoc,
@@ -393,19 +350,13 @@ void DrawObject(cGameObject* pCurrentMesh,
 
 	if (pCurrentMesh->bIsWireFrame)
 	{
-		// Yes, draw it wireframe
 		glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 		glDisable(GL_CULL_FACE);	// Discared "back facing" triangles
-		//glDisable( GL_DEPTH );		// Enables the KEEPING of the depth information
-		//glDisable( GL_DEPTH_TEST );	// When drawing, checked the existing depth
 	}
 	else
 	{
-		// No, it's "solid" (or "Filled")
 		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 		glEnable(GL_CULL_FACE);	// Discared "back facing" triangles
-		//glEnable( GL_DEPTH );		// Enables the KEEPING of the depth information
-		//glEnable( GL_DEPTH_TEST );	// When drawing, checked the existing depth
 	}
 
 	// *****************************************************************

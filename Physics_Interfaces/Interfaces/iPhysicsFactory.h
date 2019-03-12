@@ -3,7 +3,9 @@
 #include "iRigidBody.h"
 #include "iPhysicsWorld.h"
 #include "sRigidBodyDef.h"
+#include "sSoftBodyDef.h"
 #include "shapes.h"
+#include "iSoftBody.h"
 
 
 namespace nPhysics
@@ -16,6 +18,7 @@ namespace nPhysics
 		virtual iRigidBody* CreateRigidBody(const sRigidBodyDef& def, iShape* shape) = 0;
 		virtual iSphereShape* CreateSphereShape(float radius) = 0;
 		virtual iPlaneShape* CreatePlaneShape(const glm::vec3& normal, float constant) = 0;
+		virtual iSoftBody* CreateSoftBody(const sSoftBodyDef& sbDef) = 0;
 
 	};
 

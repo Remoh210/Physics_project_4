@@ -1,0 +1,22 @@
+#pragma once
+#include <glm/glm.hpp>
+
+
+namespace nPhysics
+{
+	class iSoftBody
+	{
+	public:
+		virtual ~iSoftBody() {};
+		
+		virtual void GetNodePostion(size_t index, glm::vec3& positionOut) = 0;
+		virtual size_t NumNodes() = 0;
+
+	protected:
+		iSoftBody(){}
+		iSoftBody(const iSoftBody& other){}
+		iSoftBody& operator=(const iSoftBody& other) { return *this; }
+
+
+	};
+}

@@ -33,6 +33,9 @@
     <ClInclude Include="physics\CreateFactory.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="physics\simple\cSimpleSoftBody.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="physics\simple\cSimpleRigidBody.cpp">
@@ -48,6 +51,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="physics\CreateFactory.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="physics\simple\cSimpleSoftBody.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

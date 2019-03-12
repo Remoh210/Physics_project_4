@@ -44,6 +44,7 @@ cGameObject::cGameObject()
 	this->pTheShape = NULL;
 	this->shapeType = cGameObject::UNKOWN_SHAPE;
 	this->rigidBody = NULL;
+	this->softBody = NULL;
 
 
 

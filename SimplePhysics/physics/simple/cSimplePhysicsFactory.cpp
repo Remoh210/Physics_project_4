@@ -1,5 +1,6 @@
 #include "cSimplePhysicsFactory.h"
 #include "cSimpleRigidBody.h"
+#include "cSimpleSoftBody.h"
 //#include "interfaces/shapes.h"
 #include "shape.h"
 #include "cSimplePhysicsWorld.h"
@@ -24,6 +25,11 @@ namespace nPhysics
 	iPlaneShape* cPhysicsFactory:: CreatePlaneShape(const glm::vec3& normal, float constant)
 	{
 		return new cPlaneShape(normal, constant);
+	}
+
+	iSoftBody * cPhysicsFactory::CreateSoftBody(const sSoftBodyDef& sbDef)
+	{
+		return new cSimpleSoftBody(sbDef);
 	}
 
 }

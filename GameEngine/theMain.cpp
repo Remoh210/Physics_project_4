@@ -269,9 +269,9 @@ int main(void)
 	}
 
 
-	//PhysicsInit
-	hGetProckDll = LoadLibraryA("BulletPhysics.dll");
-	physics_library = BULLET;
+	//Physics Initia
+	hGetProckDll = LoadLibraryA("SimplePhysics.dll");
+	physics_library = SIMPLE;
 	f_createPhysicsFactory CreatePhysicsFactory = (f_createPhysicsFactory)GetProcAddress(hGetProckDll, "CreateFactory");
 	gPhysicsFactory = CreatePhysicsFactory();
 	gPhysicsWorld = gPhysicsFactory->CreatePhysicsWorld();
@@ -465,30 +465,41 @@ int main(void)
 		glUniform1f(useSkyBoxTexture_UniLoc, (float)GL_FALSE);
 
 
-		// Draw all the objects in the "scene"
-		for ( unsigned int objIndex = 0; 
-			  objIndex != (unsigned int)vec_non_transObj.size();
-			  objIndex++ )
-		{	
-			cGameObject* pCurrentMesh = vec_non_transObj[objIndex];
-			
-			glm::mat4x4 matModel = glm::mat4(1.0f);			// mat4x4 m, p, mvp;
 
-			DrawObject(pCurrentMesh, matModel, program);
 
-		}//for ( unsigned int objIndex = 0; 
+		DrawScene_Simple(vec_non_transObj, program, 1);
+		DrawScene_Simple(vec_transObj, program, 1);
 
-		for (unsigned int objIndex = 0;
-			objIndex != (unsigned int)vec_transObj.size();
-			objIndex++)
-		{
-			cGameObject* pCurrentMesh = vec_transObj[objIndex];
+		//for ( unsigned int objIndex = 0; 
+		//	  objIndex != (unsigned int)vec_non_transObj.size();
+		//	  objIndex++ )
+		//{	
+		//	cGameObject* pCurrentMesh = vec_non_transObj[objIndex];
+		//	
+		//	glm::mat4x4 matModel = glm::mat4(1.0f);			// mat4x4 m, p, mvp;
 
-			glm::mat4x4 matModel = glm::mat4(1.0f);			// mat4x4 m, p, mvp;
+		//	DrawObject(pCurrentMesh, matModel, program);
 
-			DrawObject(pCurrentMesh, matModel, program);
+		//}//for ( unsigned int objIndex = 0; 
 
-		}//for ( unsigned int objIndex = 0; 
+		//for (unsigned int objIndex = 0;
+		//	objIndex != (unsigned int)vec_transObj.size();
+		//	objIndex++)
+		//{
+		//	cGameObject* pCurrentMesh = vec_transObj[objIndex];
+
+		//	glm::mat4x4 matModel = glm::mat4(1.0f);			// mat4x4 m, p, mvp;
+
+		//	DrawScene_Simple(pCurrentMesh, matModel, program);
+
+		//}//for ( unsigned int objIndex = 0; 
+
+		//DrawScene_Simple(std::vector<cGameObject*> vec_pMeshSceneObjects,
+		//	GLuint shaderProgramID,
+		//	unsigned int passNumber)
+		//{
+
+		//}
 
 
 		double FPS_currentTime = glfwGetTime();

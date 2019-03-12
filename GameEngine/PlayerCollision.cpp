@@ -1,59 +1,59 @@
-#include "globalStuff.h"
-#include "globalStuff.h"
-
-// These are for the transformation glm stuff
-#include <glm/vec4.hpp> // glm::vec4
-#include <glm/mat4x4.hpp> // glm::mat4
-#include <glm/gtc/matrix_transform.hpp> // glm::translate, glm::rotate, glm::scale, glm::perspective
-
-
-void PlayerColTest(double deltaTime, GLuint shaderProgramID)
-{
-//	// Get the MiG-29
-//	cGameObject* pMig29 = findObjectByFriendlyName("mig");
-//	cGameObject* pDebugBall = findObjectByFriendlyName("DebugSphere");
-//	// So show that the points move with the mig, I'll update the position and orientation here	
-//	if (camera.Front.y > 0.3f) { pMig29->adjMeshOrientationEulerAngles(glm::vec3(0.01f, 0.0f, 0.0f), false); }
-//	if (camera.Front.y < -0.3f) { pMig29->adjMeshOrientationEulerAngles(glm::vec3(-0.01f, 0.0f, 0.0f), false); }
-//	if (camera.Front.x < 0.3f) { pMig29->adjMeshOrientationEulerAngles(glm::vec3(0.0f, 0.01f, 0.0f), false); }
-//	if (camera.Front.x > -0.3f) { pMig29->adjMeshOrientationEulerAngles(glm::vec3(0.0, -0.01f, 0.0f), false); }
-////	pMig29->setMeshOrientationEulerAngles(glm::vec3(camera.Front.y * 2, camera.Front.x * 2, camera.Front.z * 2), false);
+//#include "globalStuff.h"
+//#include "globalStuff.h"
 //
-//	// *****************************************************
-//	// Move the Mig-29 in the direction it's facing..
-//	// You do the same sort of thing as below, but ONLY use orienation.
-//	// So, find where the "nose" point is pointing in MODEL SPACE only.
-//
-//	// Here, "forward" is along the z axis (i.e. the plane is facing that way)
-//	// So x and y are 0.0, z = 1.0f 
-//	// w = 1.0 because it's the 4th value
-//	glm::vec4 vecForwardDirection_ModelSpace = glm::vec4(0.0f, 0.0f, /**/1.0f/**/, 1.0f);
-//
-//	// Now orientation
-//	glm::quat qMig29Rotation = pMig29->getQOrientation();
-//	// Make a mat4x4 from that quaternion
-//	glm::mat4 matQMig29rotation = glm::mat4(qMig29Rotation);
-//
-//	glm::vec4 vecForwardDirection_WorldSpace = matQMig29rotation * vecForwardDirection_ModelSpace;
-//
-//	// optional normalize
-//	vecForwardDirection_WorldSpace = glm::normalize(vecForwardDirection_WorldSpace);
-//
-//	// Adjust the speed relative to the direction
-//	float forwardSpeed = 10.0f;
-//	float forwardSpeedThisFrame = forwardSpeed * deltaTime;
-//
-//	glm::vec3 positionAdjustThisFrame = vecForwardDirection_WorldSpace * forwardSpeedThisFrame;
-//
-//	// Update the position (in the direction it's facing)
-//	pMig29->position += positionAdjustThisFrame;
-//	camera.Position = glm::vec3(pMig29->position.x, pMig29->position.y, pMig29->position.z + 1.0f);
-//	// *****************************************************
-//	//pMig29->position.x += 0.01f;
-//	//pMig29->position.y += 0.02f;
+//// These are for the transformation glm stuff
+//#include <glm/vec4.hpp> // glm::vec4
+//#include <glm/mat4x4.hpp> // glm::mat4
+//#include <glm/gtc/matrix_transform.hpp> // glm::translate, glm::rotate, glm::scale, glm::perspective
 //
 //
-//
+//void PlayerColTest(double deltaTime, GLuint shaderProgramID)
+//{
+////	// Get the MiG-29
+////	cGameObject* pMig29 = findObjectByFriendlyName("mig");
+////	cGameObject* pDebugBall = findObjectByFriendlyName("DebugSphere");
+////	// So show that the points move with the mig, I'll update the position and orientation here	
+////	if (camera.Front.y > 0.3f) { pMig29->adjMeshOrientationEulerAngles(glm::vec3(0.01f, 0.0f, 0.0f), false); }
+////	if (camera.Front.y < -0.3f) { pMig29->adjMeshOrientationEulerAngles(glm::vec3(-0.01f, 0.0f, 0.0f), false); }
+////	if (camera.Front.x < 0.3f) { pMig29->adjMeshOrientationEulerAngles(glm::vec3(0.0f, 0.01f, 0.0f), false); }
+////	if (camera.Front.x > -0.3f) { pMig29->adjMeshOrientationEulerAngles(glm::vec3(0.0, -0.01f, 0.0f), false); }
+//////	pMig29->setMeshOrientationEulerAngles(glm::vec3(camera.Front.y * 2, camera.Front.x * 2, camera.Front.z * 2), false);
+////
+////	// *****************************************************
+////	// Move the Mig-29 in the direction it's facing..
+////	// You do the same sort of thing as below, but ONLY use orienation.
+////	// So, find where the "nose" point is pointing in MODEL SPACE only.
+////
+////	// Here, "forward" is along the z axis (i.e. the plane is facing that way)
+////	// So x and y are 0.0, z = 1.0f 
+////	// w = 1.0 because it's the 4th value
+////	glm::vec4 vecForwardDirection_ModelSpace = glm::vec4(0.0f, 0.0f, /**/1.0f/**/, 1.0f);
+////
+////	// Now orientation
+////	glm::quat qMig29Rotation = pMig29->getQOrientation();
+////	// Make a mat4x4 from that quaternion
+////	glm::mat4 matQMig29rotation = glm::mat4(qMig29Rotation);
+////
+////	glm::vec4 vecForwardDirection_WorldSpace = matQMig29rotation * vecForwardDirection_ModelSpace;
+////
+////	// optional normalize
+////	vecForwardDirection_WorldSpace = glm::normalize(vecForwardDirection_WorldSpace);
+////
+////	// Adjust the speed relative to the direction
+////	float forwardSpeed = 10.0f;
+////	float forwardSpeedThisFrame = forwardSpeed * deltaTime;
+////
+////	glm::vec3 positionAdjustThisFrame = vecForwardDirection_WorldSpace * forwardSpeedThisFrame;
+////
+////	// Update the position (in the direction it's facing)
+////	pMig29->position += positionAdjustThisFrame;
+////	camera.Position = glm::vec3(pMig29->position.x, pMig29->position.y, pMig29->position.z + 1.0f);
+////	// *****************************************************
+////	//pMig29->position.x += 0.01f;
+////	//pMig29->position.y += 0.02f;
+////
+////
+////
 //
 //	// Collision point on the nose of the plane.
 //	// Plane it facing forward along the +ve Z axis
@@ -127,7 +127,7 @@ void PlayerColTest(double deltaTime, GLuint shaderProgramID)
 //	// Put everything back
 //	pDebugBall->bIsVisible = false;
 //	pDebugBall->position = oldPosition;
-//	pDebugBall->nonUniformScale = oldScale;
-//
-//	return;
-}
+////	pDebugBall->nonUniformScale = oldScale;
+////
+////	return;
+//}

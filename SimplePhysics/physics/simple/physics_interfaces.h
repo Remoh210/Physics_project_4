@@ -6,3 +6,5 @@
 #include <Interfaces/iShape.h>
 #include <Interfaces/shapes.h>
 #include <Interfaces/sRigidBodyDef.h>
+#include <Interfaces/sSoftBodyDef.h>
+#include <Interfaces/iSoftBody.h>

@@ -1,5 +1,6 @@
 #pragma once
 #include "cSimplePhysicsWorld.h"
+#include "cSimplePhysicsWorld.h"
 #include <algorithm>
 #include <glm/gtx/transform.hpp>
 #include <glm/gtx/projection.hpp>
@@ -100,7 +101,45 @@ namespace nPhysics
 
 	bool cSimplePhysicsWorld::RemoveBody(iRigidBody* body)
 	{
+		if (!body) return false;
+		cSimpleRigidBody* rb = dynamic_cast<cSimpleRigidBody*>(body);
+		std::vector<cSimpleRigidBody*>::iterator itRigidBody;
+		itRigidBody = std::remove(mBodies.begin(), mBodies.end(), rb);
+		if (itRigidBody == mBodies.end())
+		{
+			return false;
+		}
+		mBodies.erase(itRigidBody, mBodies.end());
+	}
+
+	bool cSimplePhysicsWorld::AddBody(iSoftBody * body)
+	{
+		cSimpleSoftBody* rb = dynamic_cast<cSimpleSoftBody*>(body);
+		if (!rb)
+		{
+			return false;
+		}
+		std::vector<cSimpleSoftBody*>::iterator itSoftBody;
+		itSoftBody = std::find(mSoftBodies.begin(), mSoftBodies.end(), rb);
+		if (itSoftBody == mSoftBodies.end())
+		{
+			mSoftBodies.push_back(rb);
+		}
 		return true;
+	}
+
+	bool cSimplePhysicsWorld::RemoveBody(iSoftBody * body)
+	{
+
+		if (!body) return false;
+		cSimpleSoftBody* rb = dynamic_cast<cSimpleSoftBody*>(body);
+		std::vector<cSimpleSoftBody*>::iterator itSoftBody;
+		itSoftBody = std::remove(mSoftBodies.begin(), mSoftBodies.end(), rb);
+		if (itSoftBody == mSoftBodies.end())
+		{
+			return false;
+		}
+		mSoftBodies.erase(itSoftBody, mSoftBodies.end());
 	}
 
 
@@ -236,6 +275,19 @@ namespace nPhysics
 					rbA->mLastPos = rbA->mPosition; 
 					integrate(rbA->mPosition, rbA->mVelocity, mGravity, dt);
 				}
+
+
+
+
+				//SoftBodies Integration
+				std::vector<cSimpleSoftBody*>::iterator itSoft = mSoftBodies.begin();
+				while(itSoft != mSoftBodies.end())
+				{
+					(*itSoft)->UpdateInternal(dt, mGravity);
+					itSoft++;
+				}
+
+
 
 		}
 	}

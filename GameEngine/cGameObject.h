@@ -8,6 +8,7 @@
 #include <string>
 #include <vector>
 #include <Interfaces/iRigidBody.h>
+#include <Interfaces/iSoftBody.h>
 
 #include "DebugRenderer/iDebugRenderer.h"
 
@@ -144,6 +145,7 @@ public:
 		return this->m_uniqueID;
 	}
 
+	nPhysics::iSoftBody* softBody;
 
 	// Textures...
 	std::vector<sTextureInfo> vecTextures;

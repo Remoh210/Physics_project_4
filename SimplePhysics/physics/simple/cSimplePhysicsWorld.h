@@ -2,6 +2,7 @@
 #include "physics_interfaces.h"
 #include <vector>
 #include "cSimpleRigidBody.h"
+#include "cSimpleSoftBody.h"
 
 
 namespace nPhysics
@@ -37,6 +38,10 @@ namespace nPhysics
 		virtual void SetGravity(const glm::vec3& gravity);
 		virtual bool AddBody(iRigidBody* body);
 		virtual bool RemoveBody(iRigidBody* body);
+
+		virtual bool AddBody(iSoftBody* body);
+		virtual bool RemoveBody(iSoftBody* body);
+
 		virtual void Update(float dt);
 
 	private:
@@ -44,6 +49,7 @@ namespace nPhysics
 		bool CollisionTest(cSimpleRigidBody* bodyA, cSimpleRigidBody* bodyB);
 		glm::vec3 mGravity;
 		std::vector<cSimpleRigidBody*> mBodies;
+		std::vector<cSimpleSoftBody*> mSoftBodies;
 
 	};
 }

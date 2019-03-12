@@ -335,7 +335,6 @@ bool cSceneManager::loadScene(std::string filename) {
 		//if Skinned Mesh;
 		if (GameObject[i].HasMember("SkinnedMesh"))
 		{
-			//curModelInfo.meshFileName = GameObject[i]["SkinnedMesh"].GetString();
 			CurModel->meshName = GameObject[i]["SkinnedMesh"].GetString();
 			cSimpleAssimpSkinnedMesh* curSkinnedMesh = new cSimpleAssimpSkinnedMesh();
 			if (!curSkinnedMesh->LoadMeshFromFile(CurModel->friendlyName, CurModel->meshName))
@@ -420,26 +419,7 @@ bool cSceneManager::loadScene(std::string filename) {
 				}
 
 
-				//std::vector<std::string> vec_anim_name;
-				//vec_anim_name.push_back((GameObject[i]["Animation"].HasMember("Idle")) ? GameObject[i]["Animation"]["Idle"].GetString() : "");
-				//vec_anim_name.push_back((GameObject[i]["Animation"].HasMember("Walk-forward")) ? GameObject[i]["Animation"]["Walk-forward"].GetString() : "");
-				//vec_anim_name.push_back((GameObject[i]["Animation"].HasMember("Walk-backwards")) ? GameObject[i]["Animation"]["Idle"].GetString() : "");
-				//vec_anim_name.push_back((GameObject[i]["Animation"].HasMember("Idle")) ? GameObject[i]["Animation"]["Idle"].GetString() : "");
-				//vec_anim_name.push_back((GameObject[i]["Animation"].HasMember("Idle")) ? GameObject[i]["Animation"]["Idle"].GetString() : "");
-				//vec_anim_name.push_back((GameObject[i]["Animation"].HasMember("Idle")) ? GameObject[i]["Animation"]["Idle"].GetString() : "");
-				//vec_anim_name.push_back((GameObject[i]["Animation"].HasMember("Idle")) ? GameObject[i]["Animation"]["Idle"].GetString() : "");
-				//vec_anim_name.push_back((GameObject[i]["Animation"].HasMember("Idle")) ? GameObject[i]["Animation"]["Idle"].GetString() : "");
-				//vec_anim_name.push_back((GameObject[i]["Animation"].HasMember("Idle")) ? GameObject[i]["Animation"]["Idle"].GetString() : "");
-				//vec_anim_name.push_back((GameObject[i]["Animation"].HasMember("Idle")) ? GameObject[i]["Animation"]["Idle"].GetString() : "");
-				//vec_anim_name.push_back((GameObject[i]["Animation"].HasMember("Idle")) ? GameObject[i]["Animation"]["Idle"].GetString() : "");
-				//vec_anim_name.push_back((GameObject[i]["Animation"].HasMember("Idle")) ? GameObject[i]["Animation"]["Idle"].GetString() : "");
-
-				//for (int i = 0; i < vec_anim_name.size(); i++) {
-				//	std::string animName = vec_anim_name[i];
-				//	if (animName != "") {
-				//		curSkinnedMesh->LoadMeshAnimation(animName, GameObject[i]["Animation"][animName.c_str()].GetString());
-				//	}
-				//}
+				
 
 				//cAnimationState* pAniState;
 				CurModel->pSimpleSkinnedMesh = curSkinnedMesh;
@@ -513,26 +493,117 @@ bool cSceneManager::loadScene(std::string filename) {
 
 		if(GameObject[i].HasMember("RigidBody"))
 		{
-			nPhysics::iShape* CurShape = NULL;
-			nPhysics::sRigidBodyDef def;
 			std::string type = GameObject[i]["RigidBody"]["Type"].GetString();
+			if (type == "CLOTH")
+			{
+				//nPhysics::iSoftBody = new
+				nPhysics::sSoftBodyDef def;
+				def.SpringConstant = GameObject[i]["RigidBody"]["SpringConstant"].GetFloat();
+				glm::vec3 cornerA;
+				glm::vec3 cornerB;
+				glm::vec3 cornerC;
 
-			//in Radians
-			def.Orientation = CurModel->getMeshOrientationEulerAngles();
-			def.Position = CurModel->position;
+				const rapidjson::Value& jsonCornerA = GameObject[i]["RigidBody"]["CornerA"];
+				for (int i = 0; i < 3; i++)
+				{
+					cornerA[i] = jsonCornerA[i].GetFloat();
+				}
+				const rapidjson::Value& jsonCornerB = GameObject[i]["RigidBody"]["CornerB"];
+				for (int i = 0; i < 3; i++)
+				{
+					cornerB[i] = jsonCornerB[i].GetFloat();
+				}
+				const rapidjson::Value& jsonCornerC = GameObject[i]["RigidBody"]["CornerC"];
+				for (int i = 0; i < 3; i++)
+				{
+					cornerC[i] = jsonCornerC[i].GetFloat();
+				}
+
+
+				int numNodesAtoB = GameObject[i]["RigidBody"]["NumNodesAB"].GetInt();
+				int numNodesAtoC = GameObject[i]["RigidBody"]["NumNodesAC"].GetInt();
+				glm::vec3 position(0.f);
+				glm::vec3 test = cornerB - cornerA;
+				glm::vec3 sepAtoB((cornerB - cornerA) / (float)(numNodesAtoB - 1));
+				glm::vec3 sepAtoC((cornerC - cornerA) / (float)(numNodesAtoC - 1));
+
+				for (int idxB = 0; idxB < numNodesAtoC; idxB++)
+				{
+					
+					for (int idxA = 0; idxA < numNodesAtoB; idxA++)
+					{
+						
+						def.Nodes.push_back(nPhysics::sSoftBodyNodeDef(cornerA + sepAtoB * float(idxA) + sepAtoC * float(idxB), 1.0f));
+						//def.Nodes.push_back(nPhysics::sSoftBodyNodeDef(position, 1.0f));
+						position.x += 5.0f;
+					}
+					position.y += 5.0f;
+					position.x = 0.f;
+				}
+
+				for (int indexm = 0; indexm < numNodesAtoB; indexm++)
+				{
+					def.Nodes[indexm].Mass = 0;
+
+				}
+
+
+				for (int idxB = 0; idxB < numNodesAtoC - 1; idxB++)
+				{
+
+					for (int idxA = 0; idxA < numNodesAtoB - 1; idxA++)
+					{
+						int index = idxA + idxB * numNodesAtoB;
+						def.Springs.push_back(std::make_pair(index, index + 1));
+						def.Springs.push_back(std::make_pair(index, index + numNodesAtoB));
+					}
+
+				}
+				int  numNodes = numNodesAtoB * numNodesAtoC;
+				for (int idxA = 0; idxA < numNodesAtoB - 1; idxA++)
+				{
+					def.Springs.push_back(std::make_pair(numNodes - idxA - 1, numNodes - idxA - 2));
+				}
+
+				for (int idxB = 1; idxB < numNodesAtoC; idxB++)
+				{
+					int index = (numNodesAtoB * idxB) - 1;
+					def.Springs.push_back(std::make_pair(index, index + numNodesAtoB));
+				}
+
+
+				nPhysics::iSoftBody* curSoftBody = gPhysicsFactory->CreateSoftBody(def);
+				CurModel->softBody = curSoftBody;
+				gPhysicsWorld->AddBody(curSoftBody);
+
+			}
+
 
 			
 			if (type == "SPHERE")
 			{
+				nPhysics::iShape* CurShape = NULL;
+				nPhysics::sRigidBodyDef def;
+				def.Orientation = CurModel->getMeshOrientationEulerAngles();
+				def.Position = CurModel->position;
+
 				float radius = GameObject[i]["RigidBody"]["Radius"].GetFloat();
 				CurShape = gPhysicsFactory->CreateSphereShape(radius);
 				def.Mass = GameObject[i]["RigidBody"]["Mass"].GetFloat();
+
+				nPhysics::iRigidBody* rigidBody = gPhysicsFactory->CreateRigidBody(def, CurShape);
+				CurModel->rigidBody = rigidBody;
+				gPhysicsWorld->AddBody(rigidBody);
 				
 			}
 			else if (type == "PLANE")
 			{
 				
+				nPhysics::iShape* CurShape = NULL;
+				nPhysics::sRigidBodyDef def;
 
+				//in Radians
+				def.Position = CurModel->position;
 
 				float planeConst = GameObject[i]["RigidBody"]["Constant"].GetFloat();
 
@@ -544,10 +615,12 @@ bool cSceneManager::loadScene(std::string filename) {
 				}
 				CurShape = gPhysicsFactory->CreatePlaneShape(norm, planeConst);
 
+				nPhysics::iRigidBody* rigidBody = gPhysicsFactory->CreateRigidBody(def, CurShape);
+				CurModel->rigidBody = rigidBody;
+				gPhysicsWorld->AddBody(rigidBody);
+
 			}
-			nPhysics::iRigidBody* rigidBody = gPhysicsFactory->CreateRigidBody(def, CurShape);
-			CurModel->rigidBody = rigidBody;
-			gPhysicsWorld->AddBody(rigidBody);
+
 		}
 
 		vec_pObjectsToDraw.push_back(CurModel);
