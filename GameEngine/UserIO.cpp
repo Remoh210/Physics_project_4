@@ -416,7 +416,7 @@ void ProcessAsynKeys(GLFWwindow* window)
 			CamDir = glm::normalize(CamDir);
 			CamDir.y = 0.0f;
 			velVec += CamDir * 200.0f * (float)deltaTime;
-			velVec.y = 5.1f;
+			velVec.y = 5.0f;
 			vec_pSpheres[SphIndex]->rigidBody->SetVelocity(velVec);
 		}
 		if (glfwGetKey(window, GLFW_KEY_S)) {
@@ -428,7 +428,7 @@ void ProcessAsynKeys(GLFWwindow* window)
 			CamDir = glm::normalize(CamDir);
 			CamDir.y = 0.0f;
 			velVec += -CamDir * 200.0f * (float)deltaTime;
-			velVec.y = 1.1f;
+			velVec.y = 5.0f;
 			vec_pSpheres[SphIndex]->rigidBody->SetVelocity(velVec);
 		}
 
@@ -441,7 +441,7 @@ void ProcessAsynKeys(GLFWwindow* window)
 			CamDir = glm::normalize(CamDir);
 			CamDir.y = 0.0f;
 			velVec += CamDir * 200.0f * (float)deltaTime;
-			velVec.y = 1.1f;
+			velVec.y = 5.0f;
 			vec_pSpheres[SphIndex]->rigidBody->SetVelocity(velVec);
 		}
 		if (glfwGetKey(window, GLFW_KEY_A)) {
@@ -453,7 +453,7 @@ void ProcessAsynKeys(GLFWwindow* window)
 			CamDir = glm::normalize(CamDir);
 			CamDir.y = 0.0f;
 			velVec += - CamDir * 200.0f * (float)deltaTime;
-			velVec.y = 1.1f;
+			velVec.y = 5.0f;
 			vec_pSpheres[SphIndex]->rigidBody->SetVelocity(velVec);
 		}
 		

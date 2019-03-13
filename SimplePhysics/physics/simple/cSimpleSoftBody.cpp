@@ -68,7 +68,7 @@ namespace nPhysics
 	{
 		for (size_t i = 0; i < mNodes.size(); i++)
 		{
-			mNodes[i]->SpringForce = gravity;
+			mNodes[i]->SpringForce = gravity * mNodes[i]->Mass;
 		}
 		for (size_t i = 0; i < mSprings.size(); i++)
 		{
@@ -82,7 +82,7 @@ namespace nPhysics
 		{
 			for (size_t idxB = 0; idxB < mNodes.size(); idxB++)
 			{
-				//CollideNodes(mNodes[idxA], mNodes[idxB]);
+				CollideNodes(mNodes[idxA], mNodes[idxB]);
 			}
 		}
 		UpdateAABB();
@@ -92,7 +92,58 @@ namespace nPhysics
 	{
 		if (nodeA->HasNeighbor(nodeB))
 		{
-			return;
+			if (nodeA != nodeB) {
+				if (!nodeA->IsFixed() && !nodeB->IsFixed())
+				{
+					float radiusA = nodeA->Radius;
+					float radiusB = nodeB->Radius;
+
+					float distance = glm::distance(nodeA->Position, nodeB->Position);
+					if (distance <= radiusA + radiusB)
+					{
+						//nodeA->Position = nodeA->PreviousPosition;
+						//nodeB->Position = nodeB->PreviousPosition;
+
+
+						////////Collison response
+
+						float massA = nodeA->Mass;
+						float massB = nodeB->Mass;
+						float totalMass = massA + massB;
+
+
+
+						float fac1 = massA / totalMass;
+						float fac2 = massB / totalMass;
+						
+						
+						glm::vec3 x = nodeA->Position - nodeB->Position;
+						x = glm::normalize(x);
+
+
+						glm::vec3 v1 = nodeA->Velocity;
+						float x1 = glm::dot(x, v1);
+						glm::vec3 v1x = x * x1;
+						glm::vec3 v1y = v1 - v1x;
+
+						x = x * -1.0f;
+						glm::vec3 v2 = nodeB->Velocity;
+						float x2 = glm::dot(x, v2);
+						glm::vec3 v2x = x * x2;
+						glm::vec3 v2y = v2 - v2x;
+
+						nodeA->Velocity = v1x * (massA - massB) / (massA + massB) + v2x * (2 * massB) / (massA + massB) + v1y;
+						nodeB->Velocity = v1x * (2 * massA) / (massA + massB) + v2x * (massB - massA) / (massA + massB) + v2y;
+						nodeA->Velocity = -nodeA->Velocity;
+						nodeB->Velocity = -nodeB->Velocity;
+
+						nodeA->Velocity *= 0.9999f;
+						nodeB->Velocity *= 0.9999f;
+
+
+					}
+				}
+			}
 		}
 
 	}

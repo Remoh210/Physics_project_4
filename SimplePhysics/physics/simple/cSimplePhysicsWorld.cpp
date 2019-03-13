@@ -102,20 +102,23 @@ namespace nPhysics
 	{
 		if(rigidBody->GetShape()->GetShapeType() == SHAPE_TYPE_SPHERE)
 		{
+			float sphereRad;
+			rigidBody->GetShape()->GetSphereRadius(sphereRad);
+			float radiusCorrected = sphereRad * 1.1;
+
 			for (size_t i = 0; i < softBody->mNodes.size(); i++)
 			{
-				//n node = softBody->mNodes[i];
 
 				glm::vec3 v = softBody->mNodes[i]->Position - rigidBody->GetPosition();
 				float vecLength = glm::length(v);
-				float sphereRad;
-				rigidBody->GetShape()->GetSphereRadius(sphereRad);
-				if (vecLength < softBody->mNodes[i]->Radius + sphereRad)
+			
+				
+				if (vecLength < radiusCorrected)
 				{
-					// project the particle to the surface of the sphere
-					glm::vec3 position = glm::normalize(v)*(softBody->mNodes[i]->Radius + 0.1f - vecLength);
+					glm::vec3 position = glm::normalize(v)*(softBody->mNodes[i]->Radius);
 					if (!softBody->mNodes[i]->IsFixed())
 					{
+						softBody->mNodes[i]->Position = softBody->mNodes[i]->PreviousPosition;
 						softBody->mNodes[i]->Position += position;
 					}
 					
@@ -276,7 +279,7 @@ namespace nPhysics
 								//rbB->mVelocity *= 0.995f;
 								}
 								else {
-									rbB->mVelocity *= 0.999f * dt;
+									rbB->mVelocity *= 0.995f * dt;
 								}
 								
 
