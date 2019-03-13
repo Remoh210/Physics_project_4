@@ -100,11 +100,33 @@ namespace nPhysics
 
 	bool cSimplePhysicsWorld::CollideRigidBodySoftBody(cSimpleRigidBody* rigidBody, cSimpleSoftBody* softBody)
 	{
-		for (size_t i = 0; i < softBody->mNodes.size(); i++)
+		if(rigidBody->GetShape()->GetShapeType() == SHAPE_TYPE_SPHERE)
 		{
+			for (size_t i = 0; i < softBody->mNodes.size(); i++)
+			{
+				//n node = softBody->mNodes[i];
+
+				glm::vec3 v = softBody->mNodes[i]->Position - rigidBody->GetPosition();
+				float vecLength = glm::length(v);
+				float sphereRad;
+				rigidBody->GetShape()->GetSphereRadius(sphereRad);
+				if (vecLength < softBody->mNodes[i]->Radius + sphereRad)
+				{
+					// project the particle to the surface of the sphere
+					glm::vec3 position = glm::normalize(v)*(softBody->mNodes[i]->Radius + 0.1f - vecLength);
+					if (!softBody->mNodes[i]->IsFixed())
+					{
+						softBody->mNodes[i]->Position += position;
+					}
+					
+				}
+
+				
+			}
 			
+
 		}
-		return false;
+		return true;
 	}
 
 
@@ -250,11 +272,11 @@ namespace nPhysics
 								{
 								rbB->mVelocity = glm::reflect(rbB->mVelocity, normA);
 								glm::vec3 nComponent = glm::proj(rbB->mVelocity, normA);
-								rbB->mVelocity -= nComponent * 0.2f;
-								rbB->mVelocity *= 0.995f;
+								rbB->mVelocity -= nComponent * 5.0f * dt;
+								//rbB->mVelocity *= 0.995f;
 								}
 								else {
-									rbB->mVelocity *= 0.995f;
+									rbB->mVelocity *= 0.999f * dt;
 								}
 								
 

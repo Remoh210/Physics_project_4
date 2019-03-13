@@ -169,7 +169,7 @@ namespace nPhysics
 		PreviousPosition = Position;
 		Velocity += SpringForce * (dt / Mass);
 		Position += Velocity * dt;
-		float dampingFactor = 0.2f;
+		float dampingFactor = 0.9f;
 		//Velocity *= 0.999f;
 		Velocity *= glm::pow(1.f - dampingFactor, dt);
 	}

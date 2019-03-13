@@ -416,7 +416,7 @@ void ProcessAsynKeys(GLFWwindow* window)
 			CamDir = glm::normalize(CamDir);
 			CamDir.y = 0.0f;
 			velVec += CamDir * 200.0f * (float)deltaTime;
-			velVec.y = 1.1f;
+			velVec.y = 5.1f;
 			vec_pSpheres[SphIndex]->rigidBody->SetVelocity(velVec);
 		}
 		if (glfwGetKey(window, GLFW_KEY_S)) {
@@ -457,69 +457,69 @@ void ProcessAsynKeys(GLFWwindow* window)
 			vec_pSpheres[SphIndex]->rigidBody->SetVelocity(velVec);
 		}
 		
-		if ( glfwGetKey( window, GLFW_KEY_W ) )	{	LightManager->vecLights.at(lightIndex)->position.z += cameraSpeed;	}
-		if ( glfwGetKey( window, GLFW_KEY_S ) )	{	LightManager->vecLights.at(lightIndex)->position.z -= cameraSpeed;	}
-		if ( glfwGetKey( window, GLFW_KEY_A ) )	{	LightManager->vecLights.at(lightIndex)->position.x -= cameraSpeed;	}
-		if ( glfwGetKey( window, GLFW_KEY_D ) ) {	LightManager->vecLights.at(lightIndex)->position.x += cameraSpeed;	}
-		if ( glfwGetKey( window, GLFW_KEY_Q ) )	{	LightManager->vecLights.at(lightIndex)->position.y += cameraSpeed;	}
-		if ( glfwGetKey( window, GLFW_KEY_E ) )	{	LightManager->vecLights.at(lightIndex)->position.y -= cameraSpeed;	}
+		//if ( glfwGetKey( window, GLFW_KEY_W ) )	{	LightManager->vecLights.at(lightIndex)->position.z += cameraSpeed;	}
+		//if ( glfwGetKey( window, GLFW_KEY_S ) )	{	LightManager->vecLights.at(lightIndex)->position.z -= cameraSpeed;	}
+		//if ( glfwGetKey( window, GLFW_KEY_A ) )	{	LightManager->vecLights.at(lightIndex)->position.x -= cameraSpeed;	}
+		//if ( glfwGetKey( window, GLFW_KEY_D ) ) {	LightManager->vecLights.at(lightIndex)->position.x += cameraSpeed;	}
+		//if ( glfwGetKey( window, GLFW_KEY_Q ) )	{	LightManager->vecLights.at(lightIndex)->position.y += cameraSpeed;	}
+		//if ( glfwGetKey( window, GLFW_KEY_E ) )	{	LightManager->vecLights.at(lightIndex)->position.y -= cameraSpeed;	}
 
 
-		//change colour of the light
-		if ( glfwGetKey( window, GLFW_KEY_Z ) )	{   LightManager->vecLights.at(lightIndex)->diffuse = glm::vec4(0.0f, 0.0f, 1.0f, 1.0f); 	}//Red
-		if ( glfwGetKey( window, GLFW_KEY_X ) )	{   LightManager->vecLights.at(lightIndex)->diffuse = glm::vec4(0.0f, 1.0f, 0.0f, 1.0f);	}//Green
-		if ( glfwGetKey( window, GLFW_KEY_C ) )	{   LightManager->vecLights.at(lightIndex)->diffuse = glm::vec4(1.0f, 0.0f, 0.0f, 1.0f);    }//Blue
-		if ( glfwGetKey( window, GLFW_KEY_V ) )	{	LightManager->vecLights.at(lightIndex)->diffuse = glm::vec4(1.0f, 1.0f, 0.0f, 1.0f);	}
-		if ( glfwGetKey( window, GLFW_KEY_B ) )	{	LightManager->vecLights.at(lightIndex)->diffuse = glm::vec4(0.0f, 1.0f, 1.0f, 1.0f);	}
+		////change colour of the light
+		//if ( glfwGetKey( window, GLFW_KEY_Z ) )	{   LightManager->vecLights.at(lightIndex)->diffuse = glm::vec4(0.0f, 0.0f, 1.0f, 1.0f); 	}//Red
+		//if ( glfwGetKey( window, GLFW_KEY_X ) )	{   LightManager->vecLights.at(lightIndex)->diffuse = glm::vec4(0.0f, 1.0f, 0.0f, 1.0f);	}//Green
+		//if ( glfwGetKey( window, GLFW_KEY_C ) )	{   LightManager->vecLights.at(lightIndex)->diffuse = glm::vec4(1.0f, 0.0f, 0.0f, 1.0f);    }//Blue
+		//if ( glfwGetKey( window, GLFW_KEY_V ) )	{	LightManager->vecLights.at(lightIndex)->diffuse = glm::vec4(1.0f, 1.0f, 0.0f, 1.0f);	}
+		//if ( glfwGetKey( window, GLFW_KEY_B ) )	{	LightManager->vecLights.at(lightIndex)->diffuse = glm::vec4(0.0f, 1.0f, 1.0f, 1.0f);	}
 
 
-		//change lightype
-		if (glfwGetKey(window, GLFW_KEY_1)) { LightManager->vecLights.at(lightIndex)->SetLightType(sLight::POINT_LIGHT); }//
-		if (glfwGetKey(window, GLFW_KEY_2)) { LightManager->vecLights.at(lightIndex)->SetLightType(sLight::SPOT_LIGHT); }//
+		////change lightype
+		//if (glfwGetKey(window, GLFW_KEY_1)) { LightManager->vecLights.at(lightIndex)->SetLightType(sLight::POINT_LIGHT); }//
+		//if (glfwGetKey(window, GLFW_KEY_2)) { LightManager->vecLights.at(lightIndex)->SetLightType(sLight::SPOT_LIGHT); }//
 
-		//Change Light LookAt
-		if (glfwGetKey(window, GLFW_KEY_R)) { LightManager->vecLights.at(lightIndex)->SetRelativeDirectionByLookAt(vec_pObjectsToDraw.at(index)->position); }
-
-
-
-		//Change SpotCone
-		if (glfwGetKey(window, GLFW_KEY_T))
-		{
-			LightManager->vecLights.at(lightIndex)->param1.y -= 0.1f;
-
-		}
-
-
-		if (glfwGetKey(window, GLFW_KEY_Y))
-		{
-			LightManager->vecLights.at(lightIndex)->param1.y += 0.1f;
-
-		}
-
-
-		if (glfwGetKey(window, GLFW_KEY_U))
-		{
-			LightManager->vecLights.at(lightIndex)->param1.z -= 0.1f;
-		}
-
-
-		if (glfwGetKey(window, GLFW_KEY_I))
-		{
-			LightManager->vecLights.at(lightIndex)->param1.z += 0.1f;
-		}
+		////Change Light LookAt
+		//if (glfwGetKey(window, GLFW_KEY_R)) { LightManager->vecLights.at(lightIndex)->SetRelativeDirectionByLookAt(vec_pObjectsToDraw.at(index)->position); }
 
 
 
+		////Change SpotCone
+		//if (glfwGetKey(window, GLFW_KEY_T))
+		//{
+		//	LightManager->vecLights.at(lightIndex)->param1.y -= 0.1f;
 
-		//change attenuation:
+		//}
 
-		//Linear
-		if ( glfwGetKey( window, GLFW_KEY_LEFT)  )	{ LightManager->vecLights.at(lightIndex)->atten.y *= 1.05f; }
-		if ( glfwGetKey( window, GLFW_KEY_RIGHT) )  { LightManager->vecLights.at(lightIndex)->atten.y *= 0.95f; }
 
-		//Quadratic
-		if ( glfwGetKey( window, GLFW_KEY_DOWN) )   { LightManager->vecLights.at(lightIndex)->atten.z *= 0.95f; }
-		if ( glfwGetKey( window, GLFW_KEY_UP)   )	{ LightManager->vecLights.at(lightIndex)->atten.z *= 1.05f; }
+		//if (glfwGetKey(window, GLFW_KEY_Y))
+		//{
+		//	LightManager->vecLights.at(lightIndex)->param1.y += 0.1f;
+
+		//}
+
+
+		//if (glfwGetKey(window, GLFW_KEY_U))
+		//{
+		//	LightManager->vecLights.at(lightIndex)->param1.z -= 0.1f;
+		//}
+
+
+		//if (glfwGetKey(window, GLFW_KEY_I))
+		//{
+		//	LightManager->vecLights.at(lightIndex)->param1.z += 0.1f;
+		//}
+
+
+
+
+		////change attenuation:
+
+		////Linear
+		//if ( glfwGetKey( window, GLFW_KEY_LEFT)  )	{ LightManager->vecLights.at(lightIndex)->atten.y *= 1.05f; }
+		//if ( glfwGetKey( window, GLFW_KEY_RIGHT) )  { LightManager->vecLights.at(lightIndex)->atten.y *= 0.95f; }
+
+		////Quadratic
+		//if ( glfwGetKey( window, GLFW_KEY_DOWN) )   { LightManager->vecLights.at(lightIndex)->atten.z *= 0.95f; }
+		//if ( glfwGetKey( window, GLFW_KEY_UP)   )	{ LightManager->vecLights.at(lightIndex)->atten.z *= 1.05f; }
 		
 
 	}
@@ -611,14 +611,10 @@ void ManageScene(GLFWwindow* window)
 		std::cout << "->";
 		std::cin >> Answer;
 		if (Answer == "1") {
-			saveModelInfo("Models.txt", vec_pObjectsToDraw);
-			saveLightInfo("lights.txt", LightManager->vecLights);
-			saveCameraInfo("camera.txt");
+			g_pSceneManager->saveScene("scene1.json");
 		}
 		else if (Answer == "2") {
-			saveModelInfo("Models2.txt", vec_pObjectsToDraw);
-			saveLightInfo("lights2.txt", LightManager->vecLights);
-			saveCameraInfo("camera2.txt");
+			g_pSceneManager->saveScene("scene2.json");
 		}
 		else if (Answer == "3") {
 			saveModelInfo("Models3.txt", vec_pObjectsToDraw);
