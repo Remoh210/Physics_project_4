@@ -123,7 +123,7 @@ void key_callback( GLFWwindow* window,
 
 	if (glfwGetKey(window, GLFW_KEY_BACKSPACE))
 	{
-		SwapThePhysics();
+		//SwapThePhysics();
 		//::g_pSceneManager->saveScene("output.json");
 		//::g_pSceneManager->loadScene("scene1.json");
 		//CreateModels("Models.txt", g_pTheVAOMeshManager, program);
@@ -260,12 +260,12 @@ void key_callback( GLFWwindow* window,
 
 	if (key == GLFW_KEY_9 && action == GLFW_PRESS)
 	{
-		LightManager->vecLights.at(lightIndex)->param2.x = 1.0f;
+		//LightManager->vecLights.at(lightIndex)->param2.x = 1.0f;
 	}
 	//TURN OFF The Light
 	if (key == GLFW_KEY_0 && action == GLFW_PRESS)
 	{
-		LightManager->vecLights.at(lightIndex)->param2.x = 0.0f;
+		//LightManager->vecLights.at(lightIndex)->param2.x = 0.0f;
 	}
 
 
@@ -278,11 +278,11 @@ void key_callback( GLFWwindow* window,
 
 	if (glfwGetKey(window, GLFW_KEY_O))
 	{	
-		LightManager->vecLights.at(lightIndex)->AtenSphere = true;
+		//LightManager->vecLights.at(lightIndex)->AtenSphere = true;
 	}
 	if (glfwGetKey(window, GLFW_KEY_P))
 	{
-		LightManager->vecLights.at(lightIndex)->AtenSphere = false;
+		//LightManager->vecLights.at(lightIndex)->AtenSphere = false;
 	}
 
 
@@ -417,8 +417,8 @@ void ProcessAsynKeys(GLFWwindow* window)
 			glm::vec3 CamDir = camera.Front - camera.Position;
 			CamDir = glm::normalize(CamDir);
 			CamDir.y = 0.0f;
-			velVec += CamDir * 200.0f * (float)deltaTime;
-			velVec.y = 5.0f;
+			velVec += CamDir * 100.0f * (float)deltaTime;
+			velVec.y = 2.0f;
 			vec_pSpheres[SphIndex]->rigidBody->SetVelocity(velVec);
 		}
 		if (glfwGetKey(window, GLFW_KEY_S)) {
@@ -429,8 +429,8 @@ void ProcessAsynKeys(GLFWwindow* window)
 			glm::vec3 CamDir = camera.Front - camera.Position;
 			CamDir = glm::normalize(CamDir);
 			CamDir.y = 0.0f;
-			velVec += -CamDir * 200.0f * (float)deltaTime;
-			velVec.y = 5.0f;
+			velVec += -CamDir * 100.0f * (float)deltaTime;
+			velVec.y = 2.0f;
 			vec_pSpheres[SphIndex]->rigidBody->SetVelocity(velVec);
 		}
 
@@ -442,8 +442,8 @@ void ProcessAsynKeys(GLFWwindow* window)
 			glm::vec3 CamDir = camera.Right;
 			CamDir = glm::normalize(CamDir);
 			CamDir.y = 0.0f;
-			velVec += CamDir * 200.0f * (float)deltaTime;
-			velVec.y = 5.0f;
+			velVec += CamDir * 100.0f * (float)deltaTime;
+			velVec.y = 2.0f;
 			vec_pSpheres[SphIndex]->rigidBody->SetVelocity(velVec);
 		}
 		if (glfwGetKey(window, GLFW_KEY_A)) {
@@ -454,8 +454,8 @@ void ProcessAsynKeys(GLFWwindow* window)
 			glm::vec3 CamDir = camera.Right;
 			CamDir = glm::normalize(CamDir);
 			CamDir.y = 0.0f;
-			velVec += - CamDir * 200.0f * (float)deltaTime;
-			velVec.y = 5.0f;
+			velVec += - CamDir * 100.0f * (float)deltaTime;
+			velVec.y = 2.0f;
 			vec_pSpheres[SphIndex]->rigidBody->SetVelocity(velVec);
 		}
 		

@@ -1,4 +1,4 @@
-!!Run on Release x64!!
+!!Run only on Release x64!!
 Controls:
 
 camera:
@@ -17,12 +17,10 @@ Space - lift selected sphere up
 G - lift All spheres up
 
 
-
-
 you can cofigure Cloth and spheres in GameEngine/scenes/physics.json
 
-Hook’s Law: SimplePhysics/cSimpleSoftBody.cpp line
-AABB vs AABB broadphase: SimplePhysics/cSimplePhysicsWorld.cpp line
-Wind: SimplePhysics/cSimpleSoftBody.cpp line 
+Hook’s Law: SimplePhysics/cSimpleSoftBody.cpp line 237
+AABB vs AABB broadphase: SimplePhysics/cSimplePhysicsWorld.cpp line 121
+Wind: SimplePhysics/cSimpleSoftBody.cpp line 116
 
 
