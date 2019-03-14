@@ -28,9 +28,7 @@ namespace nPhysics
 		}
 		for (size_t i = 0; i < mBodies.size(); i++)
 		{
-			//1 get the shape of body i
-			//2 sphere - draw sphere
-			//3 etc
+
 		}
 	}
 	void cSimplePhysicsWorld::SetGravity(const glm::vec3& gravity)
@@ -139,8 +137,6 @@ namespace nPhysics
 			if (TestAABBAABB(RigidBodyMax, RigidBodyMin, SoftBodyMax, SoftBodyMin)) {
 				float sphereRad;
 				rigidBody->GetShape()->GetSphereRadius(sphereRad);
-				float radiusCorrected = sphereRad * 1.1;
-
 				for (size_t i = 0; i < softBody->mNodes.size(); i++)
 				{
 
@@ -216,7 +212,7 @@ namespace nPhysics
 
 	void cSimplePhysicsWorld::Update(float dt)
 	{
-		//STEP 1 Integrate all rigid bodie
+		//STEP 1 Integrate all rigid bodies
 
 		if (mBodies.size() == 0) { return; }
 
@@ -357,7 +353,7 @@ namespace nPhysics
 					itSoft++;
 				}
 
-				//SoftBody RigidBody collision
+				//SoftBody-RigidBody collision
 
 				itSoft = mSoftBodies.begin();
 				while (itSoft != mSoftBodies.end())

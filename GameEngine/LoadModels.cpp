@@ -376,7 +376,7 @@ void LoadModelsIntoScene( std::vector<cGameObject*> &vec_pObjectsToDraw )
 		vec_pObjectsToDraw.push_back(pSkyBoxObject);
 	}
 
-	{	
+	{
 		cGameObject* pDebugSphere = new cGameObject();
 		pDebugSphere->setDiffuseColour(glm::vec3(1.0f, 105.0f / 255.0f, 180.0f / 255.0f));
 		pDebugSphere->friendlyName = "DebugSphere";
@@ -391,24 +391,25 @@ void LoadModelsIntoScene( std::vector<cGameObject*> &vec_pObjectsToDraw )
 		pDebugSphere->pDebugRenderer = ::g_pDebugRenderer;
 		vec_pObjectsToDraw.push_back(pDebugSphere);
 
-
-
-		{
-			cGameObject* pDebugCube = new cGameObject();
-			pDebugCube->setDiffuseColour(glm::vec3(1.0f, 0.0f, 0.0f));
-			pDebugCube->friendlyName = "DebugCube";
-			float scale = 1.0f;
-			pDebugCube->nonUniformScale = glm::vec3(scale, scale, scale);
-			pDebugCube->bDontLight = "cube.ply";
-			pDebugCube->meshName = "cube.ply";
-			pDebugCube->bIsWireFrame = true;
-			pDebugCube->position = glm::vec3(0.0f, 10.0f, 0.0f);
-			pDebugCube->bIsUpdatedByPhysics = false;
-			pDebugCube->bIsDebug = true;
-			//pDebugCube->pDebugRenderer = ::g_pDebugRenderer;
-			vec_pObjectsToDraw.push_back(pDebugCube);
-		}
 	}
+
+	{
+		cGameObject* pDebugCube = new cGameObject();
+		pDebugCube->setDiffuseColour(glm::vec3(1.0f, 0.0f, 0.0f));
+		pDebugCube->friendlyName = "DebugCube";
+		float scale = 1.0f;
+		pDebugCube->nonUniformScale = glm::vec3(scale, scale, scale);
+		pDebugCube->bDontLight = "cube.ply";
+		pDebugCube->meshName = "cube.ply";
+		pDebugCube->bIsWireFrame = true;
+		pDebugCube->position = glm::vec3(0.0f, 10.0f, 0.0f);
+		pDebugCube->bIsUpdatedByPhysics = false;
+		pDebugCube->bIsVisible = false;
+		pDebugCube->bIsDebug = true;
+		//pDebugCube->pDebugRenderer = ::g_pDebugRenderer;
+		vec_pObjectsToDraw.push_back(pDebugCube);
+	}
+	
 
 
 

@@ -1,11 +1,9 @@
 #include "cSimpleSoftBody.h"
 #include <algorithm>
 namespace nPhysics 
-
-
-
-
+	
 {
+	float elapsedTime = 0.f;
 
 	//Random float generator
 	float RandomFloat(float a, float b) {
@@ -18,6 +16,8 @@ namespace nPhysics
 	cSimpleSoftBody::cSimpleSoftBody(const sSoftBodyDef& def)
 	{
 		bWind = false;
+		mWindDirection = glm::vec3(0.0f, 0.0f, 1.0f);
+		mWindMagnitude = 3.0f;
 
 		mNodes.resize(def.Nodes.size());
 		for (size_t i = 0; i < def.Nodes.size(); i++)
@@ -81,8 +81,8 @@ namespace nPhysics
 
 	void cSimpleSoftBody::UpdateInternal(float dt, const glm::vec3& gravity)
 	{
-		
-		ApplyWind(glm::vec3(0.0f, 0.0f, 1.0f), 3.0f, 1.0f, 1.0f);
+		//Applying wind first
+		ApplyWind(dt);
 		
 		for (size_t i = 0; i < mNodes.size(); i++)
 		{
@@ -111,19 +111,24 @@ namespace nPhysics
 
 
 
-	void cSimpleSoftBody::ApplyWind(glm::vec3 windDirection, float windMagnitude, float yaw, float pitch)
+	void cSimpleSoftBody::ApplyWind(float dt)
 	{
-
+		//Randomizing Wind
 		if (bWind) {
+			elapsedTime += dt;
+			if (elapsedTime > 70.0f) 
+			{
+				mWindDirection = glm::vec3(RandomFloat(-0.2f, 0.2f), RandomFloat(-0.2f, 0.2f), 1.0f);
+				mWindMagnitude = RandomFloat(-1.0f, 3.0f);
+				elapsedTime = 0.0f;
+			}
 
 			for (int i = 0; i < mNodes.size(); i++)
 			{
-				windDirection = glm::vec3(RandomFloat(-0.4f, 0.4f), RandomFloat(-1.0f, 1.0f), RandomFloat(0.1f, 1.0f));
 				if (!mNodes[i]->IsFixed()) {
-					float lucky = RandomFloat(0.0f, 1.0f);
-					if (lucky > 0.5f) {
-						float mg = RandomFloat(0.1, 3.3f);
-						mNodes[i]->Velocity += windDirection * mg;
+					float r = RandomFloat(0.0f, 1.0f);
+					if (r > 0.5f) {
+						mNodes[i]->Velocity += mWindDirection * (mWindMagnitude);
 					}
 				}
 			}
@@ -147,7 +152,7 @@ namespace nPhysics
 						//nodeB->Position = nodeB->PreviousPosition;
 
 
-						////////Collison response
+						//Collison response
 
 						float massA = nodeA->Mass;
 						float massB = nodeB->Mass;
@@ -237,6 +242,7 @@ namespace nPhysics
 
 	}
 
+	//Node constructor
 	cSimpleSoftBody::cNode::cNode(const glm::vec3 & position, float mass)
 		: Position(position)
 		, PreviousPosition(position)

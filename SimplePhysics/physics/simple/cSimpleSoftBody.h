@@ -69,7 +69,7 @@ namespace nPhysics
 		cSimpleSoftBody& operator=(const cSimpleSoftBody& other) { return *this; }
 	private:
 		void CollideNodes(cNode* nodeA, cNode* nodeB);
-		void ApplyWind(glm::vec3 windDirection, float windMagnitude, float yaw, float pitch);
+		void ApplyWind(float dt);
 		glm::vec3 mWindDirection;
 		float mWindMagnitude;
 		float Yaw;

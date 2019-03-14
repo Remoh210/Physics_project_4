@@ -60,7 +60,7 @@
       {
           "Name": "Cloth",
           "Mesh": "Sphere_320.ply",
-          "Visible": true,
+          "Visible": false,
           "Use_Physics": true,
           "Wireframe": false,
           "Position": [
@@ -94,8 +94,8 @@
           "RigidBody": {
               "Type": "CLOTH",
               "SpringConstant" : 200.0,
-              "NumNodesAB": 4,
-              "NumNodesAC": 3,
+              "NumNodesAB": 10,
+              "NumNodesAC": 7,
               "CornerA" : [
                 -20.0,
                 30.0,
