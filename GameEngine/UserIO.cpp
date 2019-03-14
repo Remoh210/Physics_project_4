@@ -98,7 +98,9 @@ void key_callback( GLFWwindow* window,
 
 	if (glfwGetKey(window, GLFW_KEY_K))
 	{
-		SwitchToSolid(vec_pObjectsToDraw);
+		//SwitchToSolid(vec_pObjectsToDraw);
+		findObjectByFriendlyName("Cloth")->softBody->SwitchWind();
+
 	}
 
 

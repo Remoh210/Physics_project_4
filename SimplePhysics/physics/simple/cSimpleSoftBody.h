@@ -54,6 +54,7 @@ namespace nPhysics
 
 		virtual void GetNodePostion(size_t index, glm::vec3& positionOut);
 		virtual void GetNodeRadius(size_t index, float& nodeRadiusOut);
+		inline virtual void SwitchWind() { bWind = !bWind; };
 		virtual size_t NumNodes();
 
 
@@ -68,10 +69,12 @@ namespace nPhysics
 		cSimpleSoftBody& operator=(const cSimpleSoftBody& other) { return *this; }
 	private:
 		void CollideNodes(cNode* nodeA, cNode* nodeB);
+		void ApplyWind(glm::vec3 windDirection, float windMagnitude, float yaw, float pitch);
 		glm::vec3 mWindDirection;
 		float mWindMagnitude;
 		float Yaw;
 		float Pitch;
+		bool bWind;
 
 		void UpdateAABB();
 		glm::vec3 mMinBounds;

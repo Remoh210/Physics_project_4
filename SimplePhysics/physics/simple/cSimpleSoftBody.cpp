@@ -1,9 +1,24 @@
 #include "cSimpleSoftBody.h"
 #include <algorithm>
 namespace nPhysics 
+
+
+
+
 {
+
+	//Random float generator
+	float RandomFloat(float a, float b) {
+		float random = ((float)rand()) / (float)RAND_MAX;
+		float diff = b - a;
+		float r = random * diff;
+		return a + r;
+	}
+
 	cSimpleSoftBody::cSimpleSoftBody(const sSoftBodyDef& def)
 	{
+		bWind = false;
+
 		mNodes.resize(def.Nodes.size());
 		for (size_t i = 0; i < def.Nodes.size(); i++)
 		{
@@ -73,6 +88,7 @@ namespace nPhysics
 		for (size_t i = 0; i < mSprings.size(); i++)
 		{
 			mSprings[i]->ApplyForceToNodes();
+			
 		}
 		for (size_t i = 0; i < mNodes.size(); i++)
 		{
@@ -86,11 +102,33 @@ namespace nPhysics
 			}
 		}
 		UpdateAABB();
+		ApplyWind(glm::vec3(0.0f, 0.0f, 1.0f), 3.0f, 1.0f, 1.0f);
+	}
+
+
+
+	void cSimpleSoftBody::ApplyWind(glm::vec3 windDirection, float windMagnitude, float yaw, float pitch)
+	{
+
+		if (bWind) {
+
+			for (int i = 0; i < mNodes.size(); i++)
+			{
+				windDirection = glm::vec3(RandomFloat(-0.4f, 0.4f), RandomFloat(-1.0f, 1.0f), RandomFloat(0.1f, 1.0f));
+				if (!mNodes[i]->IsFixed()) {
+					float lucky = RandomFloat(0.0f, 1.0f);
+					if (lucky > 0.5f) {
+						float mg = RandomFloat(0.1, 2.0f);
+						mNodes[i]->Velocity += windDirection * mg;
+					}
+				}
+			}
+		}
 	}
 
 	void cSimpleSoftBody::CollideNodes(cNode * nodeA, cNode * nodeB)
 	{
-		if (nodeA->HasNeighbor(nodeB))
+		if (!nodeA->HasNeighbor(nodeB))
 		{
 			if (nodeA != nodeB) {
 				if (!nodeA->IsFixed() && !nodeB->IsFixed())
@@ -148,6 +186,8 @@ namespace nPhysics
 
 	}
 
+
+
 	void cSimpleSoftBody::UpdateAABB()
 	{
 		mMinBounds.x = std::numeric_limits<float>::max();
@@ -188,8 +228,8 @@ namespace nPhysics
 		glm::vec3 separationAtoB = NodeB->Position - NodeA->Position;
 		float CurrentDistance = glm::length(separationAtoB);
 		glm::vec3 force = (separationAtoB / CurrentDistance) * (-SpringConstant * (CurrentDistance - RestingDistance));
-		NodeB->SpringForce += force;
-		NodeA->SpringForce -= force;
+		NodeB->SpringForce += force ;
+		NodeA->SpringForce -= force ;
 
 	}
 
@@ -219,9 +259,9 @@ namespace nPhysics
 		}
 		PreviousPosition = Position;
 		Velocity += SpringForce * (dt / Mass);
+		Velocity *= 0.5f;
 		Position += Velocity * dt;
 		float dampingFactor = 0.9f;
-		//Velocity *= 0.999f;
 		Velocity *= glm::pow(1.f - dampingFactor, dt);
 	}
 	void cSimpleSoftBody::cNode::ComputeRadius()

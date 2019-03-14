@@ -327,9 +327,10 @@ void LoadModelTypes( cVAOMeshManager* pTheVAOMeshManager, GLuint shaderProgramID
 
 
 
-	//for debug draw only ***********************
+
+
 	sModelDrawInfo cube1x1x1;
-	cube1x1x1.meshFileName = "cube_flat_shaded_xyz_n_uv.ply";			// "cube_flat_shaded_xyz.ply";
+	cube1x1x1.meshFileName = "cube.ply";			// "cube_flat_shaded_xyz.ply";
 	pTheVAOMeshManager->LoadModelIntoVAO(cube1x1x1, shaderProgramID);
 
 
@@ -386,8 +387,27 @@ void LoadModelsIntoScene( std::vector<cGameObject*> &vec_pObjectsToDraw )
 		pDebugSphere->position = glm::vec3(-100.0f, 10.0f, 0.0f);
 		pDebugSphere->bIsUpdatedByPhysics = true;
 		pDebugSphere->bIsDebug = true;
+		pDebugSphere->bIsVisible = false;
 		pDebugSphere->pDebugRenderer = ::g_pDebugRenderer;
 		vec_pObjectsToDraw.push_back(pDebugSphere);
+
+
+
+		{
+			cGameObject* pDebugCube = new cGameObject();
+			pDebugCube->setDiffuseColour(glm::vec3(1.0f, 0.0f, 0.0f));
+			pDebugCube->friendlyName = "DebugCube";
+			float scale = 1.0f;
+			pDebugCube->nonUniformScale = glm::vec3(scale, scale, scale);
+			pDebugCube->bDontLight = "cube.ply";
+			pDebugCube->meshName = "cube.ply";
+			pDebugCube->bIsWireFrame = true;
+			pDebugCube->position = glm::vec3(0.0f, 10.0f, 0.0f);
+			pDebugCube->bIsUpdatedByPhysics = false;
+			pDebugCube->bIsDebug = true;
+			//pDebugCube->pDebugRenderer = ::g_pDebugRenderer;
+			vec_pObjectsToDraw.push_back(pDebugCube);
+		}
 	}
 
 

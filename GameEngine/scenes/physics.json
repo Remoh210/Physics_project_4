@@ -58,7 +58,7 @@
           }
       },
       {
-          "Name": "jupiter2",
+          "Name": "Cloth",
           "Mesh": "Sphere_320.ply",
           "Visible": true,
           "Use_Physics": true,
@@ -94,7 +94,7 @@
           "RigidBody": {
               "Type": "CLOTH",
               "SpringConstant" : 200.0,
-              "NumNodesAB": 20,
+              "NumNodesAB": 10,
               "NumNodesAC": 7,
               "CornerA" : [
                 -20.0,

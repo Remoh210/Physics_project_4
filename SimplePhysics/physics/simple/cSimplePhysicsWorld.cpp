@@ -98,35 +98,64 @@ namespace nPhysics
 
 	}
 
+	bool TestAABBAABB(glm::vec3 aMax, glm::vec3 aMin,  glm::vec3 bMax, glm::vec3 bMin)
+	{
+		// Exit with no intersection if separated along an axis
+		if (aMax[0] < bMin[0] || aMin[0] > bMax[0]) return 0;
+		if (aMax[1] < bMin[1] || aMin[1] > bMax[1]) return 0;
+		if (aMax[2] < bMin[2] || aMin[2] > bMax[2]) return 0;
+		// Overlapping on all axes means AABBs are intersecting
+		return 1;
+	}
+
+
+
 	bool cSimplePhysicsWorld::CollideRigidBodySoftBody(cSimpleRigidBody* rigidBody, cSimpleSoftBody* softBody)
 	{
+
+		//AABB
+		glm::vec3 RigidBodyMin;
+		glm::vec3 RigidBodyMax;
+
+		glm::vec3 SoftBodyMin;
+		glm::vec3 SoftBodyMax;
+
+
+		rigidBody->GetAABB(RigidBodyMin, RigidBodyMax);
+		softBody->GetAABB(SoftBodyMin, SoftBodyMax);
+
+
+
+
 		if(rigidBody->GetShape()->GetShapeType() == SHAPE_TYPE_SPHERE)
 		{
-			float sphereRad;
-			rigidBody->GetShape()->GetSphereRadius(sphereRad);
-			float radiusCorrected = sphereRad * 1.1;
+			if (TestAABBAABB(RigidBodyMax, RigidBodyMin, SoftBodyMax, SoftBodyMin)) {
+				float sphereRad;
+				rigidBody->GetShape()->GetSphereRadius(sphereRad);
+				float radiusCorrected = sphereRad * 1.1;
 
-			for (size_t i = 0; i < softBody->mNodes.size(); i++)
-			{
-
-				glm::vec3 v = softBody->mNodes[i]->Position - rigidBody->GetPosition();
-				float vecLength = glm::length(v);
-			
-				
-				if (vecLength < radiusCorrected)
+				for (size_t i = 0; i < softBody->mNodes.size(); i++)
 				{
-					glm::vec3 position = glm::normalize(v)*(softBody->mNodes[i]->Radius);
-					if (!softBody->mNodes[i]->IsFixed())
-					{
-						softBody->mNodes[i]->Position = softBody->mNodes[i]->PreviousPosition;
-						softBody->mNodes[i]->Position += position;
-					}
-					
-				}
 
-				
+					glm::vec3 v = softBody->mNodes[i]->Position - rigidBody->GetPosition();
+					float vecLength = glm::length(v);
+
+
+					if (vecLength < sphereRad)
+					{
+						glm::vec3 position = glm::normalize(v)*(softBody->mNodes[i]->Radius);
+
+						if (!softBody->mNodes[i]->IsFixed())
+						{
+							softBody->mNodes[i]->Position = softBody->mNodes[i]->PreviousPosition;
+							softBody->mNodes[i]->Position += position;
+						}
+
+					}
+
+
+				}
 			}
-			
 
 		}
 		return true;

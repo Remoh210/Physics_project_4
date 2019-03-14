@@ -293,7 +293,7 @@ int main(void)
 	::LightManager->LoadUniformLocations(program);
 	
 	LoadModelsIntoScene(::vec_pObjectsToDraw);
-	g_simpleDubugRenderer = new cSimpleDebugRenderer(findObjectByFriendlyName("DebugSphere"), program);
+	g_simpleDubugRenderer = new cSimpleDebugRenderer(findObjectByFriendlyName("DebugSphere"), findObjectByFriendlyName("DebugCube"), program);
 
 	//vec_sorted_drawObj = vec_pObjectsToDraw;
 
@@ -619,7 +619,6 @@ int main(void)
 				}
 				else{ curMesh->position = curMesh->rigidBody->GetPosition(); }
 				curMesh->m_meshQOrientation = glm::mat4(curMesh->rigidBody->GetMatRotation());
-				//HACK CHARACTER
 
 			}
 		}
@@ -635,7 +634,7 @@ int main(void)
 
 						float rad;
 						curObj->rigidBody->GetShape()->GetSphereRadius(rad);
-						g_simpleDubugRenderer->drawSphere(curObj->rigidBody->GetPosition(), rad);
+						g_simpleDubugRenderer->drawCube(curObj->rigidBody->GetPosition(), rad);
 					}
 					if (curObj->rigidBody->GetShape()->GetShapeType() == nPhysics::SHAPE_TYPE_PLANE) {
 						curObj->bIsWireFrame = true;
@@ -643,6 +642,8 @@ int main(void)
 						glm::mat4 matIden = glm::mat4(1.0f);
 						DrawObject(curObj, matIden, program);
 					}
+				}
+				if (curObj->softBody != NULL) {
 				}
 			}
 		}

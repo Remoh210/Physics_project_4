@@ -4,13 +4,15 @@
 class cSimpleDebugRenderer
 {
 public:
-	cSimpleDebugRenderer(cGameObject* mUnitSphere, GLuint IDprogram);
+	cSimpleDebugRenderer(cGameObject* mUnitSphere, cGameObject* mUnitCube, GLuint IDprogram);
 
 	void drawSphere(glm::vec3 pos, float rad);
+	void drawCube(glm::vec3 pos, float side);
 	
 
 private:
 	cGameObject* mUnitSphere;
 	cGameObject* mUnitPlane;
+	cGameObject* mUnitCube;
 	GLuint mShaderProgram;
 };
