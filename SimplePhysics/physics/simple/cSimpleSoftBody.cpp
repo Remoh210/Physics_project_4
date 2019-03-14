@@ -116,7 +116,7 @@ namespace nPhysics
 		//Randomizing Wind
 		if (bWind) {
 			elapsedTime += dt;
-			if (elapsedTime > 70.0f) 
+			if (elapsedTime > 3.0f) 
 			{
 				mWindDirection = glm::vec3(RandomFloat(-0.2f, 0.2f), RandomFloat(-0.2f, 0.2f), 1.0f);
 				mWindMagnitude = RandomFloat(-1.0f, 3.0f);
@@ -137,55 +137,37 @@ namespace nPhysics
 
 	void cSimpleSoftBody::CollideNodes(cNode * nodeA, cNode * nodeB)
 	{
-		if (!nodeA->HasNeighbor(nodeB))
+		if (nodeA->HasNeighbor(nodeB))
 		{
 			if (nodeA != nodeB) {
 				if (!nodeA->IsFixed() && !nodeB->IsFixed())
 				{
-					float radiusA = nodeA->Radius;
-					float radiusB = nodeB->Radius;
 
-					float distance = glm::distance(nodeA->Position, nodeB->Position);
-					if (distance <= radiusA + radiusB)
+
+					glm::vec3 diffAB = glm::normalize(nodeA->Position - nodeB->Position);
+					glm::vec3 differenceB = glm::normalize(nodeB->Position - nodeA->Position);
+					float dist = glm::distance(nodeA->Position, nodeB->Position);
+
+					if (dist <= (nodeA->Radius + nodeB->Radius))
 					{
-						//nodeA->Position = nodeA->PreviousPosition;
-						//nodeB->Position = nodeB->PreviousPosition;
+						float totalMass = nodeA->Mass + nodeB->Mass;
+						float massAPercent = nodeA->Mass / totalMass;
+						float massBPercent = nodeB->Mass / totalMass;
 
+						float aDot = glm::dot(diffAB, nodeA->Velocity);
+						glm::vec3 v0 = diffAB * aDot;
+						glm::vec3 v1 = nodeA->Velocity - v0;
 
-						//Collison response
+						diffAB *= -1.0f;
+						float bDot = glm::dot(diffAB, nodeB->Velocity);
+						glm::vec3 v2 = diffAB * bDot;
+						glm::vec3 v3 = nodeB->Velocity - v2;
 
-						float massA = nodeA->Mass;
-						float massB = nodeB->Mass;
-						float totalMass = massA + massB;
+						nodeA->Velocity = -1.0f * (v0 * (nodeA->Mass - nodeB->Mass) / (nodeA->Mass + nodeB->Mass) + v2 * (2 * nodeB->Mass) / (nodeA->Mass + nodeB->Mass) + v1);
+						nodeB->Velocity = -1.0f * (v0 * (2 * nodeA->Mass) / (nodeA->Mass + nodeB->Mass) + v2 * (nodeB->Mass - nodeA->Mass) / (nodeA->Mass + nodeB->Mass) + v3);
 
-
-
-						float fac1 = massA / totalMass;
-						float fac2 = massB / totalMass;
-						
-						
-						glm::vec3 x = nodeA->Position - nodeB->Position;
-						x = glm::normalize(x);
-
-
-						glm::vec3 v1 = nodeA->Velocity;
-						float x1 = glm::dot(x, v1);
-						glm::vec3 v1x = x * x1;
-						glm::vec3 v1y = v1 - v1x;
-
-						x = x * -1.0f;
-						glm::vec3 v2 = nodeB->Velocity;
-						float x2 = glm::dot(x, v2);
-						glm::vec3 v2x = x * x2;
-						glm::vec3 v2y = v2 - v2x;
-
-						nodeA->Velocity = v1x * (massA - massB) / (massA + massB) + v2x * (2 * massB) / (massA + massB) + v1y;
-						nodeB->Velocity = v1x * (2 * massA) / (massA + massB) + v2x * (massB - massA) / (massA + massB) + v2y;
-						nodeA->Velocity = -nodeA->Velocity;
-						nodeB->Velocity = -nodeB->Velocity;
-
-						nodeA->Velocity *= 0.9999f;
-						nodeB->Velocity *= 0.9999f;
+						nodeA->Velocity *= 0.99f;
+						nodeB->Velocity *= 0.99f;
 
 
 					}
@@ -234,11 +216,12 @@ namespace nPhysics
 
 	void cSimpleSoftBody::cSpring::ApplyForceToNodes()
 	{
+		//Hook’s Law
 		glm::vec3 separationAtoB = NodeB->Position - NodeA->Position;
 		float CurrentDistance = glm::length(separationAtoB);
 		glm::vec3 force = (separationAtoB / CurrentDistance) * (-SpringConstant * (CurrentDistance - RestingDistance));
-		NodeB->SpringForce += force ;
-		NodeA->SpringForce -= force ;
+		NodeB->SpringForce += force;
+		NodeA->SpringForce -= force;
 
 	}
 
@@ -269,8 +252,8 @@ namespace nPhysics
 		}
 		PreviousPosition = Position;
 		Velocity += SpringForce * (dt / Mass);
-		Velocity *= 0.5f;
 		Position += Velocity * dt;
+		Velocity *= 0.99f;
 		float dampingFactor = 0.9f;
 		Velocity *= glm::pow(1.f - dampingFactor, dt);
 	}

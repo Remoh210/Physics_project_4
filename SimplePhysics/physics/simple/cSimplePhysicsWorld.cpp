@@ -118,7 +118,7 @@ namespace nPhysics
 	bool cSimplePhysicsWorld::CollideRigidBodySoftBody(cSimpleRigidBody* rigidBody, cSimpleSoftBody* softBody)
 	{
 
-		//AABB
+		//AABB vs AABB broadphase
 		glm::vec3 RigidBodyMin;
 		glm::vec3 RigidBodyMax;
 
@@ -146,7 +146,7 @@ namespace nPhysics
 
 					if (vecLength < sphereRad)
 					{
-						glm::vec3 position = glm::normalize(v)*(softBody->mNodes[i]->Radius);
+						glm::vec3 position = glm::normalize(v)*(softBody->mNodes[i]->Radius*1.1f);
 
 						if (!softBody->mNodes[i]->IsFixed())
 						{
@@ -325,7 +325,6 @@ namespace nPhysics
 
 
 
-
 				if (rbA->GetShape()->GetShapeType() != nPhysics::SHAPE_TYPE_PLANE) {
 
 					glm::vec3 direction = rbA->mVelocity - rbA->mPosition;
@@ -345,33 +344,31 @@ namespace nPhysics
 
 
 
-				//SoftBodies Integration
-				std::vector<cSimpleSoftBody*>::iterator itSoft = mSoftBodies.begin();
-				while(itSoft != mSoftBodies.end())
-				{
-					(*itSoft)->UpdateInternal(dt, mGravity);
-					itSoft++;
-				}
-
-				//SoftBody-RigidBody collision
-
-				itSoft = mSoftBodies.begin();
-				while (itSoft != mSoftBodies.end())
-				{
-					std::vector<cSimpleRigidBody*>::iterator it = mBodies.begin();
-					while (it != mBodies.end())
-					{
-						CollideRigidBodySoftBody(*it, *itSoft);
-						it++;
-					}
-
-					(*itSoft)->UpdateInternal(dt, mGravity);
-					itSoft++;
-				}
-
-
-
 		}
+		std::vector<cSimpleSoftBody*>::iterator itSoft = mSoftBodies.begin();
+		//SoftBodies Integration
+
+		while (itSoft != mSoftBodies.end())
+		{
+			(*itSoft)->UpdateInternal(dt, mGravity);
+			itSoft++;
+		}
+
+		//SoftBody-RigidBody collision
+		itSoft = mSoftBodies.begin();
+		while (itSoft != mSoftBodies.end())
+		{
+			std::vector<cSimpleRigidBody*>::iterator it = mBodies.begin();
+			while (it != mBodies.end())
+			{
+				CollideRigidBodySoftBody(*it, *itSoft);
+				it++;
+			}
+			itSoft++;
+		}
+
+
+
 	}
 	
 

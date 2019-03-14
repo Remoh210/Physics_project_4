@@ -1,20 +1,28 @@
-!!Run on Debug/Release x64!!
+!!Run on Release x64!!
 Controls:
 
 camera:
 WASD + Mouse - move camera camera
 EQ - move camera Up/Down
 
-BackSpace - switch physics 
-T - switch between sphres
-Arrows Up/Down change gravity
+
+T - switch between spheres
 ctrl + WASD - apply velocity in camera looking direction
-Space - lift selected sphere up
-G - lift All spheres up
+K - Turn ON/OFF Wind
 Enter - switch ON/OFF debug view
 
-RK integration is in cSimplePhysicsWorld.cpp
+Additional controls:
+Arrows Up/Down change gravity
+Space - lift selected sphere up
+G - lift All spheres up
 
-you can cofigure spheres radius/mass in GameEngine/scenes/physics.json
+
+
+
+you can cofigure Cloth and spheres in GameEngine/scenes/physics.json
+
+Hook’s Law: SimplePhysics/cSimpleSoftBody.cpp line
+AABB vs AABB broadphase: SimplePhysics/cSimplePhysicsWorld.cpp line
+Wind: SimplePhysics/cSimpleSoftBody.cpp line 
 
 
