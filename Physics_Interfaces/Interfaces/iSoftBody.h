@@ -11,6 +11,7 @@ namespace nPhysics
 		
 		virtual void GetNodePostion(size_t index, glm::vec3& positionOut) = 0;
 		virtual void GetNodeRadius(size_t index, float& nodeRadiusOut) = 0;
+		virtual void GetAABB(glm::vec3& minBoundsOut, glm::vec3& maxBoundsOut) = 0;
 		inline virtual void SwitchWind() = 0;
 		virtual size_t NumNodes() = 0;
 

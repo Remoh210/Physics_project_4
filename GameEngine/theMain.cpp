@@ -528,46 +528,8 @@ int main(void)
 		}
 		g_textRenderer->drawText(width, height, ("Gravity: " + std::to_string((int)g_Gravity.y)).c_str(), 150.0f);
 		
-		//float sx = 2.0f / width;
-		//float sy = 2.0f / height;
-		//GLfloat yoffset = 50.0f;
-		//GLfloat xoffset = 8 * sx;
-
-		//g_textRend.renderText("ololosadasdasdassdasdasdasd", -1 + xoffset, 1 - yoffset * sy, sx, sy);
-		//yoffset += 50.0f;
-
-
-
-		//REFLECTION
-
-		//{
-		//	GLint bAddReflect_UniLoc = glGetUniformLocation(program, "bAddReflect");
-		//	//			glUniform1f( bAddReflect_UniLoc, (float)GL_TRUE );
-
-		//	GLint bAddRefract_UniLoc = glGetUniformLocation(program, "bAddRefract");
-		//	glUniform1f(bAddRefract_UniLoc, (float)GL_TRUE);
-
-		//	cGameObject* pBunny = findObjectByFriendlyName("Ufo2UVb");
-
-		//	glm::vec3 oldPos = pBunny->position;
-		//	glm::vec3 oldScale = pBunny->nonUniformScale;
-		//	glm::quat oldOrientation = pBunny->getQOrientation();
-
-		//	pBunny->position = glm::vec3(0.0f, 25.0f, 0.0f);
-		//	pBunny->setUniformScale(100.0f);
-		//	pBunny->setMeshOrientationEulerAngles(0.0f, 0.0f, 0.0f, true);
-
-		//	glm::mat4x4 matModel = glm::mat4(1.0f);			// mat4x4 m, p, mvp;
-
-		//	DrawObject(pBunny, matModel, program);
-
-		//	pBunny->position = oldPos;
-		//	pBunny->nonUniformScale = oldScale;
-		//	pBunny->setQOrientation(oldOrientation);
-
-		//	glUniform1f(bAddReflect_UniLoc, (float)GL_FALSE);
-		//	glUniform1f(bAddRefract_UniLoc, (float)GL_FALSE);
-		//}
+		
+	
 
 
 
@@ -643,7 +605,17 @@ int main(void)
 						DrawObject(curObj, matIden, program);
 					}
 				}
-				if (curObj->softBody != NULL) {
+				if (curObj->softBody != NULL) 
+				{
+
+					glm::vec3 max;
+					glm::vec3 min;
+					glm::vec3 center;
+					curObj->softBody->GetAABB(min, max);
+					center = (min + max) / 2.0f;
+					float size = glm::distance(min, max) / 2.0f;
+					g_simpleDubugRenderer->drawCube(center, size);
+
 				}
 			}
 		}

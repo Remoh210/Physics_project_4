@@ -81,6 +81,9 @@ namespace nPhysics
 
 	void cSimpleSoftBody::UpdateInternal(float dt, const glm::vec3& gravity)
 	{
+		
+		ApplyWind(glm::vec3(0.0f, 0.0f, 1.0f), 3.0f, 1.0f, 1.0f);
+		
 		for (size_t i = 0; i < mNodes.size(); i++)
 		{
 			mNodes[i]->SpringForce = gravity * mNodes[i]->Mass;
@@ -101,8 +104,9 @@ namespace nPhysics
 				CollideNodes(mNodes[idxA], mNodes[idxB]);
 			}
 		}
+		
 		UpdateAABB();
-		ApplyWind(glm::vec3(0.0f, 0.0f, 1.0f), 3.0f, 1.0f, 1.0f);
+		
 	}
 
 
@@ -118,7 +122,7 @@ namespace nPhysics
 				if (!mNodes[i]->IsFixed()) {
 					float lucky = RandomFloat(0.0f, 1.0f);
 					if (lucky > 0.5f) {
-						float mg = RandomFloat(0.1, 2.0f);
+						float mg = RandomFloat(0.1, 3.3f);
 						mNodes[i]->Velocity += windDirection * mg;
 					}
 				}

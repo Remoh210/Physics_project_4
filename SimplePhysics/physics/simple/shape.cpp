@@ -34,6 +34,10 @@ namespace nPhysics
 		minBoundsOut.x = pos.x - mRadius;
 		minBoundsOut.y = pos.y - mRadius;
 		minBoundsOut.z = pos.z - mRadius;
+
+		maxBoundsOut.x = pos.x + mRadius;
+		maxBoundsOut.y = pos.y + mRadius;
+		maxBoundsOut.z = pos.z + mRadius;
 		return true;
 	}
 	//float cSphereShape::GetRadius()

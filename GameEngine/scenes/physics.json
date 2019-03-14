@@ -94,21 +94,21 @@
           "RigidBody": {
               "Type": "CLOTH",
               "SpringConstant" : 200.0,
-              "NumNodesAB": 10,
-              "NumNodesAC": 7,
+              "NumNodesAB": 4,
+              "NumNodesAC": 3,
               "CornerA" : [
                 -20.0,
-                35.0,
+                30.0,
                 -5.0
               ],
               "CornerB" : [
                 20.0,
-                35.0,
+                30.0,
                 -5.0
               ],
             "CornerC" : [
                 -8.0,
-                23.0,
+                18.0,
                 -5.0
               ]
 
@@ -306,7 +306,7 @@
            ],
            "RigidBody": {
                "Type": "SPHERE",
-               "Radius": 30.0,
+               "Radius": 20.0,
                "Mass": 50.0
            }
        },

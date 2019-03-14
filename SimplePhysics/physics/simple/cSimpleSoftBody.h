@@ -58,7 +58,7 @@ namespace nPhysics
 		virtual size_t NumNodes();
 
 
-		void GetAABB(glm::vec3& minBoundsOut, glm::vec3& maxBoundsOut);
+		virtual void GetAABB(glm::vec3& minBoundsOut, glm::vec3& maxBoundsOut);
 
 		void UpdateInternal(float dt, const glm::vec3& gravity);
 

@@ -48,7 +48,15 @@ namespace nPhysics
 
 	glm::mat4 cSimpleRigidBody::GetTransform()
 	{
-		return glm::translate(glm::mat4(), mPosition);
+		glm::mat4 matOut;
+
+		matOut = mRotation;
+		matOut[3][0] = mPosition.x;
+		matOut[3][1] = mPosition.y;
+		matOut[3][2] = mPosition.z;
+		matOut[3][3] = 1.f;
+
+		return matOut;
 		//TODO: Orientation
 	}
 
